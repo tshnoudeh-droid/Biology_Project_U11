@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { scenes, starts, TOTAL } from './scenes'
+import { InteriorDefs } from './interior'
 import { rich } from '../lib/rich'
 import { IconArrowLeft, IconArrowRight, IconPlay } from '../components/Icons'
 
@@ -98,12 +99,14 @@ export function FilmPlayer() {
     <div className="film">
       <div className="film-stage" role="region" aria-roledescription="animated tour" aria-label={`Scene ${idx + 1} of ${scenes.length}: ${scene.resort}, ${scene.term}`}>
         <svg viewBox="0 0 1600 900" className="film-svg" aria-hidden="true">
+          <InteriorDefs />
           <rect width="1600" height="900" fill="#1B2A26" />
           <g key={scene.id} className="film-scene">
             <Art t={local} />
           </g>
         </svg>
 
+        <div className="film-scrim" aria-hidden="true" />
         <div className="film-head" key={`h-${scene.id}`}>
           <span className="film-head__eyebrow">
             Scene {idx + 1} · {scene.term}

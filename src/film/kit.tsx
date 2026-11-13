@@ -74,10 +74,14 @@ type StreamProps = {
   hold?: boolean
   /** small sideways spread so a crowd doesn't look like a single file */
   spread?: number
+  /** perspective: scale multiplier for a given y */
+  scaleAt?: (y: number) => number
+  /** guests carry suitcases */
+  bag?: boolean
 }
 
 /** A line of guests walking along a path. */
-export function Stream({ pts, t, start = 0, travel, count, gap, kind = 'O2', s = 1, hold = false, spread = 10 }: StreamProps) {
+export function Stream({ pts, t, start = 0, travel, count, gap, kind = 'O2', s = 1, hold = false, spread = 10, scaleAt, bag = false }: StreamProps) {
   const out: ReactNode[] = []
   for (let i = 0; i < count; i++) {
     const f = (t - start - i * gap) / travel
@@ -86,7 +90,20 @@ export function Stream({ pts, t, start = 0, travel, count, gap, kind = 'O2', s =
     const [x, y] = along(pts, Math.min(1, f))
     const bob = f < 1 ? Math.sin(t * 9 + i * 1.7) * 3 : 0
     const off = (((i * 37) % 7) - 3) * (spread / 3)
-    out.push(kind === 'O2' ? <O2 key={i} x={x + off * 0.4} y={y + off + bob} s={s} /> : <CO2 key={i} x={x + off * 0.4} y={y + off + bob} s={s} />)
+    const k = s * (scaleAt ? scaleAt(y) : 1)
+    const gx = x + off * 0.4 * k
+    const gy = y + (off + bob) * k
+    out.push(
+      <g key={i}>
+        {bag && (
+          <g transform={`translate(${gx + (kind === 'O2' ? 30 : 40) * k} ${gy + 10 * k}) scale(${k})`}>
+            <rect x="-10" y="-14" width="20" height="26" rx="4" fill={kind === 'O2' ? '#D9B676' : '#C9D6CF'} stroke="#1B2A26" strokeWidth="1.5" />
+            <path d="M-5 -14 L-5 -20 L5 -20 L5 -14" stroke="#1B2A26" strokeWidth="2" fill="none" />
+          </g>
+        )}
+        {kind === 'O2' ? <O2 x={gx} y={gy} s={k} /> : <CO2 x={gx} y={gy} s={k} />}
+      </g>,
+    )
   }
   return <g>{out}</g>
 }

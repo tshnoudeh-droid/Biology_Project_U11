@@ -1,105 +1,241 @@
-import { AirwayArt, breathPath } from '../components/AirwayArt'
+import type { ReactNode } from 'react'
 import { CO2, O2, Sign, Staff, Stream, along, mix, ramp, window4, type Pt } from './kit'
+import {
+  ArchDoor, Armchair, Chandelier, Frame, M, P, Pendant, Plant, Room, Rope, Sconce, SideTable, Stanchion, Steam,
+  ceilPt, depthAtY, depthScale, floorPt, wallPt, type Box,
+} from './interior'
 
-const W = 1600
+const persp = (B: Box, base = 1) => (y: number) => base * depthScale(B, depthAtY(B, y))
 
-/* ================= 1 · Arrival: the air pump (diaphragm) ================= */
+/* ================= 1 · Arrival: the front entrance + air pump room ================= */
 export function ArrivalArt({ t }: { t: number }) {
-  const pump = t > 5.5
-  // airway art is 800×1100, drawn at scale 0.7 → 560×770 starting x=860
-  const pts = breathPath as Pt[]
-  const pressure = pump ? (t < 12 ? 759 : 760) : 760
+  const B: Box = { x0: 300, y0: 120, x1: 1300, y1: 560 }
+  const pump = ramp(t, 5.5, 7.5)
+  const pressure = t > 5.5 && t < 13 ? 759 : 760
+  const needle = (pressure - 760) * 30
   return (
     <g>
-      <AirwayArt className="film-airway" x={860} y={-10} width={560} height={770} diaphragmDown={pump}>
-        {/* queue outside the front doors, then in through the nose */}
-        <Stream pts={[[-260, 262], ...pts.slice(0, 1)]} t={t} travel={5} count={6} gap={0.5} s={1.25} hold />
-        <Stream pts={pts} t={t} start={6} travel={7} count={6} gap={0.55} s={1.25} />
-      </AirwayArt>
+      <rect width="1600" height="900" fill="url(#g-night)" />
+      {Array.from({ length: 30 }).map((_, i) => (
+        <circle key={i} cx={(i * 197) % 1600} cy={(i * 61) % 110 + 6} r={i % 3 ? 1.2 : 2} fill="#F3EDE4" opacity={0.3 + 0.4 * Math.abs(Math.sin(t + i))} />
+      ))}
+      <Room
+        B={B}
+        exterior
+        floor="stone"
+        backWall={
+          <g>
+            {/* facade */}
+            <rect x="300" y="150" width="1000" height="410" fill="#24403A" />
+            <rect x="290" y="142" width="1020" height="18" fill="url(#g-brass)" />
+            <text x="800" y="214" textAnchor="middle" className="film-facade">ALVEA</text>
+            {[0, 1].map((row) =>
+              [340, 430, 520, 1000, 1090, 1180].map((x) => (
+                <g key={`${row}-${x}`}>
+                  <rect x={x} y={240 + row * 100} width="60" height="74" rx="30" fill={M.glow} opacity={0.75 - ((x + row) % 3) * 0.12} />
+                  <rect x={x} y={240 + row * 100} width="60" height="74" rx="30" fill="none" stroke="url(#g-brass)" strokeWidth="3" />
+                </g>
+              )),
+            )}
+            {/* nose canopy */}
+            <path d="M800 260 L930 430 L670 430 Z" fill="#2F5D50" stroke="url(#g-brass)" strokeWidth="5" />
+            <ellipse cx="800" cy="440" rx="190" ry="40" fill="url(#g-glow)" />
+            {/* nares: two arched doors with the septum pillar between them */}
+            <ArchDoor x={690} y={440} w={92} h={120} />
+            <ArchDoor x={818} y={440} w={92} h={120} />
+            <rect x="784" y="440" width="32" height="120" fill="#2F5D50" stroke="url(#g-brass)" strokeWidth="3" />
+            {/* lanterns */}
+            {[640, 960].map((x) => (
+              <g key={x}>
+                <ellipse cx={x} cy="470" rx="40" ry="40" fill="url(#g-glow)" />
+                <rect x={x - 9} y="456" width="18" height="28" rx="4" fill={M.glow} stroke="url(#g-brass)" strokeWidth="2" />
+              </g>
+            ))}
+          </g>
+        }
+      />
+      {/* red carpet */}
+      <path d={P([[700, 560], [900, 560], [1060, 900], [540, 900]])} fill="url(#g-carpet)" />
+      <path d={P([[700, 560], [900, 560], [1060, 900], [540, 900]])} fill="none" stroke={M.brass} strokeWidth="3" />
+      <Plant x={600} y={600} s={0.9} />
+      <Plant x={1000} y={600} s={0.9} />
+      <Staff x={640} y={690} s={1.1} body="#2F5D50" accent={M.brass} />
 
-      {/* guest introductions */}
-      <g transform="translate(120 250)">
-        <O2 x={40} y={20} s={2.2} />
-        <text x="110" y="14" className="film-text film-text--big">O₂ guests</text>
-        <text x="110" y="44" className="film-text">oxygen, checking in</text>
-        <CO2 x={40} y={140} s={2} />
-        <text x="110" y="134" className="film-text film-text--big">CO₂ guests</text>
-        <text x="110" y="164" className="film-text">carbon dioxide, checking out</text>
+      {/* queue of guests with luggage, enter after the pump starts */}
+      <Stream pts={[[800, 960], [800, 700], [760, 600], [736, 540]]} t={t} start={0.3} travel={9} count={9} gap={0.9} s={1.4} bag scaleAt={(y) => mix(0.55, 1.2, (y - 540) / 360)} />
+
+      {/* welcome easel */}
+      <g>
+        <line x1="120" y1="560" x2="90" y2="700" stroke={M.woodDark} strokeWidth="8" />
+        <line x1="260" y1="560" x2="290" y2="700" stroke={M.woodDark} strokeWidth="8" />
+        <rect x="30" y="300" width="340" height="270" rx="10" fill={M.cream} stroke="url(#g-brass)" strokeWidth="6" />
+        <text x="195" y="338" textAnchor="middle" className="film-board__title">Tonight’s guests</text>
+        <O2 x={98} y={392} s={1.4} />
+        <text x="140" y="388" className="film-board__term">O₂</text>
+        <text x="140" y="410" className="film-board__note">oxygen · checking in</text>
+        <CO2 x={98} y={482} s={1.2} />
+        <text x="140" y="478" className="film-board__term">CO₂</text>
+        <text x="140" y="500" className="film-board__note">carbon dioxide · checking out</text>
+        <text x="195" y="548" textAnchor="middle" className="film-board__note">Every breath, a destination.</text>
       </g>
 
-      <Sign x={120} y={470} term="Diaphragm" resort="The Air Pump" note="contracts → chest volume ↑ → pressure ↓" show={t > 5.5} to={[1154, 700]} />
-      <g className="film-sign" style={{ opacity: t > 7 ? 1 : 0 }}>
-        <rect x="120" y="600" width="420" height="92" rx="16" fill="rgba(251,252,251,0.08)" stroke="rgba(244,213,204,0.4)" />
-        <text x="146" y="638" className="film-text">Pressure in the lungs</text>
-        <text x="146" y="676" className="film-text film-text--big">{pressure} mm Hg {pressure < 760 ? '↓ air rushes in' : ''}</text>
+      {/* air pump room (diaphragm) */}
+      <g>
+        <rect x="1330" y="280" width="250" height="340" rx="14" fill="#14221F" stroke="url(#g-brass)" strokeWidth="6" />
+        <text x="1455" y="312" textAnchor="middle" className="film-plaque">AIR PUMP ROOM</text>
+        {/* chest + lungs */}
+        <path d="M1370 360 Q1455 330 1540 360 L1550 520 L1360 520 Z" fill="none" stroke={M.cream} strokeOpacity="0.4" strokeWidth="3" />
+        <g transform={`translate(1455 360) scale(${1 + 0.06 * pump} ${1 + 0.1 * pump}) translate(-1455 -360)`}>
+          <path d="M1448 370 C1420 372 1392 400 1388 450 C1386 480 1392 500 1400 506 C1420 502 1440 504 1448 500 Z" fill={M.blush} opacity="0.6" />
+          <path d="M1462 370 C1490 372 1518 400 1522 450 C1524 480 1518 500 1510 506 C1490 502 1470 504 1462 500 Z" fill={M.blush} opacity="0.6" />
+        </g>
+        <path d={`M1360 540 C1400 ${mix(470, 528, pump)} 1510 ${mix(470, 528, pump)} 1550 540`} stroke={M.coral} strokeWidth="9" fill="none" strokeLinecap="round" />
+        {/* gauge */}
+        <g transform="translate(1400 588)">
+          <circle r="24" fill={M.cream} stroke="url(#g-brass)" strokeWidth="4" />
+          <line x1="0" y1="0" x2="0" y2="-18" stroke={M.velvet} strokeWidth="3" strokeLinecap="round" transform={`rotate(${needle})`} style={{ transition: 'transform .6s' }} />
+          <text x="34" y="6" className="film-plaque" style={{ textAnchor: 'start' }}>{pressure} mm Hg</text>
+        </g>
       </g>
+      <Sign x={1100} y={640} term="Diaphragm" resort="The Air Pump" note={`contracts → volume ↑ → pressure ${pressure} mm Hg`} show={t > 5.5} to={[1455, 520]} />
+      <Sign x={980} y={20} term="Nares (nostrils)" resort="Twin front doors" note="nasal septum = the pillar between" show={t > 2} to={[736, 470]} />
     </g>
   )
 }
 
 /* ================= 2 · The Lobby: nasal cavity ================= */
 export function LobbyArt({ t }: { t: number }) {
-  const swirl: Pt[] = [
-    [-40, 560], [170, 560], [330, 520], [520, 470], [720, 450], [920, 462], [1080, 440], [1240, 456], [1380, 500], [1470, 620], [1500, 760],
-  ]
-  const swirl2: Pt[] = [
-    [-40, 580], [170, 575], [360, 560], [560, 560], [800, 555], [1040, 560], [1260, 560], [1420, 600], [1500, 760],
-  ]
-  const steam = (x: number, y: number, i: number) => {
-    const k = (t * 0.6 + i * 0.33) % 1
-    return <path key={`${x}${i}`} d={`M${x} ${y} q8 -12 0 -24 q-8 -12 0 -24`} stroke="#F4D5CC" strokeWidth="2" fill="none" opacity={0.6 * (1 - k)} transform={`translate(0 ${-k * 30})`} />
+  const B: Box = { x0: 470, y0: 190, x1: 1130, y1: 520 }
+  const sc = persp(B, 1.5)
+  const shelves = (side: -1 | 1) =>
+    [0.26, 0.44, 0.62].map((v, i) => {
+      const d0 = 0.04 + i * 0.05
+      const d1 = 0.78 - i * 0.12
+      const a = wallPt(B, side, v, d0)
+      const b = wallPt(B, side, v, d1)
+      const c = wallPt(B, side, v + 0.07, d1)
+      const e = wallPt(B, side, v + 0.07, d0)
+      const bulge = side * -26
+      return (
+        <g key={`${side}${i}`}>
+          <path d={`M${a[0]} ${a[1]} L${b[0]} ${b[1]} Q${b[0] + bulge * 2} ${(b[1] + c[1]) / 2} ${c[0]} ${c[1]} L${e[0]} ${e[1]} Z`} fill={M.blush} />
+          <path d={`M${e[0]} ${e[1] + 3} L${c[0]} ${c[1] + 3}`} stroke={M.coral} strokeWidth="5" opacity="0.8" />
+          {[0.3, 0.6].map((f, k) => {
+            const [sx, sy] = wallPt(B, side, v, mix(d0, d1, f))
+            return <Steam key={k} x={sx + bulge} y={sy} t={t} i={i + k} s={1 + mix(d0, d1, f)} />
+          })}
+        </g>
+      )
+    })
+  // skylights in the ceiling = sinuses
+  const sky = (u0: number, u1: number) => {
+    const q = [ceilPt(B, u0, 0.25), ceilPt(B, u1, 0.25), ceilPt(B, u1, 0.5), ceilPt(B, u0, 0.5)]
+    return (
+      <g>
+        <path d={P(q)} fill="#9FC3D9" opacity="0.5" />
+        <path d={P([q[0], q[1], [q[1][0] + 40, q[1][1] + 260], [q[0][0] - 40, q[0][1] + 260]])} fill="#CFE3EE" opacity="0.07" />
+      </g>
+    )
   }
+  const runner = (u0: number, u1: number) => P([floorPt(B, u0, 0), floorPt(B, u1, 0), floorPt(B, u1, 1), floorPt(B, u0, 1)])
+  const leftHall: Pt[] = [[260, 960], [300, 800], [470, 700], [400, 620], [560, 580], [700, 540], [770, 500]]
+  const rightHall: Pt[] = [[1340, 960], [1300, 800], [1130, 700], [1200, 620], [1040, 580], [900, 540], [830, 500]]
   return (
     <g>
-      {/* sinuses = skylight lofts */}
-      <ellipse cx="700" cy="120" rx="80" ry="40" fill="none" stroke="#C9D6CF" strokeDasharray="6 6" opacity="0.7" />
-      <ellipse cx="1260" cy="130" rx="90" ry="44" fill="none" stroke="#C9D6CF" strokeDasharray="6 6" opacity="0.7" />
-      {/* lobby shell shaped like the nasal cavity */}
-      <path d="M150 640 C190 430 380 250 700 222 C1000 196 1260 212 1440 262 L1470 640 Z" fill="#24403A" stroke="#F4D5CC" strokeWidth="3" />
-      {/* aromatherapy ceiling (olfactory epithelium) */}
-      <path d="M760 218 C860 210 960 208 1080 212" stroke="#E3735E" strokeWidth="8" strokeDasharray="3 10" strokeLinecap="round" fill="none" />
-      {[800, 900, 1000].map((x, i) => (
-        <circle key={x} cx={x} cy={236 + ((t * 20 + i * 15) % 40)} r="4" fill="#E3735E" opacity={0.7 - ((t * 20 + i * 15) % 40) / 60} />
+      <Room
+        B={B}
+        floor="wood"
+        backWall={
+          <g>
+            <ArchDoor x={740} y={330} w={120} h={190} label="ELEVATORS" />
+            <Frame x={520} y={250} w={130} h={170}>
+              <path d="M65 160 L65 20" stroke={M.leafDark} strokeWidth="3" />
+              {[0, 1, 2, 3, 4, 5].map((k) => (
+                <ellipse key={k} cx={k % 2 ? 50 : 80} cy={40 + k * 20} rx="16" ry="10" fill={k % 2 ? M.leaf : M.leafDark} />
+              ))}
+            </Frame>
+            <Frame x={950} y={250} w={130} h={170}>
+              <circle cx="65" cy="85" r="40" fill={M.coral} opacity="0.7" />
+              <circle cx="45" cy="60" r="22" fill={M.blush} />
+              <circle cx="88" cy="58" r="20" fill={M.blush} />
+            </Frame>
+          </g>
+        }
+      />
+      {sky(0.08, 0.32)}
+      {sky(0.68, 0.92)}
+      {shelves(-1)}
+      {shelves(1)}
+      {/* aromatherapy chandelier = olfactory epithelium */}
+      <Chandelier x={800} y={110} s={1} color={M.coral} />
+      {[0, 1, 2].map((i) => {
+        const k = (t * 0.4 + i * 0.33) % 1
+        return <path key={i} d={`M${760 + i * 40} ${160 + k * 80} q10 -14 0 -28`} stroke={M.coral} strokeWidth="2.5" fill="none" opacity={0.7 * (1 - k)} />
+      })}
+      {/* cilia carpet runners + mucus */}
+      {[[0.18, 0.4], [0.6, 0.82]].map(([u0, u1], i) => (
+        <g key={i}>
+          <path d={runner(u0, u1)} fill={M.leafDark} />
+          <path d={runner(u0 + 0.02, u1 - 0.02)} fill="#DCE6B8" opacity="0.35" />
+          {Array.from({ length: 16 }).map((_, k) => {
+            const d = Math.pow((k + 0.5) / 16, 1.3)
+            return [u0, u1].map((u, j) => {
+              const [x, y] = floorPt(B, u, d)
+              const ln = 18 * depthScale(B, d)
+              return <line key={`${k}${j}`} x1={x} y1={y} x2={x} y2={y - ln} stroke={M.leaf} strokeWidth={3 * depthScale(B, d)} strokeLinecap="round" transform={`rotate(${Math.sin(t * 6 + k) * 25} ${x} ${y})`} />
+            })
+          })}
+          {[0, 1, 2].map((k) => {
+            const d = 1 - ((t * 0.12 + k * 0.33) % 1)
+            const [x, y] = floorPt(B, (u0 + u1) / 2, d)
+            return <circle key={k} cx={x} cy={y} r={9 * depthScale(B, d)} fill="#5A6B65" />
+          })}
+        </g>
       ))}
-      {/* conchae: heated rainforest walls */}
-      <path d="M1420 300 C1250 290 1060 300 960 330 C990 350 1200 352 1426 344 Z" fill="#F4D5CC" opacity="0.9" />
-      <path d="M1430 390 C1200 376 900 386 760 420 C790 444 1150 446 1436 436 Z" fill="#F4D5CC" opacity="0.9" />
-      <path d="M1440 500 C1150 480 760 490 560 530 C590 556 1100 556 1446 546 Z" fill="#F4D5CC" opacity="0.9" />
-      {[1100, 1250].map((x, i) => steam(x, 336, i))}
-      {[900, 1100, 1300].map((x, i) => steam(x, 424, i + 1))}
-      {[750, 1000, 1250].map((x, i) => steam(x, 534, i + 2))}
-      {/* front doors (nares) */}
-      <path d="M150 640 L150 520 Q190 470 230 520 L230 640 Z" fill="#1B2A26" stroke="#F4D5CC" strokeWidth="3" />
-      {/* floor: mucus + cilia carpet */}
-      <rect x="230" y="616" width="1240" height="24" fill="#DCE6B8" opacity="0.55" />
-      {Array.from({ length: 40 }).map((_, i) => {
-        const x = 250 + i * 30
-        const a = Math.sin(t * 6 + i * 0.6) * 18
-        return <path key={i} d={`M${x} 640 l0 -14`} stroke="#8FB3A6" strokeWidth="3" strokeLinecap="round" transform={`rotate(${a} ${x} 640)`} />
-      })}
-      {/* dust caught in mucus, swept toward the throat (right) */}
-      {[0, 1, 2, 3].map((i) => {
-        const x = 260 + ((t * 70 + i * 300) % 1200)
-        return <circle key={i} cx={x} cy={626} r="6" fill="#5A6B65" />
-      })}
-      {/* mouth: side door */}
-      <path d="M260 690 L1400 690" stroke="#36574F" strokeWidth="30" strokeLinecap="round" />
+      {/* septum: central planter wall dividing the two halls */}
+      <path d={P([floorPt(B, 0.47, 0), floorPt(B, 0.53, 0), floorPt(B, 0.56, 0.42), floorPt(B, 0.44, 0.42)])} fill="#3E6359" />
+      <path d={P([floorPt(B, 0.44, 0.42), floorPt(B, 0.56, 0.42), [floorPt(B, 0.56, 0.42)[0], floorPt(B, 0.56, 0.42)[1] + 40], [floorPt(B, 0.44, 0.42)[0], floorPt(B, 0.44, 0.42)[1] + 40]])} fill="#2F5D50" stroke="url(#g-brass)" strokeWidth="3" />
+      <Plant x={800} y={floorPt(B, 0.5, 0.42)[1] - 6} s={0.75} />
+      <Plant x={800} y={floorPt(B, 0.5, 0.15)[1] - 4} s={0.45} />
+      {/* side door (mouth) on right wall */}
+      {(() => {
+        const q = [wallPt(B, 1, 0.68, 0.5), wallPt(B, 1, 0.68, 0.62), wallPt(B, 1, 1, 0.62), wallPt(B, 1, 1, 0.5)]
+        return <path d={P(q)} fill="#0F1A17" stroke="url(#g-brass)" strokeWidth="3" />
+      })()}
+      {/* housekeeper */}
+      <Staff x={360} y={680} s={1.15} body={M.cream} accent={M.leafDark}>
+        <line x1="26" y1="30" x2="60" y2="80" stroke={M.brassDark} strokeWidth="4" />
+        <rect x="50" y="76" width="34" height="12" rx="6" fill="#DCE6B8" />
+      </Staff>
       {/* guests */}
-      <Stream pts={swirl} t={t} start={0.5} travel={9} count={12} gap={1.1} s={1.2} />
-      <Stream pts={swirl2} t={t} start={1.2} travel={9} count={8} gap={1.6} s={1.2} />
+      <Stream pts={leftHall} t={t} start={0.2} travel={9} count={10} gap={1.4} s={1} scaleAt={sc} bag />
+      <Stream pts={rightHall} t={t} start={0.9} travel={9} count={10} gap={1.4} s={1} scaleAt={sc} bag />
 
-      <Sign x={20} y={300} term="Nares (nostrils)" resort="The Front Doors" to={[190, 520]} />
-      <Sign x={260} y={140} term="Nasal septum" resort="Glass wall: left and right halls" show={t > 2} />
-      <Sign x={1020} y={620} anchor="start" term="Mouth" resort="Side door: skips the welcome" show={t > 2.5} to={[1000, 690]} />
-      <Sign x={1180} y={330} term="Nasal conchae" resort="Heated Rainforest Walls" show={t > 5} to={[1150, 430]} />
-      <Sign x={240} y={420} term="Mucus + cilia" resort="Housekeeping" show={t > 10} to={[480, 628]} />
-      <Sign x={820} y={40} term="Olfactory epithelium" resort="Aromatherapy Suite" show={t > 15} to={[900, 214]} />
-      <Sign x={1220} y={40} term="Paranasal sinuses" resort="Skylight Lofts" show={t > 17} />
+      <Sign x={30} y={580} term="Nares (nostrils)" resort="Front doors, behind you" show={t > 0.3} />
+      <Sign x={980} y={600} term="Nasal septum" resort="Dividing wall: left + right halls" show={t > 2} to={[820, 640]} />
+      <Sign x={1220} y={420} term="Mouth" resort="Side door: skips the welcome" show={t > 3} to={[1350, 640]} />
+      <Sign x={1180} y={180} term="Nasal conchae" resort="Heated Rainforest Walls" note="swirl guests: warm, humidify, clean" show={t > 5.5} to={[1300, 300]} />
+      <Sign x={30} y={430} term="Mucus + cilia" resort="Housekeeping carpets" note="trap dust, sweep it to the throat" show={t > 10.5} to={[400, 760]} />
+      <Sign x={540} y={14} term="Olfactory epithelium" resort="Aromatherapy chandelier" show={t > 15.5} to={[800, 150]} />
+      <Sign x={30} y={170} term="Paranasal sinuses" resort="Skylight Lofts" show={t > 17.5} to={[300, 120]} />
     </g>
   )
 }
 
 /* ================= 3 · The Elevator: pharynx ================= */
+function Floorplate({ y, h, children }: { y: number; h: number; children?: ReactNode }) {
+  return (
+    <g>
+      <rect x="260" y={y} width="960" height={h} fill="url(#g-wall)" />
+      {Array.from({ length: 24 }).map((_, i) => (
+        <rect key={i} x={262 + i * 40} y={y} width="16" height={h - 20} fill="#33554C" opacity="0.45" />
+      ))}
+      <rect x="260" y={y + h - 20} width="960" height="20" fill="url(#g-wood)" />
+      <rect x="260" y={y} width="960" height="6" fill={M.brass} opacity="0.6" />
+      {children}
+    </g>
+  )
+}
 export function ElevatorArt({ t }: { t: number }) {
   const carY = mix(110, 560, ramp(t, 2, 16))
   const floors = [
@@ -109,205 +245,308 @@ export function ElevatorArt({ t }: { t: number }) {
   ]
   const exitF = ramp(t, 16.5, 20.5)
   const food = window4(t, 9.5, 10.5, 19.5, 20.5)
-  const foodX = t < 13 ? mix(300, 760, ramp(t, 10, 13)) : mix(760, 990, ramp(t, 15, 19))
-  const foodY = t < 13 ? 400 : mix(400, 660, ramp(t, 13, 19))
+  const foodX = t < 13 ? mix(330, 740, ramp(t, 10, 13)) : mix(740, 1010, ramp(t, 15, 19))
+  const foodY = t < 13 ? 448 : mix(448, 655, ramp(t, 13, 19))
+  const floorNow = carY < 230 ? 0 : carY < 430 ? 1 : 2
+  const guard = (x: number, y: number) => (
+    <Staff x={x} y={y} s={0.85} body={M.velvet} accent={M.brass}>
+      <rect x="-18" y="-34" width="36" height="10" rx="4" fill={M.ink} />
+    </Staff>
+  )
   return (
     <g>
-      {floors.map((f, i) => (
-        <g key={f.name}>
-          <rect x="300" y={f.y} width="900" height={f.h} fill={i === 1 ? '#2B4A42' : '#24403A'} stroke="#36574F" strokeWidth="2" />
-          <Sign x={1230} y={f.y + 30} term={f.name} resort={f.resort} note={f.note} show={t > f.at} />
-        </g>
-      ))}
-      {/* shaft */}
-      <rect x="690" y="90" width="160" height="590" fill="#1B2A26" stroke="#F4D5CC" strokeWidth="3" />
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <line key={i} x1="700" x2="840" y1={100 + i * 100} y2={100 + i * 100} stroke="#36574F" />
-      ))}
-      {/* car */}
-      <g transform={`translate(700 ${carY})`}>
-        <rect width="140" height="110" rx="10" fill="#36574F" stroke="#F4D5CC" strokeWidth="3" />
-        {exitF < 0.05 && [
-          <O2 key="a" x={36} y={60} s={1.1} />,
-          <O2 key="b" x={100} y={60} s={1.1} />,
-          <O2 key="c" x={68} y={88} s={1.1} />,
-        ]}
+      <Floorplate y={90} h={190}>
+        <Pendant x={420} y={90} len={20} s={0.7} />
+        <Armchair x={380} y={258} s={0.75} />
+        <SideTable x={460} y={258} s={0.7} />
+        <Armchair x={540} y={258} s={0.75} color={M.leaf} />
+        <Frame x={960} y={120} w={80} h={60}>
+          <path d="M0 50 L30 20 L50 40 L80 10 L80 60 L0 60 Z" fill={M.leaf} />
+        </Frame>
+        {guard(1110, 196)}
+        <text x="300" y="128" className="film-plaque" style={{ textAnchor: 'start' }}>← FROM THE LOBBY (NASAL CAVITY)</text>
+      </Floorplate>
+      <Floorplate y={280} h={200}>
+        <text x="300" y="318" className="film-plaque" style={{ textAnchor: 'start' }}>← FROM THE MOUTH</text>
+        <rect x="300" y="334" width="150" height="60" rx="6" fill="#14221F" stroke="url(#g-brass)" strokeWidth="3" />
+        <text x="375" y="370" textAnchor="middle" className="film-plaque">FOOD COURT</text>
+        {[520, 610].map((x) => (
+          <g key={x}>
+            <ellipse cx={x} cy="420" rx="34" ry="8" fill={M.marble} />
+            <line x1={x} y1="422" x2={x} y2="458" stroke="url(#g-brass)" strokeWidth="5" />
+            <rect x={x - 46} y="418" width="12" height="40" rx="4" fill={M.blush} />
+            <rect x={x + 34} y="418" width="12" height="40" rx="4" fill={M.blush} />
+          </g>
+        ))}
+        {guard(960, 390)}
+        {guard(1110, 390)}
+      </Floorplate>
+      <Floorplate y={480} h={200}>
+        <rect x="380" y="540" width="110" height="120" rx="8" fill="#0F1A17" stroke={M.coral} strokeWidth="4" />
+        <text x="435" y="530" textAnchor="middle" className="film-plaque">AIR · LARYNX</text>
+        <rect x="970" y="540" width="110" height="120" rx="8" fill="#0F1A17" stroke={M.leaf} strokeWidth="4" />
+        <text x="1025" y="530" textAnchor="middle" className="film-plaque">FOOD · ESOPHAGUS</text>
+        <path d="M640 645 L520 645" stroke={M.coral} strokeWidth="6" strokeLinecap="round" />
+        <path d="M520 645 l16 -10 M520 645 l16 10" stroke={M.coral} strokeWidth="6" strokeLinecap="round" />
+        <path d="M840 645 L960 645" stroke={M.leaf} strokeWidth="6" strokeLinecap="round" />
+        <path d="M960 645 l-16 -10 M960 645 l-16 10" stroke={M.leaf} strokeWidth="6" strokeLinecap="round" />
+      </Floorplate>
+      {/* glass elevator shaft */}
+      <rect x="670" y="90" width="160" height="590" fill="url(#g-glass)" stroke="url(#g-brass)" strokeWidth="6" />
+      <line x1="750" y1="90" x2="750" y2={carY} stroke={M.brassDark} strokeWidth="3" />
+      <g transform={`translate(680 ${carY})`}>
+        <rect width="140" height="110" rx="8" fill="rgba(217,182,118,0.18)" stroke="url(#g-brass)" strokeWidth="5" />
+        <rect y="100" width="140" height="10" fill="url(#g-brass)" />
+        {exitF < 0.05 && [<O2 key="a" x={36} y={58} s={1.1} />, <O2 key="b" x={100} y={58} s={1.1} />, <O2 key="c" x={68} y={84} s={1.1} />]}
       </g>
-      {exitF > 0 && <Stream pts={[[770, 640], [600, 640], [480, 700], [470, 780]]} t={t} start={16.5} travel={3} count={3} gap={0.4} s={1.1} />}
-      {/* entrances */}
-      <path d="M300 190 L690 190" stroke="#F4D5CC" strokeWidth="2" strokeDasharray="8 8" />
-      <text x="320" y="176" className="film-text">from the lobby (nasal cavity)</text>
-      <text x="320" y="376" className="film-text">from the mouth</text>
-      {/* the great split doors */}
-      <rect x="440" y="600" width="90" height="80" rx="8" fill="#1B2A26" stroke="#E3735E" strokeWidth="3" />
-      <text x="485" y="720" textAnchor="middle" className="film-text">larynx · air</text>
-      <rect x="950" y="600" width="90" height="80" rx="8" fill="#1B2A26" stroke="#8FB3A6" strokeWidth="3" />
-      <text x="995" y="720" textAnchor="middle" className="film-text">esophagus · food</text>
-      {/* food tray */}
+      {/* floor indicator */}
+      <g transform="translate(750 50)">
+        <path d="M-60 20 A60 60 0 0 1 60 20" fill="#14221F" stroke="url(#g-brass)" strokeWidth="5" />
+        {['N', 'O', 'L'].map((l, i) => (
+          <text key={l} x={-40 + i * 40} y="10" textAnchor="middle" className="film-plaque" style={{ fill: i === floorNow ? M.coral : M.cream }}>
+            {l}
+          </text>
+        ))}
+      </g>
+      {exitF > 0 && <Stream pts={[[750, 640], [600, 640], [470, 640], [435, 620]]} t={t} start={16.5} travel={3} count={3} gap={0.4} s={1.1} />}
+      {/* room-service tray */}
       <g opacity={food} transform={`translate(${foodX} ${foodY})`}>
-        <ellipse cx="0" cy="12" rx="34" ry="8" fill="#C9D6CF" />
-        <path d="M-26 10 Q0 -26 26 10 Z" fill="#E9C46A" />
+        <ellipse cx="0" cy="12" rx="34" ry="8" fill={M.marble} />
+        <path d="M-26 10 Q0 -26 26 10 Z" fill="url(#g-brass)" />
       </g>
-      {/* tonsil guards */}
-      <Staff x={1010} y={150} s={0.9} body="#E3735E" accent="#B84A35" />
-      <Staff x={1010} y={350} s={0.9} body="#E3735E" accent="#B84A35" />
-      <Staff x={600} y={390} s={0.8} body="#E3735E" accent="#B84A35" />
+      {floors.map((f) => (
+        <Sign key={f.name} x={1250} y={f.y + 30} term={f.name} resort={f.resort} note={f.note} show={t > f.at} />
+      ))}
     </g>
   )
 }
 
-/* ================= 4 · Security Gate: larynx ================= */
+/* ================= 4 · Security Gate: larynx as a concert hall ================= */
 export function GateArt({ t }: { t: number }) {
+  const B: Box = { x0: 380, y0: 140, x1: 1220, y1: 560 }
+  const sc = persp(B, 1.3)
   const closed = window4(t, 6.5, 8, 10.5, 12)
   const angle = mix(-78, 0, closed)
   const trayK = ramp(t, 6, 11.5)
-  const trayPts: Pt[] = [[420, 120], [700, 250], [780, 262], [930, 300], [1080, 760]]
+  const trayPts: Pt[] = [[260, 820], [560, 640], [700, 470], [900, 470], [1180, 600], [1400, 700]]
   const [tx, ty] = along(trayPts, trayK)
+  const vib = t > 13 ? Math.sin(t * 30) * 3 : 0
   return (
     <g>
-      {/* thyroid façade */}
-      <path d="M560 300 L740 300 L800 340 L860 300 L1040 300 L1010 470 C980 560 900 620 800 640 C700 620 620 560 590 470 Z" fill="#DCE8E2" stroke="#2F5D50" strokeWidth="4" />
-      {/* door opening: glottis with vocal cords */}
-      <path d="M730 330 L870 330 L860 600 L740 600 Z" fill="#1B2A26" />
-      <path d="M800 340 L752 590 M800 340 L848 590" stroke="#FBFCFB" strokeWidth="9" strokeLinecap="round" />
-      {/* cricoid + trachea rings */}
-      <rect x="650" y="660" width="300" height="40" rx="12" fill="#DCE8E2" stroke="#2F5D50" strokeWidth="3" />
-      <rect x="670" y="716" width="260" height="22" rx="11" fill="#DCE8E2" opacity="0.7" />
-      {/* drawbridge (epiglottis) */}
-      <g transform={`rotate(${angle} 720 300)`}>
-        <path d="M720 300 C760 270 860 266 900 300 C860 330 760 330 720 300 Z" fill="#F4D5CC" stroke="#B84A35" strokeWidth="3" />
+      <Room
+        B={B}
+        floor="marble"
+        backWall={
+          <g>
+            {/* proscenium shaped like the thyroid cartilage shield */}
+            <path d="M560 210 L760 210 L800 250 L840 210 L1040 210 L1010 400 C985 480 900 545 800 556 C700 545 615 480 590 400 Z" fill="#DCE8E2" />
+            <path d="M560 210 L760 210 L800 250 L840 210 L1040 210 L1010 400 C985 480 900 545 800 556 C700 545 615 480 590 400 Z" fill="none" stroke="url(#g-brass)" strokeWidth="8" />
+            {/* stage opening with curtains = vocal cords around the glottis */}
+            <path d="M660 250 L940 250 L920 520 L680 520 Z" fill="#0F1A17" />
+            <path d={`M660 250 L800 250 L${730 + vib} 520 L680 520 Z`} fill="url(#g-velvet)" />
+            <path d={`M800 250 L940 250 L920 520 L${870 - vib} 520 Z`} fill="url(#g-velvet)" />
+            <rect x="650" y="244" width="300" height="14" fill="url(#g-brass)" />
+            {/* cricoid: stage steps */}
+            <rect x="620" y="530" width="360" height="16" fill={M.marble} />
+            <rect x="600" y="546" width="400" height="14" fill={M.marbleVein} />
+          </g>
+        }
+      />
+      <Chandelier x={560} y={40} s={0.8} />
+      <Chandelier x={1040} y={40} s={0.8} />
+      {/* drawbridge = epiglottis */}
+      <g transform={`rotate(${angle} 650 250)`}>
+        <path d="M650 250 C700 210 880 206 950 250 C880 290 700 290 650 250 Z" fill={M.blush} stroke={M.velvet} strokeWidth="4" />
+        <path d="M680 250 L920 250" stroke={M.brass} strokeWidth="3" />
       </g>
-      <circle cx="720" cy="300" r="8" fill="#B84A35" />
-      {/* guests pass through when open */}
-      <Stream pts={[[800, -40], [800, 320], [800, 620], [800, 800]]} t={t} start={0.5} travel={5} count={4} gap={0.9} s={1.15} />
-      <Stream pts={[[800, -40], [800, 320], [800, 620], [800, 800]]} t={t} start={12.2} travel={5} count={5} gap={0.9} s={1.15} />
-      {/* room-service tray (food) */}
-      <g opacity={trayK > 0 && trayK < 1 ? 1 : 0} transform={`translate(${tx} ${ty})`}>
-        <ellipse cx="0" cy="12" rx="38" ry="9" fill="#C9D6CF" />
-        <path d="M-28 10 Q0 -30 28 10 Z" fill="#E9C46A" />
+      <circle cx="650" cy="250" r="10" fill="url(#g-brass)" />
+      {/* aisle runner + stanchions */}
+      <path d={P([floorPt(B, 0.44, 0), floorPt(B, 0.56, 0), floorPt(B, 0.66, 1), floorPt(B, 0.34, 1)])} fill="url(#g-carpet)" />
+      {[0.35, 0.6, 0.85].map((d) => {
+        const l = floorPt(B, 0.4, d)
+        const r = floorPt(B, 0.6, d)
+        const s = depthScale(B, d)
+        return (
+          <g key={d}>
+            <Stanchion x={l[0]} y={l[1]} s={s} />
+            <Stanchion x={r[0]} y={r[1]} s={s} />
+          </g>
+        )
+      })}
+      {(() => {
+        const pts = [0.35, 0.6, 0.85].map((d) => [floorPt(B, 0.4, d), floorPt(B, 0.6, d), depthScale(B, d)] as const)
+        return pts.slice(0, -1).map(([l, r, s], i) => {
+          const [l2, r2, s2] = pts[i + 1]
+          return (
+            <g key={i}>
+              <Rope a={[l[0], l[1] - 84 * s]} b={[l2[0], l2[1] - 84 * s2]} />
+              <Rope a={[r[0], r[1] - 84 * s]} b={[r2[0], r2[1] - 84 * s2]} />
+            </g>
+          )
+        })
+      })()}
+      {/* service door → esophagus */}
+      <path d={P([wallPt(B, 1, 0.5, 0.15), wallPt(B, 1, 0.5, 0.3), wallPt(B, 1, 1, 0.3), wallPt(B, 1, 1, 0.15)])} fill="#0F1A17" stroke={M.leaf} strokeWidth="3" />
+      {/* guests walk the aisle and through the stage door */}
+      <Stream pts={[[800, 960], [800, 640], [800, 520], [800, 430]]} t={t} start={0.4} travel={6} count={4} gap={1} s={1} scaleAt={sc} bag />
+      <Stream pts={[[800, 960], [800, 640], [800, 520], [800, 430]]} t={t} start={12.3} travel={6} count={5} gap={1} s={1} scaleAt={sc} bag />
+      {/* room-service trolley (food) */}
+      <g opacity={trayK > 0 && trayK < 1 ? 1 : 0} transform={`translate(${tx} ${ty}) scale(${mix(1.3, 0.7, ramp(ty, 820, 470))})`}>
+        <rect x="-40" y="0" width="80" height="10" rx="4" fill="url(#g-brass)" />
+        <ellipse cx="0" cy="-2" rx="38" ry="9" fill={M.marble} />
+        <path d="M-28 -4 Q0 -40 28 -4 Z" fill="url(#g-brass)" />
+        <line x1="-34" y1="10" x2="-34" y2="40" stroke={M.brassDark} strokeWidth="4" />
+        <line x1="34" y1="10" x2="34" y2="40" stroke={M.brassDark} strokeWidth="4" />
       </g>
-      <text x="1100" y="720" className="film-text" opacity={t > 9 ? 1 : 0}>
-        food → esophagus
-      </text>
-      {/* sound waves on exhale (teaser) */}
       {t > 14 &&
         [0, 1, 2].map((i) => (
-          <path key={i} d={`M${880 + i * 26} 430 q14 30 0 60`} stroke="#E3735E" strokeWidth="3" fill="none" opacity={0.4 + 0.6 * Math.abs(Math.sin(t * 4 + i))} />
+          <path key={i} d={`M${960 + i * 28} 340 q16 34 0 68`} stroke={M.coral} strokeWidth="4" fill="none" opacity={0.4 + 0.6 * Math.abs(Math.sin(t * 4 + i))} />
         ))}
 
-      <Sign x={1080} y={180} term="Larynx" resort="Security Gate" note="9 cartilages hold the airway open" />
-      <Sign x={1080} y={330} term="Thyroid cartilage" resort="The Façade (Adam’s apple)" show={t > 3} to={[1000, 400]} />
-      <Sign x={220} y={260} term="Epiglottis" resort="The Drawbridge" note="closes when you swallow" show={t > 6} to={[760, 292]} />
-      <Sign x={220} y={480} term="True vocal cords" resort="The Main Stage" show={t > 12} to={[760, 520]} />
-      <Sign x={1080} y={500} term="Glottis" resort="The Stage Door" show={t > 13} to={[820, 470]} />
+      <Sign x={1180} y={14} term="Larynx" resort="The Security Gate" note="9 cartilages hold the airway open" />
+      <Sign x={1180} y={150} term="Thyroid cartilage" resort="The Proscenium (Adam’s apple)" show={t > 3} to={[1030, 260]} />
+      <Sign x={60} y={200} term="Epiglottis" resort="The Drawbridge" note="closes when you swallow" show={t > 6} to={[700, 250]} />
+      <Sign x={1180} y={420} term="Esophagus" resort="Service corridor for food" show={t > 9} to={[1340, 560]} />
+      <Sign x={60} y={420} term="True vocal cords" resort="The Stage Curtains" show={t > 12.5} to={[720, 420]} />
+      <Sign x={60} y={560} term="Glottis" resort="Gap between the curtains" show={t > 13.5} to={[800, 470]} />
     </g>
   )
 }
 
 /* ================= 5 · Main Hallway: trachea ================= */
 export function HallwayArt({ t }: { t: number }) {
-  const cx = 800
-  const cy = 360
-  const rings = Array.from({ length: 11 }, (_, k) => k)
-  const proj = (d: number) => 1 / (1 + d * 0.55)
+  const B: Box = { x0: 660, y0: 250, x1: 940, y1: 470 }
+  const sc = persp(B, 2.4)
+  const ribs = Array.from({ length: 12 }, (_, k) => Math.pow((k + 0.6) / 12, 1.25))
   return (
     <g>
-      {/* rings receding (C-shaped: gap on the right = back wall facing the esophagus) */}
-      {rings.reverse().map((k) => {
-        const s = proj(k)
-        const r = 470 * s
-        const a1 = (35 * Math.PI) / 180
-        const p1 = [cx + r * Math.cos(a1), cy - r * Math.sin(a1)]
-        const p2 = [cx + r * Math.cos(-a1), cy - r * Math.sin(-a1)]
+      <Room
+        B={B}
+        floor="wood"
+        wainscot
+        backWall={
+          <g>
+            <ArchDoor x={720} y={300} w={160} h={170} label="GUEST WINGS" />
+          </g>
+        }
+      />
+      {/* right wall: glass to the service corridor (esophagus) */}
+      <path d={P([wallPt(B, 1, 0.12, 0), wallPt(B, 1, 0.12, 1), wallPt(B, 1, 0.9, 1), wallPt(B, 1, 0.9, 0)])} fill="url(#g-glass)" />
+      {(() => {
+        const k = (t * 0.08) % 1
+        const [x, y] = wallPt(B, 1, 0.78, k)
+        const s = depthScale(B, k)
+        return (
+          <g transform={`translate(${x} ${y}) scale(${s * 1.6})`} opacity="0.75">
+            <rect x="-40" y="0" width="80" height="10" rx="4" fill="url(#g-brass)" />
+            <path d="M-28 -2 Q0 -36 28 -2 Z" fill="url(#g-brass)" />
+          </g>
+        )
+      })()}
+      {/* runner: mucociliary escalator moving toward the viewer */}
+      <path d={P([floorPt(B, 0.32, 0), floorPt(B, 0.68, 0), floorPt(B, 0.72, 1), floorPt(B, 0.28, 1)])} fill="url(#g-carpet)" />
+      {Array.from({ length: 10 }).map((_, i) => {
+        const d = (t * 0.09 + i * 0.1) % 1
+        const [x, y] = floorPt(B, 0.4 + (i % 3) * 0.1, d)
+        return <ellipse key={i} cx={x} cy={y} rx={22 * depthScale(B, d)} ry={8 * depthScale(B, d)} fill="#DCE6B8" opacity="0.85" />
+      })}
+      {/* C-shaped cartilage arches: up the left wall, over the ceiling, open on the right wall */}
+      {ribs.map((d, i) => {
+        const a = wallPt(B, -1, 1, d)
+        const b = wallPt(B, -1, 0, d)
+        const c = wallPt(B, 1, 0, d)
+        const e = wallPt(B, 1, 0.12, d)
+        const s = depthScale(B, d)
         return (
           <path
-            key={k}
-            d={`M${p1[0]} ${p1[1]} A${r} ${r} 0 1 0 ${p2[0]} ${p2[1]}`}
-            stroke="#DCE8E2"
-            strokeOpacity={0.25 + 0.6 * s}
-            strokeWidth={34 * s}
+            key={i}
+            d={`M${a[0]} ${a[1]} L${b[0]} ${b[1]} Q${(b[0] + c[0]) / 2} ${b[1] - 40 * s} ${c[0]} ${c[1]} L${e[0]} ${e[1]}`}
+            stroke={M.cream}
+            strokeOpacity={0.35 + 0.5 * s}
+            strokeWidth={26 * s}
             fill="none"
-            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         )
       })}
-      {/* back wall (trachealis) on the right */}
-      <path d="M1185 85 Q1230 360 1185 635" stroke="#B84A35" strokeWidth="10" strokeDasharray="4 8" fill="none" />
-      {/* escalator floor: mucus moving toward us (up toward the pharynx) */}
-      {Array.from({ length: 14 }).map((_, i) => {
-        const d = 10 - ((t * 1.2 + i * 0.75) % 10.5)
-        const s = proj(d)
-        return <circle key={i} cx={cx + ((i % 3) - 1) * 220 * s} cy={cy + 440 * s} r={14 * s} fill="#DCE6B8" opacity={0.85} />
+      {[0.3, 0.55, 0.8].map((d) => {
+        const [x, y] = wallPt(B, -1, 0.42, d)
+        return <Sconce key={d} x={x} y={y} s={depthScale(B, d) * 1.6} />
       })}
       {/* guests walking away down the hallway */}
-      {Array.from({ length: 7 }).map((_, i) => {
-        const d = ((t - i * 1.3) * 0.75)
-        if (d < 0 || d > 9) return null
-        const s = proj(d)
-        return <O2 key={i} x={cx + ((i % 3) - 1) * 160 * s} y={cy + 300 * s + Math.sin(t * 9 + i) * 3 * s} s={2.2 * s} />
-      })}
-      <Sign x={60} y={170} term="16–20 C-shaped rings" resort="The Arches" note="hyaline cartilage keeps the hall open" show={t > 4} to={[350, 330]} />
-      <Sign x={1250} y={250} term="Open side → esophagus" resort="Back wall (trachealis)" show={t > 7} to={[1200, 360]} />
-      <Sign x={60} y={500} term="Mucociliary escalator" resort="The Luggage Return" note="goblet cells + cilia move mucus up" show={t > 11} to={[620, 720]} />
-      <Sign x={1250} y={520} term="Conducting zone" resort="No check-in desk here" note="no gas exchange in the trachea" show={t > 17} />
+      <Stream pts={[[740, 960], [770, 700], [790, 520], [800, 470]]} t={t} start={0.2} travel={8} count={8} gap={1.3} s={1} scaleAt={sc} bag />
+      <Stream pts={[[880, 960], [850, 700], [820, 520], [810, 470]]} t={t} start={0.9} travel={8} count={8} gap={1.3} s={1} scaleAt={sc} bag />
+
+      <Sign x={40} y={180} term="16–20 C-shaped rings" resort="The Arches" note="hyaline cartilage keeps the hall open" show={t > 4} to={[300, 120]} />
+      <Sign x={1190} y={150} term="Open side → esophagus" resort="Glass wall (trachealis behind)" show={t > 7} to={[1400, 380]} />
+      <Sign x={40} y={520} term="Mucociliary escalator" resort="The Luggage Return runner" note="goblet cells + cilia move mucus up" show={t > 11} to={[620, 800]} />
+      <Sign x={1190} y={520} term="Conducting zone" resort="No check-in desk here" note="no gas exchange in the trachea" show={t > 17} />
     </g>
   )
 }
 
 /* ================= 6 · Guest Wings: bronchi ================= */
 export function WingsArt({ t }: { t: number }) {
+  const B: Box = { x0: 400, y0: 160, x1: 1200, y1: 540 }
+  const sc = persp(B, 1.3)
   const alarm = window4(t, 1.5, 2, 5, 5.6)
-  const left: Pt[] = [[800, -40], [800, 200], [700, 270], [540, 360], [420, 330], [360, 330]]
-  const left2: Pt[] = [[800, -40], [800, 200], [700, 270], [540, 360], [420, 480], [360, 480]]
-  const left3: Pt[] = [[800, -40], [800, 200], [700, 270], [540, 380], [440, 620], [360, 620]]
-  const right: Pt[] = [[800, -40], [800, 200], [920, 250], [1080, 300], [1200, 360], [1260, 360]]
-  const right2: Pt[] = [[800, -40], [800, 200], [920, 250], [1080, 300], [1200, 560], [1260, 560]]
-  const dustY = t < 3.5 ? mix(-20, 196, ramp(t, 0.5, 2)) : mix(196, -60, ramp(t, 3.5, 5))
+  const dustK = t < 3.5 ? ramp(t, 0.5, 2.2) : 1 - ramp(t, 3.5, 5)
+  const [dx, dy] = along([[800, 960], [800, 520]], dustK)
+  const rightPath = (end: Pt): Pt[] => [[760, 960], [780, 700], [700, 600], [620, 540], end]
+  const leftPath = (end: Pt): Pt[] => [[840, 960], [820, 700], [900, 600], [980, 550], end]
   return (
     <g>
-      {/* buildings = lungs */}
-      <rect x="160" y="250" width="380" height="450" rx="30" fill="#24403A" stroke="#F4D5CC" strokeWidth="3" />
-      {[400, 550].map((y) => (
-        <line key={y} x1="160" x2="540" y1={y} y2={y} stroke="#F4D5CC" strokeWidth="2" strokeDasharray="8 6" />
-      ))}
-      <path d="M1060 250 L1440 250 L1440 700 L1150 700 L1150 520 C1120 520 1060 500 1060 470 Z" fill="#24403A" stroke="#F4D5CC" strokeWidth="3" />
-      <line x1="1060" x2="1440" y1="460" y2="460" stroke="#F4D5CC" strokeWidth="2" strokeDasharray="8 6" />
-      {/* the heart next door */}
-      <path d="M1080 600 C1040 560 1000 600 1030 640 L1080 690 L1130 640 C1160 600 1120 560 1080 600 Z" fill="#E3735E" opacity="0.6" />
-      <text x="1000" y="730" className="film-text">the heart, next door</text>
-      {/* corridors */}
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M800 -20 L800 200" stroke="#F4D5CC" strokeWidth="70" opacity="0.25" />
-        <path d="M800 200 L700 270 L540 360" stroke="#F4D5CC" strokeWidth="62" opacity="0.25" />
-        <path d="M800 200 L920 250 L1080 300" stroke="#F4D5CC" strokeWidth="48" opacity="0.25" />
+      <Room
+        B={B}
+        floor="marble"
+        backWall={
+          <g>
+            {/* right wing arch (wider) and left wing arch (narrower) */}
+            <ArchDoor x={440} y={230} w={300} h={310} label="RIGHT WING" />
+            <ArchDoor x={890} y={280} w={240} h={260} label="LEFT WING" />
+            {/* lobe directories */}
+            {['Superior', 'Middle', 'Inferior'].map((l, i) => (
+              <g key={l}>
+                <rect x={520} y={340 + i * 52} width="140" height="40" rx="6" fill="#14221F" stroke="url(#g-brass)" strokeWidth="2" />
+                <text x={590} y={366 + i * 52} textAnchor="middle" className="film-plaque">{l} lobe</text>
+              </g>
+            ))}
+            {['Superior', 'Inferior'].map((l, i) => (
+              <g key={l}>
+                <rect x={940} y={380 + i * 56} width="140" height="40" rx="6" fill="#14221F" stroke="url(#g-brass)" strokeWidth="2" />
+                <text x={1010} y={406 + i * 56} textAnchor="middle" className="film-plaque">{l} lobe</text>
+              </g>
+            ))}
+          </g>
+        }
+      />
+      {/* carina: security arch at the fork */}
+      <g>
+        <rect x="770" y="300" width="60" height="250" fill="none" stroke="url(#g-brass)" strokeWidth="12" />
+        <rect x="770" y="290" width="60" height="20" rx="4" fill={alarm > 0.5 && Math.sin(t * 20) > 0 ? M.coral : M.brassDark} />
+        <ellipse cx="800" cy="300" rx={30 + alarm * 60} ry={30 + alarm * 60} fill="url(#g-glow-coral)" opacity={alarm} />
       </g>
-      {/* carina checkpoint */}
-      <path d="M770 220 L800 192 L830 220" stroke={alarm > 0.5 && Math.sin(t * 20) > 0 ? '#E3735E' : '#F4D5CC'} strokeWidth="8" fill="none" strokeLinecap="round" />
-      <circle cx="800" cy="170" r={10 + alarm * 30} fill="#E3735E" opacity={alarm * 0.35} />
-      <circle cx="800" cy={dustY} r="10" fill="#5A6B65" opacity={t < 5 ? 1 : 0} />
-      <text x="850" y="150" className="film-text film-text--big" opacity={window4(t, 3.4, 3.6, 4.8, 5.4)}>
+      <circle cx={dx} cy={dy} r={10 * mix(1, 0.5, dustK)} fill="#5A6B65" opacity={t < 5 ? 1 : 0} />
+      <text x="860" y="260" className="film-cough" opacity={window4(t, 3.4, 3.6, 4.8, 5.4)}>
         COUGH!
       </text>
-      {/* floor labels */}
-      <text x="350" y="300" textAnchor="middle" className="film-text">Superior lobe</text>
-      <text x="350" y="450" textAnchor="middle" className="film-text">Middle lobe</text>
-      <text x="350" y="600" textAnchor="middle" className="film-text">Inferior lobe</text>
-      <text x="1300" y="300" textAnchor="middle" className="film-text">Superior lobe</text>
-      <text x="1300" y="590" textAnchor="middle" className="film-text">Inferior lobe</text>
-      {/* guests split */}
-      <Stream pts={left} t={t} start={6} travel={5} count={2} gap={1.4} s={1.1} hold />
-      <Stream pts={left2} t={t} start={6.6} travel={5} count={2} gap={1.4} s={1.1} hold />
-      <Stream pts={left3} t={t} start={7.2} travel={5.5} count={2} gap={1.4} s={1.1} hold />
-      <Stream pts={right} t={t} start={6.3} travel={5} count={2} gap={1.4} s={1.1} hold />
-      <Stream pts={right2} t={t} start={6.9} travel={5.5} count={2} gap={1.4} s={1.1} hold />
+      {/* the heart next door */}
+      <g transform="translate(1340 380)">
+        <rect x="-90" y="-70" width="180" height="140" rx="16" fill="#14221F" stroke={M.coral} strokeWidth="3" />
+        <path d="M0 -10 C-30 -50 -70 -20 -40 20 L0 54 L40 20 C70 -20 30 -50 0 -10 Z" fill={M.coral} opacity={0.6 + 0.4 * Math.abs(Math.sin(t * 3))} />
+        <text y="92" textAnchor="middle" className="film-plaque">THE CARDIAC CLUB · NEXT DOOR</text>
+      </g>
+      <Plant x={300} y={720} s={1.2} />
+      {/* guests split into the two wings */}
+      <Stream pts={rightPath([590, 470])} t={t} start={6} travel={5} count={4} gap={0.9} s={1} scaleAt={sc} bag />
+      <Stream pts={leftPath([1010, 480])} t={t} start={6.4} travel={5} count={3} gap={1} s={1} scaleAt={sc} bag />
 
-      <Sign x={880} y={14} term="Carina" resort="Security Checkpoint" note="touch it → cough reflex" show={t > 0.5} to={[806, 196]} />
-      <Sign x={170} y={150} term="Right primary bronchus" resort="Right Wing · 3 floors (lobes)" show={t > 7} />
-      <Sign x={1060} y={150} term="Left primary bronchus" resort="Left Wing · 2 floors (lobes)" show={t > 7.5} />
-      <Sign x={590} y={600} term="Hilum" resort="Wing entrance" show={t > 9} to={[545, 370]} />
-      <Sign x={590} y={460} term="Secondary bronchi" resort="One corridor per floor" show={t > 13} to={[450, 470]} />
+      <Sign x={880} y={14} term="Carina" resort="Security Checkpoint" note="touch it → cough reflex" show={t > 0.5} to={[830, 300]} />
+      <Sign x={40} y={170} term="Right primary bronchus" resort="Right Wing · 3 floors (lobes)" note="wider, shorter, more vertical" show={t > 6.5} to={[480, 300]} />
+      <Sign x={1220} y={170} term="Left primary bronchus" resort="Left Wing · 2 floors (lobes)" show={t > 7} to={[1100, 330]} />
+      <Sign x={40} y={420} term="Hilum" resort="Wing entrances" show={t > 9} to={[450, 520]} />
+      <Sign x={40} y={560} term="Secondary bronchi" resort="One corridor per floor (lobe)" show={t > 13} to={[520, 400]} />
     </g>
   )
 }
 
-export const SCENE_W = W

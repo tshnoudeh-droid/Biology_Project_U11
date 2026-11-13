@@ -105,6 +105,15 @@
 }
 
 /* overlays */
+.film-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 30%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 0 0, rgba(15, 26, 23, 0.92) 0%, rgba(15, 26, 23, 0.7) 40%, transparent 72%);
+}
 .film-head {
   position: absolute;
   top: 2.2cqw;
@@ -335,4 +344,57 @@
   .film-caption p {
     font-size: 2.6cqw;
   }
+}
+
+/* interior-design scene type */
+.film-plaque {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: #ebd29b;
+}
+.film-facade {
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  fill: #ebd29b;
+}
+.film-board__title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 26px;
+  fill: var(--coral-deep);
+}
+.film-board__term {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 22px;
+  fill: var(--deep-lung);
+}
+.film-board__note {
+  font-family: var(--font-body);
+  font-size: 15px;
+  fill: var(--body);
+}
+.film-board-led {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  fill: #ebd29b;
+}
+.film-board-led--sm {
+  font-size: 15px;
+  fill: var(--body-on-dark);
+}
+.film-cough {
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 600;
+  fill: var(--oxygen-coral);
+}
+.film-sign rect:first-of-type {
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
