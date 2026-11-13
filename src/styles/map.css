@@ -148,9 +148,8 @@
   color: var(--deep-lung);
   white-space: nowrap;
   text-align: left;
-  opacity: 0;
+  display: none;
   pointer-events: none;
-  transition: opacity 0.2s;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 .hotspot__tip--left {
@@ -158,7 +157,7 @@
   right: calc(100% + 14px);
 }
 .hotspot__tip.is-visible {
-  opacity: 1;
+  display: flex;
 }
 .hotspot__tip-term {
   font-size: 12px;
@@ -348,9 +347,6 @@
   .map-canvas {
     height: auto;
     width: min(100%, 520px);
-  }
-  .map-panel {
-    order: -1;
   }
   .hotspot {
     width: 32px;

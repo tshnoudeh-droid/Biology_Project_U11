@@ -23,7 +23,7 @@ export function BreathingCluster() {
       aria-label="Illustration of a bronchiole branching into clusters of alveoli that gently expand and relax, like breathing"
     >
       <defs>
-        <radialGradient id="bc-glow" cx="50%" cy="40%" r="55%">
+        <radialGradient id="bc-glow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#E3735E" stopOpacity="0.22" />
           <stop offset="100%" stopColor="#E3735E" stopOpacity="0" />
         </radialGradient>

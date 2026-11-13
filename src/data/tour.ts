@@ -421,7 +421,7 @@ export const tourStops: Stop[] = [
       { value: '≤ 1 mm', label: 'bronchiole diameter' },
       { value: '~2,400 km', label: 'of airways in total' },
     ],
-    tip: 'Try Asthma Mode below to see what happens when the trails tighten. Guests with asthma should always pack their reliever inhaler (a bronchodilator).',
+    tip: 'Try Asthma Mode above to see what happens when the trails tighten. Guests with asthma should always pack their reliever inhaler (a bronchodilator).',
     quiz: {
       question: 'Why can bronchioles change their diameter?',
       options: [
@@ -487,7 +487,7 @@ export const tourStops: Stop[] = [
       { value: '~480 million', label: 'alveoli in both lungs' },
       { value: '~0.5 µm', label: 'thickness of the respiratory membrane' },
     ],
-    tip: 'Flip the Surfactant Switch below to see why premature babies, who haven’t made enough surfactant yet, can struggle to breathe.',
+    tip: 'Flip the Surfactant Switch above to see why premature babies, who haven’t made enough surfactant yet, can struggle to breathe.',
     quiz: {
       question: 'What do type II alveolar cells secrete?',
       options: [

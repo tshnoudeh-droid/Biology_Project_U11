@@ -8,7 +8,12 @@ type LogoMarkProps = {
 export function LogoMark({ tone = 'dark', className, title = 'Alvea logo' }: LogoMarkProps) {
   const soft = tone === 'dark' ? '#F4D5CC' : '#2F5D50'
   return (
-    <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-label={title}>
+    <svg
+      viewBox="0 0 120 140"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...(title ? { role: 'img', 'aria-label': title } : { 'aria-hidden': true, focusable: false })}
+    >
       <path d="M60 136 C60 112 56 96 60 74" fill="none" stroke={soft} strokeWidth="4" strokeLinecap="round" />
       <path d="M60 92 C50 86 42 80 38 70" fill="none" stroke={soft} strokeWidth="3" strokeLinecap="round" />
       <path d="M60 92 C70 86 78 80 82 70" fill="none" stroke={soft} strokeWidth="3" strokeLinecap="round" />

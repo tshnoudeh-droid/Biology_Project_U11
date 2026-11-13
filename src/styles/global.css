@@ -11,6 +11,8 @@
   --paper: #fbfcfb;
   --oxygen-coral: #e3735e;
   --coral-deep: #b84a35;
+  /* coral text on blush backgrounds (5.9:1) */
+  --coral-ink: #993a27;
   --blush: #f4d5cc;
   --body: #3b4a45;
   --body-on-dark: #c9d6cf;
@@ -58,6 +60,7 @@ html {
 }
 
 body {
+  overflow-x: clip;
   margin: 0;
   background: var(--mist);
   color: var(--body);
@@ -507,4 +510,8 @@ button {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+.on-dark strong {
+  color: var(--blush);
 }

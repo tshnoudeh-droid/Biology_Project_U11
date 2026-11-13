@@ -19,7 +19,7 @@ export function Nav() {
   return (
     <header className="nav on-dark">
       <div className="nav__inner container">
-        <Link to="/" className="nav__brand" aria-label="Alvea Wellness Retreat, home">
+        <Link to="/" className="nav__brand">
           <LogoLockup tone="dark" />
         </Link>
         <button
