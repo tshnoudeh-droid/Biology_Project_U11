@@ -1,3 +1,4 @@
+import type React from 'react'
 /**
  * Stylized head, neck and chest showing the full airway, drawn for dark backgrounds.
  * viewBox 0 0 800 1100. Coordinates are shared with the resort map hotspots and the breath path.
@@ -37,17 +38,23 @@ export const hotspots: Record<number, [number, number]> = {
 }
 
 type Props = {
+  className?: string
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  children?: React.ReactNode
   zone?: 'conducting' | 'respiratory' | 'ventilation' | null
   diaphragmDown?: boolean
   trail?: string
   trailColor?: string
 }
 
-export function AirwayArt({ zone = null, diaphragmDown = false, trail, trailColor = '#E3735E' }: Props) {
+export function AirwayArt({ className = 'airway-art', x, y, width, height, children, zone = null, diaphragmDown = false, trail, trailColor = '#E3735E' }: Props) {
   const pathD = breathPath.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ')
   const conductingD = breathPath.slice(1, 13).map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ')
   return (
-    <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} className="airway-art" aria-hidden="true" focusable="false">
+    <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} className={className} x={x} y={y} width={width} height={height} aria-hidden="true" focusable="false">
       <defs>
         <radialGradient id="aw-glow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#E3735E" stopOpacity="0.55" />
@@ -158,6 +165,7 @@ export function AirwayArt({ zone = null, diaphragmDown = false, trail, trailColo
       {/* faint route guide */}
       <path d={pathD} fill="none" stroke="#C9D6CF" strokeOpacity="0.25" strokeWidth="2" strokeDasharray="3 8" />
       {trail && <path d={trail} fill="none" stroke={trailColor} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />}
+      {children}
     </svg>
   )
 }

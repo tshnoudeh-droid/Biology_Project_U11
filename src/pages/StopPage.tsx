@@ -31,7 +31,7 @@ export default function StopPage() {
     <article className={`stop stop--${stop.zone}`} aria-labelledby="stop-title">
       <div className="stop__bar">
         <div className="container stop__bar-inner">
-          <Link to="/tour" className="stop__map-link">
+          <Link to="/tour/map" className="stop__map-link">
             <IconMap /> Resort map
           </Link>
           <ProgressBar current={stop.progress} label={progressLabel} />
@@ -136,7 +136,7 @@ export default function StopPage() {
             </span>
           </Link>
         ) : (
-          <Link to="/tour" className="stop__nav-link stop__nav-link--prev">
+          <Link to="/tour/map" className="stop__nav-link stop__nav-link--prev">
             <IconArrowLeft />
             <span>
               <span className="stop__nav-dir">Back</span>

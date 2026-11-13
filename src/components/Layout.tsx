@@ -5,7 +5,7 @@ import { Footer } from './Footer'
 
 const titles: Record<string, string> = {
   '/': 'Alvea Wellness Retreat',
-  '/tour': 'Resort Map · Alvea',
+  '/tour/map': 'Resort Map · Alvea',
   '/book': 'Book Your Stay · Alvea',
   '/about': 'About · Alvea',
   '/sources': 'Sources · Alvea',
