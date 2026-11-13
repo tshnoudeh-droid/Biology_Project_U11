@@ -1,0 +1,370 @@
+.map-page {
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(47, 93, 80, 0.5), transparent 65%),
+    var(--deep-lung);
+  color: var(--body-on-dark);
+  padding: 28px 0 56px;
+}
+.map-page__inner {
+  display: grid;
+  grid-template-columns: auto minmax(340px, 1fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
+}
+.map-stage {
+  display: flex;
+  justify-content: center;
+}
+.map-canvas {
+  position: relative;
+  height: min(calc(100vh - 76px - 56px), 1000px);
+  max-width: 100%;
+}
+.airway-art,
+.map-particle-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.map-particle-layer {
+  pointer-events: none;
+}
+.map-particle-text {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  fill: var(--deep-lung);
+}
+.map-particle-glow {
+  animation: breathe 1.4s var(--ease-breath) infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.aw-diaphragm {
+  transition: transform 1.8s var(--ease-breath);
+}
+.aw-diaphragm.is-down {
+  transform: translateY(16px) scaleY(0.6);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.aw-lungs {
+  transform-origin: 420px 640px;
+  transform-box: view-box;
+  transition: transform 2s var(--ease-breath);
+}
+.aw-lungs.is-expanded {
+  transform: scale(1.035);
+}
+.aw-alveoli {
+  transform-origin: 244px 912px;
+  transform-box: view-box;
+  animation: breathe 5s var(--ease-breath) infinite;
+}
+
+/* ---------- Hotspots ---------- */
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--deep-lung);
+  background: var(--blush);
+  color: var(--deep-lung);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 4px rgba(244, 213, 204, 0.18);
+  transition:
+    transform 0.3s var(--ease-breath),
+    background-color 0.3s,
+    box-shadow 0.4s,
+    opacity 0.3s;
+  z-index: 2;
+}
+.hotspot::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(244, 213, 204, 0.4);
+  animation: ping 4.5s var(--ease-breath) infinite;
+}
+@keyframes ping {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+.hotspot:hover,
+.hotspot:focus-visible {
+  transform: translate(-50%, -50%) scale(1.12);
+  z-index: 5;
+}
+.hotspot:focus-visible {
+  outline: 3px solid var(--blush);
+  outline-offset: 4px;
+}
+.hotspot--headline {
+  width: 46px;
+  height: 46px;
+  background: var(--oxygen-coral);
+}
+.hotspot.is-lit {
+  background: var(--oxygen-coral);
+  box-shadow:
+    0 0 0 6px rgba(227, 115, 94, 0.35),
+    0 0 28px 8px rgba(227, 115, 94, 0.55);
+}
+.hotspot.is-zone {
+  box-shadow:
+    0 0 0 6px rgba(244, 213, 204, 0.4),
+    0 0 26px 6px rgba(244, 213, 204, 0.4);
+}
+.hotspot.is-dim {
+  opacity: 0.32;
+}
+.hotspot__tip {
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--deep-lung);
+  white-space: nowrap;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+.hotspot__tip--left {
+  left: auto;
+  right: calc(100% + 14px);
+}
+.hotspot__tip.is-visible {
+  opacity: 1;
+}
+.hotspot__tip-term {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--eucalyptus);
+}
+.hotspot__tip-name {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+/* ---------- Panel ---------- */
+.map-panel {
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.map-panel > .eyebrow {
+  margin-bottom: -14px;
+}
+.map-panel__title {
+  color: var(--mist);
+  font-size: clamp(34px, 3.2vw, 48px);
+  margin: 0;
+}
+.map-panel__intro {
+  margin: 0;
+  max-width: 50ch;
+}
+.breath-box {
+  background: var(--card-dark);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.breath-box__btn {
+  align-self: flex-start;
+}
+.breath-caption {
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(27, 42, 38, 0.65);
+  border-left: 4px solid var(--oxygen-coral);
+}
+.breath-caption__title {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oxygen-coral);
+}
+.breath-caption__text {
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--mist);
+}
+.breath-caption__text strong {
+  color: var(--blush);
+}
+.breath-caption__text--idle {
+  font-size: 16px;
+  color: var(--body-on-dark);
+}
+.breath-key {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+.breath-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot--o2 {
+  background: var(--oxygen-coral);
+}
+.dot--co2 {
+  background: var(--visited);
+}
+
+.zone-legend {
+  display: grid;
+  gap: 10px;
+}
+.zone-legend .eyebrow {
+  margin-bottom: 2px;
+}
+.zone-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 2px solid rgba(201, 214, 207, 0.15);
+  background: transparent;
+  color: var(--body-on-dark);
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.zone-btn:hover,
+.zone-btn[aria-pressed='true'] {
+  border-color: var(--blush);
+  background: rgba(244, 213, 204, 0.06);
+}
+.zone-btn__swatch {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  margin-top: 3px;
+}
+.zone-btn--conducting .zone-btn__swatch {
+  background: var(--blush);
+}
+.zone-btn--respiratory .zone-btn__swatch {
+  background: var(--oxygen-coral);
+  border-radius: 50%;
+}
+.zone-btn--ventilation .zone-btn__swatch {
+  background: linear-gradient(var(--deep-lung) 40%, var(--oxygen-coral) 40%, var(--oxygen-coral) 70%, var(--deep-lung) 70%);
+  border: 1px solid var(--oxygen-coral);
+}
+.zone-btn > span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+.zone-btn__label {
+  font-weight: 700;
+  color: var(--mist);
+}
+.zone-btn__note {
+  font-size: 14.5px;
+}
+
+.map-bonus ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.map-bonus a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--pill);
+  border: 1px solid rgba(244, 213, 204, 0.35);
+  color: var(--blush);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+.map-bonus a:hover {
+  background: rgba(244, 213, 204, 0.1);
+}
+.map-bonus svg {
+  width: 15px;
+  height: 15px;
+}
+.map-start {
+  align-self: flex-start;
+}
+
+@media (max-width: 960px) {
+  .map-page__inner {
+    grid-template-columns: 1fr;
+  }
+  .map-canvas {
+    height: auto;
+    width: min(100%, 520px);
+  }
+  .map-panel {
+    order: -1;
+  }
+  .hotspot {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  .hotspot--headline {
+    width: 36px;
+    height: 36px;
+  }
+}
+.map-page .eyebrow {
+  color: var(--oxygen-coral);
+}
+.map-page .breath-box .eyebrow {
+  color: var(--blush);
+}
