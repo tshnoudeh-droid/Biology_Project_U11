@@ -1,5 +1,11 @@
 import type { ComponentType } from 'react'
 import type { RideKey } from '../data/tour'
+import { AsthmaRide } from './AsthmaRide'
+import { SurfactantRide } from './SurfactantRide'
+import { GasRide } from './GasRide'
+import { DiaphragmRide } from './DiaphragmRide'
+import { ChemoRide } from './ChemoRide'
+import '../styles/rides.css'
 
 export const rideMeta: Record<RideKey, { eyebrow: string; title: string; blurb: string }> = {
   asthma: {
@@ -29,4 +35,10 @@ export const rideMeta: Record<RideKey, { eyebrow: string; title: string; blurb: 
   },
 }
 
-export const rides: Partial<Record<RideKey, ComponentType>> = {}
+export const rides: Record<RideKey, ComponentType> = {
+  asthma: AsthmaRide,
+  surfactant: SurfactantRide,
+  gas: GasRide,
+  diaphragm: DiaphragmRide,
+  chemo: ChemoRide,
+}
