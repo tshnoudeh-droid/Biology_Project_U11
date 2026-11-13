@@ -1,9 +1,47 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { scenes, starts, TOTAL } from './scenes'
+import { JOURNEY, scenes, starts, TOTAL, type Scene } from './scenes'
+import { CamContext, ease, type Cam } from './kit'
 import { InteriorDefs } from './interior'
 import { rich } from '../lib/rich'
 import { IconArrowLeft, IconArrowRight, IconPlay } from '../components/Icons'
+
+const SPEEDS = [1, 1.25, 1.5]
+
+/** Camera eases from the previous beat's focus to the current one, plus a slow drift for life. */
+function cameraAt(scene: Scene, local: number, bi: number): Cam {
+  const def: [number, number, number] = [800, 450, 1]
+  const cur = scene.beats[bi].focus ?? def
+  const prev = bi > 0 ? scene.beats[bi - 1].focus ?? def : [cur[0], cur[1], Math.max(1, cur[2] - 0.06)]
+  const k = ease((local - scene.beats[bi].at) / 1.6)
+  const drift = 0.02 * Math.sin(local * 0.35)
+  const z = prev[2] + (cur[2] - prev[2]) * k + drift
+  let cx = prev[0] + (cur[0] - prev[0]) * k
+  let cy = prev[1] + (cur[1] - prev[1]) * k
+  const hw = 800 / z
+  const hh = 450 / z
+  cx = Math.max(hw, Math.min(1600 - hw, cx))
+  cy = Math.max(hh, Math.min(900 - hh, cy))
+  return { cx, cy, z }
+}
+
+function Journey({ scene }: { scene: Scene }) {
+  const j = scene.journey
+  if (j === 'brain') return <div className="film-journey"><span className="film-journey__special">Behind the scenes · brainstem control</span></div>
+  const exhale = j === 'exhale'
+  return (
+    <div className={`film-journey${exhale ? ' is-exhale' : ''}`} aria-hidden="true">
+      {j === 'outside' && <span className="film-journey__special">Outside → </span>}
+      {exhale && <span className="film-journey__special">Exhale ← </span>}
+      {JOURNEY.map((name, i) => (
+        <span key={name} className={`film-journey__stop${typeof j === 'number' && i === j ? ' is-here' : ''}${typeof j === 'number' && i < j ? ' is-done' : ''}${exhale && i < 7 ? ' is-done' : ''}`}>
+          <i />
+          {name}
+        </span>
+      ))}
+    </div>
+  )
+}
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
@@ -20,6 +58,9 @@ export function FilmPlayer() {
   const [time, setTime] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [started, setStarted] = useState(false)
+  const [speed, setSpeed] = useState(1)
+  const speedRef = useRef(1)
+  speedRef.current = speed
   const timeRef = useRef(0)
   const raf = useRef(0)
 
@@ -35,13 +76,14 @@ export function FilmPlayer() {
       setStarted(true)
       seek(t)
     }
+    ;(window as unknown as { __film?: unknown }).__film = { starts, beats: scenes.map((s) => s.beats.map((b) => b.at)), durations: scenes.map((s) => s.duration), ids: scenes.map((s) => s.id) }
   }, [seek])
 
   useEffect(() => {
     if (!playing) return
     let last = performance.now()
     const loop = (now: number) => {
-      const dt = Math.min(0.1, (now - last) / 1000)
+      const dt = Math.min(0.1, (now - last) / 1000) * speedRef.current
       last = now
       const next = timeRef.current + dt
       if (next >= TOTAL) {
@@ -94,6 +136,7 @@ export function FilmPlayer() {
   }, [toggle, goScene, idx, local])
 
   const Art = scene.Art
+  const cam = cameraAt(scene, local, beatIdx)
 
   return (
     <div className="film">
@@ -102,7 +145,11 @@ export function FilmPlayer() {
           <InteriorDefs />
           <rect width="1600" height="900" fill="#1B2A26" />
           <g key={scene.id} className="film-scene">
-            <Art t={local} />
+            <g transform={`translate(800 450) scale(${cam.z}) translate(${-cam.cx} ${-cam.cy})`}>
+              <CamContext.Provider value={cam}>
+                <Art t={local} />
+              </CamContext.Provider>
+            </g>
           </g>
         </svg>
 
@@ -112,6 +159,7 @@ export function FilmPlayer() {
             Scene {idx + 1} · {scene.term}
           </span>
           <span className="film-head__title">{scene.resort}</span>
+          <Journey scene={scene} />
         </div>
 
         <div className="film-caption" aria-live="polite">
@@ -158,6 +206,13 @@ export function FilmPlayer() {
           <button type="button" className="film-btn" onClick={() => goScene(idx + 1)} aria-label="Next scene">
             <IconArrowRight />
           </button>
+          <div className="film-speed" role="group" aria-label="Playback speed">
+            {SPEEDS.map((v) => (
+              <button key={v} type="button" aria-pressed={speed === v} onClick={() => setSpeed(v)}>
+                {v}×
+              </button>
+            ))}
+          </div>
           <span className="film-time">
             {fmt(time)} / {fmt(TOTAL)}
           </span>

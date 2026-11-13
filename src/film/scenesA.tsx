@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CO2, O2, Sign, Staff, Stream, along, mix, ramp, window4, type Pt } from './kit'
+import { CO2, Flow, O2, Sign, Sparkles, Staff, Stream, along, mix, ramp, window4, type Pt } from './kit'
 import {
   ArchDoor, Armchair, Chandelier, Frame, M, P, Pendant, Plant, Room, Rope, Sconce, SideTable, Stanchion, Steam,
   ceilPt, depthAtY, depthScale, floorPt, wallPt, type Box,
@@ -62,7 +62,12 @@ export function ArrivalArt({ t }: { t: number }) {
       <Staff x={640} y={690} s={1.1} body="#2F5D50" accent={M.brass} />
 
       {/* queue of guests with luggage, enter after the pump starts */}
-      <Stream pts={[[800, 960], [800, 700], [760, 600], [736, 540]]} t={t} start={0.3} travel={9} count={9} gap={0.9} s={1.4} bag scaleAt={(y) => mix(0.55, 1.2, (y - 540) / 360)} />
+      <g opacity={pump}>
+        <Flow pts={[[800, 900], [790, 700], [760, 580], [738, 500]]} t={t} speed={120} width={4} />
+        <Flow pts={[[600, 900], [690, 660], [736, 520]]} t={t + 0.4} speed={120} width={3} />
+        <Flow pts={[[1000, 900], [880, 660], [862, 520]]} t={t + 0.8} speed={120} width={3} />
+      </g>
+      <Stream pts={[[800, 960], [800, 700], [760, 600], [736, 540]]} t={t < 5.5 ? t * 0.35 : t - 3.6} start={0.2} travel={5.5} count={16} gap={0.55} s={1.4} bag hero scaleAt={(y) => mix(0.55, 1.2, (y - 540) / 360)} />
 
       {/* welcome easel */}
       <g>
@@ -97,8 +102,8 @@ export function ArrivalArt({ t }: { t: number }) {
           <text x="34" y="6" className="film-plaque" style={{ textAnchor: 'start' }}>{pressure} mm Hg</text>
         </g>
       </g>
-      <Sign x={1100} y={640} term="Diaphragm" resort="The Air Pump" note={`contracts → volume ↑ → pressure ${pressure} mm Hg`} show={t > 5.5} to={[1455, 520]} />
-      <Sign x={980} y={20} term="Nares (nostrils)" resort="Twin front doors" note="nasal septum = the pillar between" show={t > 2} to={[736, 470]} />
+      <Sign x={1040} y={640} term="Diaphragm" resort="The Air Pump" note={`contracts → volume ↑ → pressure ${pressure} mm Hg`} at={6} t={t} to={[1455, 520]} />
+      <Sign x={980} y={20} term="Nares (nostrils)" resort="Twin front doors" note="nasal septum = the pillar between" at={2} t={t} to={[736, 470]} />
     </g>
   )
 }
@@ -208,16 +213,26 @@ export function LobbyArt({ t }: { t: number }) {
         <rect x="50" y="76" width="34" height="12" rx="6" fill="#DCE6B8" />
       </Staff>
       {/* guests */}
-      <Stream pts={leftHall} t={t} start={0.2} travel={9} count={10} gap={1.4} s={1} scaleAt={sc} bag />
-      <Stream pts={rightHall} t={t} start={0.9} travel={9} count={10} gap={1.4} s={1} scaleAt={sc} bag />
+      <Flow pts={leftHall} t={t} speed={90} />
+      <Flow pts={rightHall} t={t + 0.5} speed={90} />
+      {t > 5.5 && (
+        <g>
+          <Sparkles x={470} y={690} t={t} />
+          <Sparkles x={1130} y={690} t={t + 0.3} />
+          <Sparkles x={620} y={570} t={t + 0.6} n={4} spread={40} />
+          <Sparkles x={980} y={570} t={t + 0.9} n={4} spread={40} />
+        </g>
+      )}
+      <Stream pts={leftHall} t={t} start={0.2} travel={6.5} count={16} gap={0.9} s={1} scaleAt={sc} bag hero />
+      <Stream pts={rightHall} t={t} start={0.6} travel={6.5} count={16} gap={0.9} s={1} scaleAt={sc} bag />
 
-      <Sign x={30} y={580} term="Nares (nostrils)" resort="Front doors, behind you" show={t > 0.3} />
-      <Sign x={980} y={600} term="Nasal septum" resort="Dividing wall: left + right halls" show={t > 2} to={[820, 640]} />
-      <Sign x={1220} y={420} term="Mouth" resort="Side door: skips the welcome" show={t > 3} to={[1350, 640]} />
-      <Sign x={1180} y={180} term="Nasal conchae" resort="Heated Rainforest Walls" note="swirl guests: warm, humidify, clean" show={t > 5.5} to={[1300, 300]} />
-      <Sign x={30} y={430} term="Mucus + cilia" resort="Housekeeping carpets" note="trap dust, sweep it to the throat" show={t > 10.5} to={[400, 760]} />
-      <Sign x={540} y={14} term="Olfactory epithelium" resort="Aromatherapy chandelier" show={t > 15.5} to={[800, 150]} />
-      <Sign x={30} y={170} term="Paranasal sinuses" resort="Skylight Lofts" show={t > 17.5} to={[300, 120]} />
+      <Sign x={30} y={580} term="Nares (nostrils)" resort="Front doors, behind you" at={0.3} t={t} />
+      <Sign x={980} y={600} term="Nasal septum" resort="Dividing wall: left + right halls" at={2} t={t} to={[820, 640]} />
+      <Sign x={1220} y={420} term="Mouth" resort="Side door: skips the welcome" at={3} t={t} to={[1350, 640]} />
+      <Sign x={1180} y={180} term="Nasal conchae" resort="Heated Rainforest Walls" note="swirl guests: warm, humidify, clean" at={5.5} t={t} to={[1300, 300]} />
+      <Sign x={30} y={430} term="Mucus + cilia" resort="Housekeeping carpets" note="trap dust, sweep it to the throat" at={10.5} t={t} to={[400, 760]} />
+      <Sign x={820} y={14} term="Olfactory epithelium" resort="Aromatherapy chandelier" at={15.5} t={t} to={[800, 150]} />
+      <Sign x={30} y={170} term="Paranasal sinuses" resort="Skylight Lofts" at={17.5} t={t} to={[300, 120]} />
     </g>
   )
 }
@@ -237,13 +252,14 @@ function Floorplate({ y, h, children }: { y: number; h: number; children?: React
   )
 }
 export function ElevatorArt({ t }: { t: number }) {
-  const carY = mix(110, 560, ramp(t, 2, 16))
+  const carY = t < 13.5 ? mix(110, 312, ramp(t, 8.5, 10)) : mix(312, 560, ramp(t, 13.5, 15))
   const floors = [
     { y: 90, h: 190, name: 'Nasopharynx', resort: 'North Wing · air only', note: 'guard: pharyngeal tonsil (adenoid)', at: 5 },
     { y: 280, h: 200, name: 'Oropharynx', resort: 'Food Court · air + food', note: 'guards: palatine + lingual tonsils', at: 10 },
     { y: 480, h: 200, name: 'Laryngopharynx', resort: 'The Great Split', note: 'air → larynx · food → esophagus', at: 15 },
   ]
-  const exitF = ramp(t, 16.5, 20.5)
+  const exitF = ramp(t, 15.5, 19)
+  const boarding = ramp(t, 0.5, 3.2)
   const food = window4(t, 9.5, 10.5, 19.5, 20.5)
   const foodX = t < 13 ? mix(330, 740, ramp(t, 10, 13)) : mix(740, 1010, ramp(t, 15, 19))
   const foodY = t < 13 ? 448 : mix(448, 655, ramp(t, 13, 19))
@@ -260,11 +276,11 @@ export function ElevatorArt({ t }: { t: number }) {
         <Armchair x={380} y={258} s={0.75} />
         <SideTable x={460} y={258} s={0.7} />
         <Armchair x={540} y={258} s={0.75} color={M.leaf} />
-        <Frame x={960} y={120} w={80} h={60}>
+        <Frame x={980} y={150} w={80} h={60}>
           <path d="M0 50 L30 20 L50 40 L80 10 L80 60 L0 60 Z" fill={M.leaf} />
         </Frame>
-        {guard(1110, 196)}
-        <text x="300" y="128" className="film-plaque" style={{ textAnchor: 'start' }}>← FROM THE LOBBY (NASAL CAVITY)</text>
+        {guard(1140, 196)}
+        <text x="860" y="128" className="film-plaque" style={{ textAnchor: 'start' }}>← FROM THE LOBBY (NASAL CAVITY)</text>
       </Floorplate>
       <Floorplate y={280} h={200}>
         <text x="300" y="318" className="film-plaque" style={{ textAnchor: 'start' }}>← FROM THE MOUTH</text>
@@ -297,7 +313,7 @@ export function ElevatorArt({ t }: { t: number }) {
       <g transform={`translate(680 ${carY})`}>
         <rect width="140" height="110" rx="8" fill="rgba(217,182,118,0.18)" stroke="url(#g-brass)" strokeWidth="5" />
         <rect y="100" width="140" height="10" fill="url(#g-brass)" />
-        {exitF < 0.05 && [<O2 key="a" x={36} y={58} s={1.1} />, <O2 key="b" x={100} y={58} s={1.1} />, <O2 key="c" x={68} y={84} s={1.1} />]}
+        {exitF < 0.05 && boarding >= 1 && [<O2 key="a" x={36} y={58} s={1.1} />, <O2 key="b" x={100} y={58} s={1.1} />, <O2 key="c" x={68} y={84} s={1.1} />]}
       </g>
       {/* floor indicator */}
       <g transform="translate(750 50)">
@@ -308,14 +324,16 @@ export function ElevatorArt({ t }: { t: number }) {
           </text>
         ))}
       </g>
-      {exitF > 0 && <Stream pts={[[750, 640], [600, 640], [470, 640], [435, 620]]} t={t} start={16.5} travel={3} count={3} gap={0.4} s={1.1} />}
+      {boarding < 1 && <Stream pts={[[240, 236], [500, 236], [716, 236]]} t={t} start={0.3} travel={2.6} count={3} gap={0.15} s={1.1} hero />}
+      {exitF > 0 && <Stream pts={[[750, 640], [600, 640], [470, 640], [435, 620]]} t={t} start={15.5} travel={2.6} count={3} gap={0.35} s={1.1} hero />}
+      <Flow pts={[[750, 120], [750, 660]]} t={t} speed={70} opacity={0.3} />
       {/* room-service tray */}
       <g opacity={food} transform={`translate(${foodX} ${foodY})`}>
         <ellipse cx="0" cy="12" rx="34" ry="8" fill={M.marble} />
         <path d="M-26 10 Q0 -26 26 10 Z" fill="url(#g-brass)" />
       </g>
       {floors.map((f) => (
-        <Sign key={f.name} x={1250} y={f.y + 30} term={f.name} resort={f.resort} note={f.note} show={t > f.at} />
+        <Sign key={f.name} x={1250} y={f.y + 30} term={f.name} resort={f.resort} note={f.note} at={f.at} t={t} />
       ))}
     </g>
   )
@@ -388,8 +406,15 @@ export function GateArt({ t }: { t: number }) {
       {/* service door → esophagus */}
       <path d={P([wallPt(B, 1, 0.5, 0.15), wallPt(B, 1, 0.5, 0.3), wallPt(B, 1, 1, 0.3), wallPt(B, 1, 1, 0.15)])} fill="#0F1A17" stroke={M.leaf} strokeWidth="3" />
       {/* guests walk the aisle and through the stage door */}
-      <Stream pts={[[800, 960], [800, 640], [800, 520], [800, 430]]} t={t} start={0.4} travel={6} count={4} gap={1} s={1} scaleAt={sc} bag />
-      <Stream pts={[[800, 960], [800, 640], [800, 520], [800, 430]]} t={t} start={12.3} travel={6} count={5} gap={1} s={1} scaleAt={sc} bag />
+      <Flow pts={[[800, 900], [800, 600], [800, 440]]} t={t} speed={100} opacity={0.45 * (1 - closed)} width={4} />
+      <Stream pts={[[800, 960], [800, 640], [800, 520], [800, 430]]} t={t} start={0.2} travel={4.2} count={4} gap={0.7} s={1} scaleAt={sc} bag hero />
+      {/* waiting in line while the epiglottis is closed */}
+      {t < 12 &&
+        [[740, 690], [800, 680], [860, 690]].map(([ex, ey], i) => (
+          <Stream key={i} pts={[[ex, 960], [ex, ey]]} t={t} start={6.4 + i * 0.5} travel={1.8} count={1} gap={1} s={1} scaleAt={sc} bag hold spread={0} />
+        ))}
+      <Stream pts={[[800, 680], [800, 600], [800, 520], [800, 430]]} t={t} start={12} travel={3} count={3} gap={0.6} s={1} scaleAt={sc} bag />
+      <Stream pts={[[800, 960], [800, 640], [800, 520], [800, 430]]} t={t} start={13} travel={4.2} count={6} gap={0.7} s={1} scaleAt={sc} bag />
       {/* room-service trolley (food) */}
       <g opacity={trayK > 0 && trayK < 1 ? 1 : 0} transform={`translate(${tx} ${ty}) scale(${mix(1.3, 0.7, ramp(ty, 820, 470))})`}>
         <rect x="-40" y="0" width="80" height="10" rx="4" fill="url(#g-brass)" />
@@ -403,12 +428,13 @@ export function GateArt({ t }: { t: number }) {
           <path key={i} d={`M${960 + i * 28} 340 q16 34 0 68`} stroke={M.coral} strokeWidth="4" fill="none" opacity={0.4 + 0.6 * Math.abs(Math.sin(t * 4 + i))} />
         ))}
 
-      <Sign x={1180} y={14} term="Larynx" resort="The Security Gate" note="9 cartilages hold the airway open" />
-      <Sign x={1180} y={150} term="Thyroid cartilage" resort="The Proscenium (Adam’s apple)" show={t > 3} to={[1030, 260]} />
-      <Sign x={60} y={200} term="Epiglottis" resort="The Drawbridge" note="closes when you swallow" show={t > 6} to={[700, 250]} />
-      <Sign x={1180} y={420} term="Esophagus" resort="Service corridor for food" show={t > 9} to={[1340, 560]} />
-      <Sign x={60} y={420} term="True vocal cords" resort="The Stage Curtains" show={t > 12.5} to={[720, 420]} />
-      <Sign x={60} y={560} term="Glottis" resort="Gap between the curtains" show={t > 13.5} to={[800, 470]} />
+      <Sign x={1180} y={14} term="Larynx" resort="The Security Gate" note="9 cartilages hold the airway open" at={0.3} t={t} />
+      <Sign x={1180} y={150} term="Thyroid cartilage" resort="The Proscenium (Adam’s apple)" at={3} t={t} to={[1030, 260]} />
+      <Sign x={60} y={200} term="Epiglottis" resort="The Drawbridge" note="closes when you swallow" at={6} t={t} to={[700, 250]} />
+      <Sign x={1180} y={290} term="Swallowing" resort="Guests wait: breathing pauses" at={8} t={t} to={[800, 680]} />
+      <Sign x={1180} y={420} term="Esophagus" resort="Service corridor for food" at={9} t={t} to={[1340, 560]} />
+      <Sign x={60} y={420} term="True vocal cords" resort="The Stage Curtains" at={12.5} t={t} to={[720, 420]} />
+      <Sign x={60} y={560} term="Glottis" resort="Gap between the curtains" at={13.5} t={t} to={[800, 470]} />
     </g>
   )
 }
@@ -474,13 +500,15 @@ export function HallwayArt({ t }: { t: number }) {
         return <Sconce key={d} x={x} y={y} s={depthScale(B, d) * 1.6} />
       })}
       {/* guests walking away down the hallway */}
-      <Stream pts={[[740, 960], [770, 700], [790, 520], [800, 470]]} t={t} start={0.2} travel={8} count={8} gap={1.3} s={1} scaleAt={sc} bag />
-      <Stream pts={[[880, 960], [850, 700], [820, 520], [810, 470]]} t={t} start={0.9} travel={8} count={8} gap={1.3} s={1} scaleAt={sc} bag />
+      <Flow pts={[[700, 900], [790, 480]]} t={t} speed={110} opacity={0.35} />
+      <Flow pts={[[900, 900], [810, 480]]} t={t + 0.3} speed={110} opacity={0.35} />
+      <Stream pts={[[740, 960], [770, 700], [790, 520], [800, 470]]} t={t} start={0.2} travel={5.5} count={14} gap={0.8} s={1} scaleAt={sc} bag hero />
+      <Stream pts={[[880, 960], [850, 700], [820, 520], [810, 470]]} t={t} start={0.6} travel={5.5} count={14} gap={0.8} s={1} scaleAt={sc} bag />
 
-      <Sign x={40} y={180} term="16–20 C-shaped rings" resort="The Arches" note="hyaline cartilage keeps the hall open" show={t > 4} to={[300, 120]} />
-      <Sign x={1190} y={150} term="Open side → esophagus" resort="Glass wall (trachealis behind)" show={t > 7} to={[1400, 380]} />
-      <Sign x={40} y={520} term="Mucociliary escalator" resort="The Luggage Return runner" note="goblet cells + cilia move mucus up" show={t > 11} to={[620, 800]} />
-      <Sign x={1190} y={520} term="Conducting zone" resort="No check-in desk here" note="no gas exchange in the trachea" show={t > 17} />
+      <Sign x={40} y={180} term="16–20 C-shaped rings" resort="The Arches" note="hyaline cartilage keeps the hall open" at={4} t={t} to={[300, 120]} />
+      <Sign x={1190} y={150} term="Open side → esophagus" resort="Glass wall (trachealis behind)" at={7} t={t} to={[1400, 380]} />
+      <Sign x={40} y={520} term="Mucociliary escalator" resort="The Luggage Return runner" note="goblet cells + cilia move mucus up" at={11} t={t} to={[620, 800]} />
+      <Sign x={1190} y={520} term="Conducting zone" resort="No check-in desk here" note="no gas exchange in the trachea" at={17} t={t} />
     </g>
   )
 }
@@ -531,21 +559,26 @@ export function WingsArt({ t }: { t: number }) {
         COUGH!
       </text>
       {/* the heart next door */}
-      <g transform="translate(1340 380)">
+      <g transform="translate(1310 380)">
         <rect x="-90" y="-70" width="180" height="140" rx="16" fill="#14221F" stroke={M.coral} strokeWidth="3" />
         <path d="M0 -10 C-30 -50 -70 -20 -40 20 L0 54 L40 20 C70 -20 30 -50 0 -10 Z" fill={M.coral} opacity={0.6 + 0.4 * Math.abs(Math.sin(t * 3))} />
-        <text y="92" textAnchor="middle" className="film-plaque">THE CARDIAC CLUB · NEXT DOOR</text>
+        <text y="92" textAnchor="middle" className="film-plaque">CARDIAC CLUB</text>
+        <text y="112" textAnchor="middle" className="film-plaque" style={{ fontSize: 12 }}>(THE HEART) NEXT DOOR</text>
       </g>
       <Plant x={300} y={720} s={1.2} />
       {/* guests split into the two wings */}
-      <Stream pts={rightPath([590, 470])} t={t} start={6} travel={5} count={4} gap={0.9} s={1} scaleAt={sc} bag />
-      <Stream pts={leftPath([1010, 480])} t={t} start={6.4} travel={5} count={3} gap={1} s={1} scaleAt={sc} bag />
+      <g opacity={ramp(t, 5.5, 6.5)}>
+        <Flow pts={rightPath([590, 470])} t={t} speed={110} />
+        <Flow pts={leftPath([1010, 480])} t={t + 0.4} speed={110} />
+      </g>
+      <Stream pts={rightPath([590, 470])} t={t} start={6} travel={4} count={12} gap={0.6} s={1} scaleAt={sc} bag hero />
+      <Stream pts={leftPath([1010, 480])} t={t} start={6.3} travel={4} count={10} gap={0.75} s={1} scaleAt={sc} bag />
 
-      <Sign x={880} y={14} term="Carina" resort="Security Checkpoint" note="touch it → cough reflex" show={t > 0.5} to={[830, 300]} />
-      <Sign x={40} y={170} term="Right primary bronchus" resort="Right Wing · 3 floors (lobes)" note="wider, shorter, more vertical" show={t > 6.5} to={[480, 300]} />
-      <Sign x={1220} y={170} term="Left primary bronchus" resort="Left Wing · 2 floors (lobes)" show={t > 7} to={[1100, 330]} />
-      <Sign x={40} y={420} term="Hilum" resort="Wing entrances" show={t > 9} to={[450, 520]} />
-      <Sign x={40} y={560} term="Secondary bronchi" resort="One corridor per floor (lobe)" show={t > 13} to={[520, 400]} />
+      <Sign x={880} y={14} term="Carina" resort="Security Checkpoint" note="touch it → cough reflex" at={0.5} t={t} to={[830, 300]} />
+      <Sign x={40} y={170} term="Right primary bronchus" resort="Right Wing · 3 floors (lobes)" note="wider, shorter, more vertical" at={6.5} t={t} to={[480, 300]} />
+      <Sign x={1220} y={170} term="Left primary bronchus" resort="Left Wing · 2 floors (lobes)" at={7} t={t} to={[1100, 330]} />
+      <Sign x={40} y={420} term="Hilum" resort="Wing entrances" at={9} t={t} to={[450, 520]} />
+      <Sign x={40} y={560} term="Secondary bronchi" resort="One corridor per floor (lobe)" at={13} t={t} to={[520, 400]} />
     </g>
   )
 }

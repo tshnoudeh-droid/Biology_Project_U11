@@ -1,5 +1,5 @@
 import { LogoMark } from '../components/Logo'
-import { CO2, O2, Sign, Staff, Stream, mix, ramp, window4 } from './kit'
+import { CO2, Flow, O2, Sign, Staff, Stream, mix, ramp, window4 } from './kit'
 import {
   Armchair, Chandelier, Desk, M, P, Pendant, Plant, Room, Rug, Sconce, SideTable, Sofa,
   depthAtY, depthScale, floorPt, wallPt, type Box,
@@ -45,20 +45,22 @@ export function CorridorsArt({ t }: { t: number }) {
         return <Sconce key={d} x={x} y={y} s={depthScale(B, d) * 1.4} />
       })}
       <path d={P([floorPt(B, 0.36, 0), floorPt(B, 0.64, 0), floorPt(B, 0.7, 1), floorPt(B, 0.3, 1)])} fill="url(#g-carpet)" />
-      <Stream pts={[[760, 960], [780, 700], [770, 560], [mix(B.x0, B.x1, 0.27), B.y1 - 20]]} t={t * slow} start={0.3} travel={9} count={6} gap={1.6} s={1} scaleAt={sc} bag />
-      <Stream pts={[[840, 960], [820, 700], [830, 560], [mix(B.x0, B.x1, 0.73), B.y1 - 20]]} t={t * slow} start={1} travel={9} count={6} gap={1.6} s={1} scaleAt={sc} bag />
+      <Flow pts={[[760, 900], [770, 600], [mix(B.x0, B.x1, 0.27), B.y1 - 20]]} t={t * slow} speed={100} opacity={0.4 * slow} />
+      <Flow pts={[[840, 900], [830, 600], [mix(B.x0, B.x1, 0.73), B.y1 - 20]]} t={t * slow + 0.4} speed={100} opacity={0.4 * slow} />
+      <Stream pts={[[760, 960], [780, 700], [770, 560], [mix(B.x0, B.x1, 0.27), B.y1 - 20]]} t={t * slow} start={0.2} travel={6} count={12} gap={1} s={1} scaleAt={sc} bag hero />
+      <Stream pts={[[840, 960], [820, 700], [830, 560], [mix(B.x0, B.x1, 0.73), B.y1 - 20]]} t={t * slow} start={0.7} travel={6} count={12} gap={1} s={1} scaleAt={sc} bag />
 
-      <Sign x={40} y={170} term="Bronchioles" resort="The Room Corridors" note="≤ 1 mm wide · no cartilage" show={t > 0.3} to={[300, 300]} />
+      <Sign x={40} y={170} term="Bronchioles" resort="The Room Corridors" note="≤ 1 mm wide · no cartilage" at={0.3} t={t} to={[300, 300]} />
       <Sign
         x={1170}
         y={170}
         term={squeeze > 0.3 ? 'Bronchoconstriction' : 'Smooth muscle walls'}
         resort={squeeze > 0.3 ? 'Corridors tighten (asthma)' : 'Padded walls that tighten or relax'}
-        show={t > 6}
+        at={6} t={t}
         to={[1350, 420]}
       />
-      <Sign x={40} y={500} term="Terminal bronchioles" resort="1,000+ per lung" note="last corridor of the conducting zone" show={t > 13} to={[700, 430]} />
-      <Sign x={1170} y={500} term="Respiratory bronchioles" resort="→ alveolar ducts → alveolar sacs" note="~2,400 km of corridors in total" show={t > 14.5} to={[900, 430]} />
+      <Sign x={40} y={500} term="Terminal bronchioles" resort="1,000+ per lung" note="last corridor of the conducting zone" at={13} t={t} to={[700, 430]} />
+      <Sign x={1170} y={500} term="Respiratory bronchioles" resort="→ alveolar ducts → alveolar sacs" note="~2,400 km of corridors in total" at={14.5} t={t} to={[900, 430]} />
     </g>
   )
 }
@@ -136,9 +138,15 @@ export function SpaArt({ t }: { t: number }) {
       <Candle x={440} y={720} t={t} />
       <Candle x={1170} y={720} t={t} />
       {/* guests relaxing */}
-      <Stream pts={[[800, -80], [800, 420], [600, 600]]} t={t} start={0.3} travel={3.5} count={1} gap={1} s={1.4} hold />
-      <Stream pts={[[800, -80], [800, 420], [1000, 600]]} t={t} start={1} travel={3.5} count={1} gap={1} s={1.4} hold />
-      <Stream pts={[[800, -80], [800, 520], [800, 715]]} t={t} start={1.7} travel={3.5} count={1} gap={1} s={1.6} hold />
+      <Stream pts={[[300, 960], [420, 760], [600, 600]]} t={t} start={0.2} travel={2.6} count={1} gap={1} s={1.4} hold hero />
+      <Stream pts={[[1300, 960], [1180, 760], [1000, 600]]} t={t} start={0.7} travel={2.6} count={1} gap={1} s={1.4} hold />
+      <Stream pts={[[800, 980], [800, 860], [800, 715]]} t={t} start={1.2} travel={2.2} count={1} gap={1} s={1.6} hold />
+      {t > 7 && (
+        <g>
+          <Stream pts={[[620, 580], [640, 470], [640, 400]]} t={t} start={7.2} travel={2.4} count={8} gap={1.6} s={0.7} />
+          <Stream pts={[[980, 580], [960, 470], [960, 400]]} t={t} start={8} travel={2.4} count={8} gap={1.6} s={0.7} />
+        </g>
+      )}
       {/* type II masseuse */}
       <Staff x={700} y={560} s={1.2} body={M.cream} accent={M.coral}>
         <rect x="24" y="16" width="16" height="30" rx="5" fill="#E9C46A" stroke={M.ink} strokeWidth="2" />
@@ -158,11 +166,11 @@ export function SpaArt({ t }: { t: number }) {
       </g>
       {t > 16 && t < 20 && <circle cx={mix(1150, mx + 70, ramp(t, 17, 19.5))} cy={540} r="9" fill="#5A6B65" />}
 
-      <Sign x={560} y={14} term="Alveoli" resort="The Spa Suites" note="~480 million · the respiratory zone" show={t > 0.3} />
-      <Sign x={1170} y={150} term="Type I alveolar cells" resort="Thin glass walls" note="gases pass straight through" show={t > 7} to={[1060, 360]} />
-      <Sign x={30} y={560} term="Type II alveolar cells" resort="The Masseuses" note="apply surfactant → suites don’t collapse" show={t > 12} to={[700, 560]} />
-      <Sign x={1170} y={430} term="Alveolar macrophage" resort="Night Housekeeping" show={t > 17.5} to={[mx, 520]} />
-      <Sign x={30} y={170} term="Alveolar pore" resort="Porthole to the next suite" show={t > 20} to={[200, 380]} />
+      <Sign x={820} y={14} term="Alveoli" resort="The Spa Suites" note="~480 million · the respiratory zone" at={0.3} t={t} />
+      <Sign x={1170} y={150} term="Type I alveolar cells" resort="Thin glass walls" note="gases pass straight through" at={7} t={t} to={[1060, 360]} />
+      <Sign x={30} y={560} term="Type II alveolar cells" resort="The Masseuses" note="apply surfactant → suites don’t collapse" at={12} t={t} to={[700, 560]} />
+      <Sign x={1170} y={430} term="Alveolar macrophage" resort="Night Housekeeping" at={17.5} t={t} to={[mx, 520]} />
+      <Sign x={30} y={170} term="Alveolar pore" resort="Porthole to the next suite" at={20} t={t} to={[200, 380]} />
     </g>
   )
 }
@@ -203,11 +211,16 @@ export function ShuttleArt({ t }: { t: number }) {
       <text x="30" y="708" className="film-plaque" style={{ textAnchor: 'start' }}>← BLOOD IN: OXYGEN-POOR (BLUE) · O₂ 40 · CO₂ 45 mm Hg</text>
       <text x="1570" y="708" className="film-plaque" style={{ textAnchor: 'end' }}>BLOOD OUT: OXYGEN-RICH (RED) →</text>
       {Array.from({ length: 9 }).map((_, i) => {
-        const cyc = (t * 0.3 + i * 0.11) % 1
-        return <O2 key={i} x={420 + i * 85} y={mix(300, 560, cyc)} s={1} />
+        const cyc = (t * 0.42 + i * 0.11) % 1
+        return (
+          <g key={i}>
+            {i === 4 && <circle cx={420 + i * 85} cy={mix(300, 560, cyc)} r="32" fill="none" stroke="#E3735E" strokeWidth="3" strokeDasharray="5 6" />}
+            <O2 x={420 + i * 85} y={mix(300, 560, cyc)} s={1} />
+          </g>
+        )
       })}
       {Array.from({ length: 5 }).map((_, i) => {
-        const cyc = (t * 0.26 + i * 0.2) % 1
+        const cyc = (t * 0.36 + i * 0.2) % 1
         return <CO2 key={i} x={120 + i * 64 + cyc * 30} y={mix(600, 200, cyc)} s={0.95} />
       })}
       {[0, 1, 2, 3, 4].map((i) => {
@@ -227,10 +240,10 @@ export function ShuttleArt({ t }: { t: number }) {
           </g>
         )
       })}
-      <Sign x={620} y={20} term="Simple diffusion" resort="High → low partial pressure" note="no energy needed" show={t > 0.5} />
-      <Sign x={1110} y={340} term="Hemoglobin" resort="Tram seats: up to 4 O₂ each" note="~98.5% of O₂ rides here" show={t > 7} to={[1100, 580]} />
+      <Sign x={780} y={14} term="Simple diffusion" resort="High → low partial pressure" note="no energy needed" at={0.5} t={t} />
+      <Sign x={1110} y={340} term="Hemoglobin" resort="Tram seats: up to 4 O₂ each" note="~98.5% of O₂ rides here" at={7} t={t} to={[1100, 580]} />
       {t > 13 && (
-        <g className="film-sign">
+        <g className="film-sign is-on">
           <rect x="560" y="170" width="460" height="150" rx="16" fill={M.cream} />
           <text x="584" y="204" className="film-sign__term">How CO₂ guests travelled</text>
           <rect x="584" y="222" width="290" height="26" rx="6" fill={M.coral} />
@@ -292,11 +305,13 @@ export function CheckoutArt({ t }: { t: number }) {
       </g>
       <Plant x={540} y={640} s={1} />
       <Plant x={1080} y={640} s={1} />
-      <Stream pts={[[1500, 960], [1200, 780], [900, 600], [880, 520]]} t={t} start={0.5} travel={8} count={12} gap={1.4} kind="CO2" s={1} scaleAt={sc} bag />
-      <Stream pts={[[200, 960], [500, 780], [720, 600], [720, 520]]} t={t} start={1.2} travel={8} count={12} gap={1.4} kind="CO2" s={1} scaleAt={sc} bag />
+      <Flow pts={[[1500, 900], [1200, 760], [900, 590], [880, 500]]} t={t} speed={110} color="#8FB3A6" opacity={0.5} />
+      <Flow pts={[[200, 900], [500, 760], [720, 590], [720, 500]]} t={t + 0.4} speed={110} color="#8FB3A6" opacity={0.5} />
+      <Stream pts={[[1500, 960], [1200, 780], [900, 600], [880, 520]]} t={t} start={0.4} travel={5.5} count={16} gap={0.9} kind="CO2" s={1} scaleAt={sc} bag hero />
+      <Stream pts={[[200, 960], [500, 780], [720, 600], [720, 520]]} t={t} start={0.9} travel={5.5} count={16} gap={0.9} kind="CO2" s={1} scaleAt={sc} bag />
 
-      <Sign x={560} y={14} term="Exhalation (quiet = passive)" resort="Check-out" note="diaphragm relaxes · lungs recoil · air flows out" show={t > 0.3} />
-      <Sign x={30} y={420} term="Vocal cords + conchae" resort="Voice made · moisture recaptured" show={t > 14} />
+      <Sign x={800} y={14} term="Exhalation (quiet = passive)" resort="Check-out" note="diaphragm relaxes · lungs recoil · air flows out" at={0.3} t={t} />
+      <Sign x={30} y={420} term="Vocal cords + conchae" resort="Voice made · moisture recaptured" at={14} t={t} />
     </g>
   )
 }
@@ -354,6 +369,17 @@ export function ConciergeArt({ t }: { t: number }) {
           <line x1="0" y1="-6" x2="0" y2="-100" stroke={M.cream} strokeWidth="5" strokeLinecap="round" transform={`rotate(${swing} 0 -6)`} />
         </g>
         <path d="M1010 586 C1010 548 1066 548 1066 586 Z" fill="url(#g-brass)" />
+        {/* sensor calls: phones → desk */}
+        <g opacity={ring}>
+          <Flow pts={[wallPt(B, -1, 0.4, 0.45), [600, 560]]} t={t} speed={160} color={M.coral} width={5} opacity={0.9} />
+          <Flow pts={[wallPt(B, 1, 0.4, 0.45), [1000, 560]]} t={t} speed={160} color={M.coral} width={5} opacity={0.9} />
+        </g>
+        {/* rhythm signals: desk → air pump (phrenic + intercostal nerves) */}
+        <path d="M800 750 L800 900" stroke={M.brass} strokeWidth="6" />
+        {Array.from({ length: 3 }).map((_, i) => {
+          const k = (t * rate * 0.5 + i / 3) % 1
+          return <circle key={i} cx={800} cy={mix(752, 900, k)} r="9" fill={M.coral} opacity={1 - k * 0.6} />
+        })}
         <g transform="translate(1270 600)">
           <rect x="-10" y="-40" width="290" height="140" rx="14" fill="#14221F" stroke="url(#g-brass)" strokeWidth="4" />
           <text x="10" y="-8" className="film-plaque" style={{ textAnchor: 'start' }}>BLOOD CO₂</text>
@@ -363,9 +389,10 @@ export function ConciergeArt({ t }: { t: number }) {
             BREATHING: {rate > 1.3 ? 'FASTER + DEEPER' : 'STEADY'}
           </text>
         </g>
-        <Sign x={30} y={600} term="Medulla oblongata" resort="Head Concierge" note="VRG sets rhythm · DRG reads sensors" show={t > 0.3} to={[560, 520]} />
-        <Sign x={1170} y={20} term="Pons" resort="Mezzanine managers" note="apneustic = depth · pneumotaxic = limits inhale" show={t > 8} to={[1040, 220]} />
-        <Sign x={30} y={170} term="Chemoreceptors" resort="Front-desk phones" note="carotid + aortic bodies, brainstem: sense H⁺" show={t > 14} to={[210, 400]} />
+        <Sign x={30} y={600} term="Medulla oblongata" resort="Head Concierge" note="VRG sets rhythm · DRG reads sensors" at={0.3} t={t} to={[560, 520]} />
+        <Sign x={1170} y={20} term="Pons" resort="Mezzanine managers" note="apneustic = depth · pneumotaxic = limits inhale" at={8} t={t} to={[1040, 220]} />
+        <Sign x={1150} y={440} term="Signals to the air pump" resort="Phrenic + intercostal nerves" note="faster rhythm = faster breathing" at={3} t={t} to={[800, 860]} />
+        <Sign x={30} y={170} term="Chemoreceptors" resort="Front-desk phones" note="carotid + aortic bodies, brainstem: sense H⁺" at={14} t={t} to={[210, 400]} />
       </g>
       {end > 0 && (
         <g opacity={end}>

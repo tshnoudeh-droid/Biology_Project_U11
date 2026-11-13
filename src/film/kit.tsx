@@ -1,4 +1,9 @@
-import type { ReactNode } from 'react'
+import { createContext, useContext, type ReactNode } from 'react'
+
+/* ---------- camera (set by the player per caption beat) ---------- */
+export type Cam = { cx: number; cy: number; z: number }
+export const CamContext = createContext<Cam>({ cx: 800, cy: 450, z: 1 })
+export const toScreen = (c: Cam, p: [number, number]): [number, number] => [(p[0] - c.cx) * c.z + 800, (p[1] - c.cy) * c.z + 450]
 
 /* ---------- timing helpers ---------- */
 export const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
@@ -78,10 +83,12 @@ type StreamProps = {
   scaleAt?: (y: number) => number
   /** guests carry suitcases */
   bag?: boolean
+  /** highlight the first guest as the one to follow */
+  hero?: boolean
 }
 
 /** A line of guests walking along a path. */
-export function Stream({ pts, t, start = 0, travel, count, gap, kind = 'O2', s = 1, hold = false, spread = 10, scaleAt, bag = false }: StreamProps) {
+export function Stream({ pts, t, start = 0, travel, count, gap, kind = 'O2', s = 1, hold = false, spread = 10, scaleAt, bag = false, hero = false }: StreamProps) {
   const out: ReactNode[] = []
   for (let i = 0; i < count; i++) {
     const f = (t - start - i * gap) / travel
@@ -101,6 +108,12 @@ export function Stream({ pts, t, start = 0, travel, count, gap, kind = 'O2', s =
             <path d="M-5 -14 L-5 -20 L5 -20 L5 -14" stroke="#1B2A26" strokeWidth="2" fill="none" />
           </g>
         )}
+        {hero && i === 0 && (
+          <g transform={`translate(${gx} ${gy}) scale(${k})`}>
+            <circle r={kind === 'O2' ? 34 : 42} fill="none" stroke={kind === 'O2' ? '#E3735E' : '#8FB3A6'} strokeWidth="3" strokeDasharray="5 6" className="film-hero-ring" />
+            <circle r={kind === 'O2' ? 40 : 48} fill={kind === 'O2' ? '#E3735E' : '#8FB3A6'} opacity="0.16" />
+          </g>
+        )}
         {kind === 'O2' ? <O2 x={gx} y={gy} s={k} /> : <CO2 x={gx} y={gy} s={k} />}
       </g>,
     )
@@ -115,35 +128,71 @@ type SignProps = {
   term: string
   resort?: string
   note?: string
+  /** explicit visibility (otherwise derived from at/t) */
   show?: boolean
+  /** scene time when the note pops up */
+  at?: number
+  t?: number
   anchor?: 'start' | 'middle' | 'end'
-  /** optional pointer line from the sign to a spot */
+  /** optional pointer from the note to a spot in the scene */
   to?: Pt
 }
 
-export function Sign({ x, y, term, resort, note, show = true, anchor = 'start', to }: SignProps) {
+/**
+ * Pop-up note: real term first (bold), resort name second, optional detail.
+ * Drawn in screen space (not zoomed by the camera) so it stays crisp and on-screen;
+ * the pointer still lands on the right spot in the zoomed scene.
+ */
+export function Sign({ x, y, term, resort, note, show, at, t, anchor = 'start', to }: SignProps) {
+  const cam = useContext(CamContext)
+  const visible = show ?? (at === undefined || t === undefined ? true : t >= at)
+  const fresh = at !== undefined && t !== undefined && t >= at && t - at < 3
   const w = Math.max(term.length * 11.6, (resort?.length ?? 0) * 9.6, (note?.length ?? 0) * 7.6) + 44
   const h = 30 + (resort ? 26 : 0) + (note ? 22 : 0) + 14
   const x0 = anchor === 'middle' ? x - w / 2 : anchor === 'end' ? x - w : x
+  const tp = to ? toScreen(cam, to) : undefined
+  // anchor the pointer on the nearest edge of the note
+  const sx = tp ? Math.max(x0, Math.min(x0 + w, tp[0])) : 0
+  const sy = tp ? (tp[1] > y + h ? y + h : tp[1] < y ? y : y + h / 2) : 0
   return (
-    <g className="film-sign" style={{ opacity: show ? 1 : 0 }}>
-      {to && <path d={`M${x0 + w / 2} ${y + h / 2} L${to[0]} ${to[1]}`} stroke="#F4D5CC" strokeWidth="2" strokeDasharray="4 5" fill="none" />}
-      {to && <circle cx={to[0]} cy={to[1]} r="5" fill="#F4D5CC" />}
-      <rect x={x0} y={y} width={w} height={h} rx="14" fill="#FBFCFB" />
-      <rect x={x0} y={y} width="7" height={h} rx="3.5" fill="#E3735E" />
-      <text x={x0 + 22} y={y + 30} className="film-sign__term">
-        {term}
-      </text>
-      {resort && (
-        <text x={x0 + 22} y={y + 56} className="film-sign__resort">
-          {resort}
+    <g transform={`translate(${cam.cx} ${cam.cy}) scale(${1 / cam.z}) translate(-800 -450)`}>
+      <g className={`film-sign${visible ? ' is-on' : ''}${fresh ? ' is-fresh' : ''}`}>
+        {tp && <path d={`M${sx} ${sy} L${tp[0]} ${tp[1]}`} stroke="#F4D5CC" strokeWidth="2" strokeDasharray="4 5" fill="none" />}
+        {tp && <circle cx={tp[0]} cy={tp[1]} r="6" fill="#F4D5CC" className="film-sign__dot" />}
+        <rect x={x0} y={y} width={w} height={h} rx="14" fill="#FBFCFB" className="film-sign__bg" />
+        <rect x={x0} y={y} width="7" height={h} rx="3.5" fill="#E3735E" />
+        <text x={x0 + 22} y={y + 30} className="film-sign__term">
+          {term}
         </text>
-      )}
-      {note && (
-        <text x={x0 + 22} y={y + (resort ? 79 : 53)} className="film-sign__note">
-          {note}
-        </text>
-      )}
+        {resort && (
+          <text x={x0 + 22} y={y + 56} className="film-sign__resort">
+            {resort}
+          </text>
+        )}
+        {note && (
+          <text x={x0 + 22} y={y + (resort ? 79 : 53)} className="film-sign__note">
+            {note}
+          </text>
+        )}
+      </g>
+    </g>
+  )
+}
+
+/** Animated airflow streaks along a path (shows which way air is moving). */
+export function Flow({ pts, t, speed = 60, color = '#F3EDE4', width = 3, opacity = 0.45 }: { pts: Pt[]; t: number; speed?: number; color?: string; width?: number; opacity?: number }) {
+  const d = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ')
+  return <path d={d} fill="none" stroke={color} strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 22" strokeDashoffset={-t * speed} opacity={opacity} />
+}
+
+/** Little humidity sparkles (warm, moist air). */
+export function Sparkles({ x, y, t, n = 5, spread = 60, color = '#CFE3EE' }: { x: number; y: number; t: number; n?: number; spread?: number; color?: string }) {
+  return (
+    <g>
+      {Array.from({ length: n }).map((_, i) => {
+        const k = (t * 0.7 + i / n) % 1
+        return <path key={i} d={`M${x + ((i * 37) % spread) - spread / 2} ${y - k * 40} q4 6 0 10 q-4 -4 0 -10`} fill={color} opacity={0.8 * (1 - k)} />
+      })}
     </g>
   )
 }
