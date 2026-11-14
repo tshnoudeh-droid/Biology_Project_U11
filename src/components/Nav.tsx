@@ -5,9 +5,9 @@ import { IconMenu, IconX } from './Icons'
 
 const links = [
   { to: '/', label: 'Home', end: true },
-  { to: '/tour', label: 'Tour', end: false },
+  { to: '/tour', label: 'Watch the tour', end: true },
+  { to: '/stops', label: 'Resort map', end: false },
   { to: '/book', label: 'Book', end: false },
-  { to: '/about', label: 'About', end: false },
   { to: '/sources', label: 'Sources', end: false },
 ]
 
@@ -35,7 +35,13 @@ export function Nav() {
           <ul>
             {links.map((l) => (
               <li key={l.to}>
-                <NavLink to={l.to} end={l.end} className={({ isActive }) => `nav__link${isActive ? ' is-active' : ''}`}>
+                <NavLink
+                  to={l.to}
+                  end={l.end}
+                  className={({ isActive }) =>
+                    `nav__link${isActive || (l.to === '/stops' && pathname.startsWith('/tour/')) ? ' is-active' : ''}`
+                  }
+                >
                   {l.label}
                 </NavLink>
               </li>

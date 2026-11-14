@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { JOURNEY, scenes, starts, TOTAL, type Scene } from './scenes'
+import { scenes, starts, TOTAL, type Scene } from './scenes'
 import { CamContext, ease, type Cam } from './kit'
 import { InteriorDefs } from './interior'
 import { rich } from '../lib/rich'
@@ -23,24 +23,6 @@ function cameraAt(scene: Scene, local: number, bi: number): Cam {
   cx = Math.max(hw, Math.min(1600 - hw, cx))
   cy = Math.max(hh, Math.min(900 - hh, cy))
   return { cx, cy, z }
-}
-
-function Journey({ scene }: { scene: Scene }) {
-  const j = scene.journey
-  if (j === 'brain') return <div className="film-journey"><span className="film-journey__special">Behind the scenes · brainstem control</span></div>
-  const exhale = j === 'exhale'
-  return (
-    <div className={`film-journey${exhale ? ' is-exhale' : ''}`} aria-hidden="true">
-      {j === 'outside' && <span className="film-journey__special">Outside → </span>}
-      {exhale && <span className="film-journey__special">Exhale ← </span>}
-      {JOURNEY.map((name, i) => (
-        <span key={name} className={`film-journey__stop${typeof j === 'number' && i === j ? ' is-here' : ''}${typeof j === 'number' && i < j ? ' is-done' : ''}${exhale && i < 7 ? ' is-done' : ''}`}>
-          <i />
-          {name}
-        </span>
-      ))}
-    </div>
-  )
 }
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
@@ -140,6 +122,26 @@ export function FilmPlayer() {
 
   return (
     <div className="film">
+      <ol className="film-steps" aria-label="Tour scenes">
+        {scenes.map((s, i) => {
+          const prog = i < idx ? 1 : i > idx ? 0 : local / s.duration
+          const state = i === idx ? 'current' : i < idx ? 'done' : 'todo'
+          return (
+            <li key={s.id} className={`film-step film-step--${state}`}>
+              <button type="button" onClick={() => goScene(i)} aria-current={i === idx ? 'step' : undefined}>
+                <span className="film-step__num">{i + 1}</span>
+                <span className="film-step__name">{s.chapter}</span>
+                <span className="film-step__bar">
+                  <span style={{ width: `${prog * 100}%` }} />
+                </span>
+              </button>
+            </li>
+          )
+        })}
+      </ol>
+      <p className="film-now" aria-live="polite">
+        <span>Now at</span> <strong>{scene.chapter}</strong> <span className="film-now__term">· {scene.term} · {scene.resort}</span>
+      </p>
       <div className="film-stage" role="region" aria-roledescription="animated tour" aria-label={`Scene ${idx + 1} of ${scenes.length}: ${scene.resort}, ${scene.term}`}>
         <svg viewBox="0 0 1600 900" className="film-svg" aria-hidden="true">
           <InteriorDefs />
@@ -159,7 +161,6 @@ export function FilmPlayer() {
             Scene {idx + 1} · {scene.term}
           </span>
           <span className="film-head__title">{scene.resort}</span>
-          <Journey scene={scene} />
         </div>
 
         <div className="film-caption" aria-live="polite">
@@ -222,27 +223,6 @@ export function FilmPlayer() {
             </Link>
           )}
         </div>
-        <ol className="film-chapters" aria-label="Scenes">
-          {scenes.map((s, i) => {
-            const prog = i < idx ? 1 : i > idx ? 0 : local / s.duration
-            return (
-              <li key={s.id} style={{ flexGrow: s.duration }}>
-                <button
-                  type="button"
-                  className={`film-chapter${i === idx ? ' is-current' : ''}`}
-                  onClick={() => goScene(i)}
-                  aria-current={i === idx ? 'step' : undefined}
-                  aria-label={`Scene ${i + 1}: ${s.chapter}, ${s.term}`}
-                >
-                  <span className="film-chapter__bar">
-                    <span style={{ width: `${prog * 100}%` }} />
-                  </span>
-                  <span className="film-chapter__name">{s.chapter}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ol>
       </div>
     </div>
   )

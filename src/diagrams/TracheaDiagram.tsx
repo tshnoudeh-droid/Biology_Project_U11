@@ -32,13 +32,13 @@ export function TracheaDiagram() {
       <path d="M176 384 L190 368 L204 384" stroke={C.coralDeep} strokeWidth="3" fill="none" strokeLinecap="round" />
       <path d="M190 120 L190 330" stroke={C.coralDeep} strokeWidth="2.4" markerStart="url(#tr-coral)" markerEnd="url(#tr-coral)" opacity="0" />
       <Callout at={[200, 52]} to={[270, 44]} label="Larynx" />
-      <Callout at={[234, 150]} to={[270, 146]} label="C-shaped ring" sub="hyaline cartilage" />
+      <Callout at={[234, 150]} to={[270, 146]} label="C-shaped ring" sub="made of cartilage" />
       <Label x={270} y={202} small>16–20 rings</Label>
       <Label x={270} y={220} small>keep it open</Label>
       <Label x={270} y={250} small>About 10–12 cm</Label>
-      <Callout at={[190, 372]} to={[270, 340]} label="Carina" />
-      <Label x={24} y={458} small>Right primary bronchus</Label>
-      <Label x={270} y={458} small anchor="start">Left primary bronchus</Label>
+      <Callout at={[190, 372]} to={[270, 340]} label="Splits into bronchi" />
+      <Label x={24} y={458} small>Right bronchus</Label>
+      <Label x={270} y={458} small anchor="start">Left bronchus</Label>
 
       <PanelTitle x={500} y={26} anchor="middle">Cross-section</PanelTitle>
       <Label x={500} y={60} small anchor="middle">Front (anterior)</Label>
@@ -49,13 +49,13 @@ export function TracheaDiagram() {
       <ellipse cx={cx} cy={cy + 150} rx="64" ry="26" fill={C.blush} stroke={C.coralDeep} strokeWidth="1.5" />
       <path d={`M${cx - 30} ${cy + 150} L${cx + 30} ${cy + 150}`} stroke={C.coralDeep} strokeWidth="2" />
       <Label x={cx} y={cy + 5} anchor="middle" small>Lumen (air)</Label>
-      <Callout at={[cx + 74, cy - 40]} to={[620, 110]} label="Hyaline cartilage" />
-      <Callout at={[cx + 50, cy + 30]} to={[620, 170]} label="Mucosa" sub="ciliated lining" />
-      <Callout at={[cx + 22, p1[1] + 11]} to={[620, 280]} label="Trachealis" sub="smooth muscle at the gap" />
+      <Callout at={[cx + 74, cy - 40]} to={[620, 110]} label="Cartilage" />
+      <Callout at={[cx + 50, cy + 30]} to={[620, 170]} label="Lining" sub="mucus + cilia" />
+      <Callout at={[cx + 22, p1[1] + 11]} to={[620, 280]} label="Muscle" sub="closes the gap" />
       <Callout at={[cx + 50, cy + 154]} to={[620, 362]} label="Esophagus" sub="behind the open side" />
       <Label x={500} y={420} small anchor="middle">Back (posterior)</Label>
 
-      <CiliaInset id="tr" x={820} y={110} w={210} title="Mucociliary escalator" arrowLabel="Mucus moves up toward the pharynx" />
+      <CiliaInset id="tr" x={820} y={110} w={210} title="Mucus escalator" arrowLabel="Mucus is swept up to the throat" />
     </svg>
   )
 }

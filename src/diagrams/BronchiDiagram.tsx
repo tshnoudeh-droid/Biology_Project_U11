@@ -18,7 +18,7 @@ export function BronchiDiagram() {
         at the hilum. The right lung has three lobes (superior, middle and inferior) and three secondary bronchi; the left lung has
         two lobes (superior and inferior), two secondary bronchi and a cardiac notch for the heart.
       </desc>
-      <PanelTitle x={500} y={24} anchor="middle">Front view (the patient’s right is on your left)</PanelTitle>
+      <PanelTitle x={500} y={24} anchor="middle">Front view (your right lung is on the left of the picture)</PanelTitle>
 
       {/* lungs */}
       <path d="M380 110 C330 120 250 220 225 330 C210 420 215 500 240 525 C320 510 410 515 470 500 C465 420 455 300 440 200 C430 150 410 110 380 110 Z" fill={C.blush} fillOpacity="0.6" stroke={C.euc} strokeWidth="2" />
@@ -60,24 +60,24 @@ export function BronchiDiagram() {
       {/* labels — left (patient's right) */}
       <Label x={200} y={70} bold anchor="end">Right lung</Label>
       <Label x={200} y={90} small anchor="end">3 lobes</Label>
-      <Callout at={[320, 220]} to={[215, 180]} label="Superior lobe" anchor="end" />
+      <Callout at={[320, 220]} to={[215, 180]} label="Upper lobe" anchor="end" />
       <Callout at={[392, 392]} to={[200, 300]} label="Middle lobe" anchor="end" />
-      <Callout at={[260, 470]} to={[200, 470]} label="Inferior lobe" anchor="end" />
-      <Callout at={[440, 222]} to={[215, 236]} label="Right primary bronchus" sub="wider, shorter, more vertical" anchor="end" />
-      <Callout at={[300, 362]} to={[200, 380]} label="Fissures" sub="separate the lobes" anchor="end" />
+      <Callout at={[260, 470]} to={[200, 470]} label="Lower lobe" anchor="end" />
+      <Callout at={[440, 222]} to={[215, 236]} label="Right bronchus" sub="wider and straighter" anchor="end" />
+      
 
       {/* labels — right (patient's left) */}
       <Label x={820} y={70} bold>Left lung</Label>
       <Label x={820} y={90} small>2 lobes</Label>
       <Callout at={[520, 60]} to={[620, 56]} label="Trachea" />
-      <Callout at={[500, 178]} to={[820, 132]} label="Carina" sub="cough reflex checkpoint" />
-      <Callout at={[590, 216]} to={[820, 190]} label="Left primary bronchus" />
-      <Callout at={[566, 260]} to={[820, 246]} label="Hilum" sub="where bronchi enter" />
-      <Callout at={[690, 260]} to={[820, 300]} label="Secondary bronchi" sub="one per lobe" />
-      <Callout at={[718, 432]} to={[820, 356]} label="Tertiary bronchi" />
-      <Callout at={[730, 300]} to={[820, 420]} label="Superior lobe" />
-      <Callout at={[740, 470]} to={[820, 480]} label="Inferior lobe" />
-      <Callout at={[580, 450]} to={[620, 560]} label="Cardiac notch" sub="room for the heart" />
+      <Callout at={[500, 178]} to={[820, 132]} label="Split point" sub="triggers coughing" />
+      <Callout at={[590, 216]} to={[820, 190]} label="Left bronchus" />
+      
+      <Callout at={[690, 260]} to={[820, 300]} label="Smaller branches" sub="one per lobe" />
+      
+      <Callout at={[730, 300]} to={[820, 420]} label="Upper lobe" />
+      <Callout at={[740, 470]} to={[820, 480]} label="Lower lobe" />
+      <Callout at={[580, 450]} to={[620, 560]} label="Space for the heart" />
     </svg>
   )
 }

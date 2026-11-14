@@ -50,11 +50,11 @@ export function DiaphragmRide() {
 
   const contracting = phase === 'inhaling' || phase === 'inhaled'
   const status = {
-    rest: 'At rest between breaths. Pressure inside the lungs equals atmospheric pressure (760 mm Hg), so no air moves.',
-    inhaling: 'INHALE: the diaphragm contracts and flattens while the external intercostals lift the ribs up and out. Volume ↑ → pressure ↓ to about 759 mm Hg, below atmospheric, so air flows IN.',
-    inhaled: 'Lungs full. Pressure has evened out with the atmosphere again, so airflow stops until the next movement.',
-    exhaling: 'QUIET EXHALE (passive): the muscles relax and the stretchy lungs recoil. Volume ↓ → pressure ↑ to about 761 mm Hg, above atmospheric, so air flows OUT.',
-    forced: 'FORCED EXHALE (active): the internal intercostals pull the ribs down and the abdominal muscles push the diaphragm up. Volume drops further and faster, so pressure rises more and air is pushed out.',
+    rest: 'Resting between breaths. Pressure inside equals the air outside, so nothing moves.',
+    inhaling: 'BREATHE IN: the diaphragm moves down and the ribs move up and out. The chest gets bigger, pressure drops below the air outside, so air flows IN.',
+    inhaled: 'Lungs full. Pressure has evened out, so air stops moving.',
+    exhaling: 'BREATHE OUT: the muscles relax and the chest gets smaller. Pressure rises above the air outside, so air flows OUT.',
+    forced: 'FORCED BREATH OUT (like blowing out candles): your stomach and rib muscles squeeze, pushing air out faster.',
   }[phase]
 
   return (
@@ -122,10 +122,10 @@ export function DiaphragmRide() {
 
           {/* labels */}
           <text x="20" y="34" className="svg-label svg-label--on-dark"><tspan className="svg-label--bold">Ribs:</tspan> {t > 0.5 ? 'lifted up and out' : 'lowered'}</text>
-          <text x="20" y="60" className="svg-label svg-label--on-dark"><tspan className="svg-label--bold">External intercostals:</tspan> {contracting ? 'contracting' : 'relaxed'}</text>
+          <text x="20" y="60" className="svg-label svg-label--on-dark"><tspan className="svg-label--bold">Rib muscles:</tspan> {contracting ? 'contracting' : 'relaxed'}</text>
           <text x="330" y={domeY + 52} textAnchor="middle" className="svg-label svg-label--on-dark svg-label--bold">Diaphragm</text>
           <text x="330" y={domeY + 70} textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">
-            {t > 0.5 ? 'contracted and flattened' : t < -0.1 ? 'pushed up by abdominal muscles' : 'relaxed, dome-shaped'}
+            {t > 0.5 ? 'pulled down, flat' : t < -0.1 ? 'pushed up hard' : 'relaxed, dome-shaped'}
           </text>
           <text x="236" y="320" textAnchor="middle" className="svg-label svg-label--on-dark">Lung</text>
 
@@ -137,7 +137,7 @@ export function DiaphragmRide() {
             <text y="56" className="svg-chem" style={{ fill: '#FBFCFB' }}>{volume.toFixed(2)} L</text>
             <text x="110" y="56" className="svg-label svg-label--sm svg-label--on-dark">{t > 0.05 ? '↑ larger' : t < -0.05 ? '↓ smaller' : ''}</text>
 
-            <text y="100" className="svg-label svg-label--on-dark svg-label--bold">Pressure in the alveoli</text>
+            <text y="100" className="svg-label svg-label--on-dark svg-label--bold">Pressure in the lungs</text>
             <g transform="translate(110 236)">
               <path d="M-90 0 A90 90 0 0 1 90 0" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="18" />
               <path d="M-90 0 A90 90 0 0 1 0 -90" fill="none" stroke="#7FA7D9" strokeOpacity="0.5" strokeWidth="18" />
@@ -145,17 +145,17 @@ export function DiaphragmRide() {
               <line x1="0" y1="0" x2="0" y2="-80" stroke="#FBFCFB" strokeWidth="4" strokeLinecap="round" transform={`rotate(${needle})`} className="dp-needle" />
               <circle r="8" fill="#FBFCFB" />
               <text x="-104" y="22" className="svg-label svg-label--sm svg-label--on-dark">756</text>
-              <text x="0" y="-100" textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">760 = atmosphere</text>
+              <text x="0" y="-100" textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">760 = outside air</text>
               <text x="84" y="22" className="svg-label svg-label--sm svg-label--on-dark">764</text>
             </g>
             <text x="110" y="284" textAnchor="middle" className="svg-chem" style={{ fill: '#FBFCFB' }}>{pressure} mm Hg</text>
             <text x="110" y="308" textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">
-              {pressure < 760 ? 'below atmospheric → air in' : pressure > 760 ? 'above atmospheric → air out' : 'equal to atmospheric → no flow'}
+              {pressure < 760 ? 'lower than outside → air in' : pressure > 760 ? 'higher than outside → air out' : 'same as outside → no flow'}
             </text>
 
             <rect y="332" width="220" height="104" rx="16" fill="rgba(244,213,204,0.08)" stroke="rgba(244,213,204,0.3)" />
             <text x="110" y="366" textAnchor="middle" className="svg-chem" style={{ fill: '#F4D5CC' }}>P₁V₁ = P₂V₂</text>
-            <text x="110" y="394" textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">Boyle’s law (constant temperature)</text>
+            <text x="110" y="394" textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">Boyle’s law</text>
             <text x="110" y="418" textAnchor="middle" className="svg-label svg-label--on-dark svg-label--bold">
               {phase === 'inhaling' ? 'V ↑  →  P ↓' : phase === 'exhaling' || phase === 'forced' ? 'V ↓  →  P ↑' : 'V steady → P steady'}
             </text>

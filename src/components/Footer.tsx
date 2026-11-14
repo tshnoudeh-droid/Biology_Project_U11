@@ -46,9 +46,9 @@ export function Footer() {
           <h2 className="footer__heading">Explore</h2>
           <ul className="footer__links">
             <li><Link to="/tour">Watch the tour</Link></li>
-            <li><Link to="/tour/map">Resort map</Link></li>
+            <li><Link to="/stops">Resort map</Link></li>
             <li><Link to="/tour/nasal-cavity">Start at Stop 1</Link></li>
-            <li><Link to="/tour/advisories">Travel advisories</Link></li>
+            <li><Link to="/tour/advisories">Health warnings</Link></li>
             <li><Link to="/book">Book your stay</Link></li>
             <li><Link to="/about">About us</Link></li>
             <li><Link to="/sources">Sources</Link></li>

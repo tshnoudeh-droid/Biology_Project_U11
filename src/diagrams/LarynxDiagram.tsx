@@ -17,7 +17,7 @@ export function LarynxDiagram() {
   return (
     <div className="diagram-with-control">
       <div className="diagram-control" role="group" aria-label="Vocal fold position">
-        <span className="diagram-control__label">Glottis:</span>
+        <span className="diagram-control__label">Vocal cords:</span>
         <div className="toggle">
           <button type="button" aria-pressed={!speaking} onClick={() => setSpeaking(false)}>
             Breathing (open)
@@ -48,19 +48,12 @@ export function LarynxDiagram() {
           <rect key={y} x="196" y={y} width="108" height="14" rx="7" fill={C.cartilage} stroke={C.euc} strokeWidth="1.5" />
         ))}
 
-        <Callout at={[250, 52]} to={[380, 46]} label="Epiglottis" sub="elastic cartilage flap" />
-        <Callout at={[300, 106]} to={[380, 104]} label="Hyoid bone" />
-        <Callout at={[250, 164]} to={[380, 160]} label="Laryngeal prominence" sub="the Adam’s apple" />
-        <Callout at={[318, 220]} to={[380, 232]} label="Thyroid cartilage" />
-        <Callout at={[304, 342]} to={[380, 344]} label="Cricoid cartilage" sub="complete ring" />
-        <Callout at={[300, 428]} to={[380, 432]} label="Tracheal rings" sub="Stop 4 begins" />
-        <Label x={30} y={200} small>Nine cartilages:</Label>
-        <Label x={30} y={220} small>thyroid, cricoid,</Label>
-        <Label x={30} y={240} small>epiglottis + 3 pairs</Label>
-        <Label x={30} y={260} small>(arytenoid,</Label>
-        <Label x={30} y={280} small>corniculate,</Label>
-        <Label x={30} y={300} small>cuneiform)</Label>
-
+        <Callout at={[250, 52]} to={[380, 46]} label="Epiglottis" sub="flap that blocks food" />
+        
+        <Callout at={[250, 164]} to={[380, 160]} label="Adam’s apple" sub="bump of cartilage" />
+        <Callout at={[318, 220]} to={[380, 232]} label="Cartilage shield" />
+        <Callout at={[304, 342]} to={[380, 344]} label="Cartilage ring" sub="below the shield" />
+        <Callout at={[300, 428]} to={[380, 432]} label="Windpipe starts" sub="Stop 4" />
         <PanelTitle x={760} y={26} anchor="middle">Top-down view of the glottis</PanelTitle>
         <Label x={760} y={58} small anchor="middle">Front (anterior)</Label>
         <ellipse cx="760" cy="250" rx="170" ry="170" fill="#EFC2B5" stroke={C.coralDeep} strokeWidth="1.5" />
@@ -79,10 +72,10 @@ export function LarynxDiagram() {
         <path d={`M${rx + 26} ${by + 2} L${rx - 4} ${by - 4} L${rx + 6} ${by + 30} Z`} fill={C.cartilage} stroke={C.euc} strokeWidth="1.5" />
         <Label x={760} y={446} small anchor="middle">Back (posterior)</Label>
 
-        <Callout at={[(ax + rx) / 2 + 4, (ay + by) / 2]} to={[950, 230]} label="True vocal cord" sub="vibrates to make sound" />
-        <Callout at={[ax, by - 30]} to={[950, 296]} label="Glottis" sub={speaking ? 'closed: folds vibrate' : 'open: air flows freely'} />
-        <Callout at={[(ax + rx) / 2 + 30, (ay + by) / 2 - 10]} to={[950, 176]} label="Vestibular fold" sub="“false” vocal cord" />
-        <Callout at={[rx + 8, by + 12]} to={[950, 380]} label="Arytenoid cartilage" />
+        <Callout at={[(ax + rx) / 2 + 4, (ay + by) / 2]} to={[950, 230]} label="Vocal cord" sub="vibrates to make sound" />
+        <Callout at={[ax, by - 30]} to={[950, 296]} label="Gap between cords" sub={speaking ? 'nearly closed: cords vibrate' : 'wide open: air flows in'} />
+        
+        
         <Callout at={[810, 104]} to={[950, 110]} label="Epiglottis" />
       </svg>
     </div>

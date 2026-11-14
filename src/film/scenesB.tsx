@@ -54,13 +54,13 @@ export function CorridorsArt({ t }: { t: number }) {
       <Sign
         x={1170}
         y={170}
-        term={squeeze > 0.3 ? 'Bronchoconstriction' : 'Smooth muscle walls'}
-        resort={squeeze > 0.3 ? 'Corridors tighten (asthma)' : 'Padded walls that tighten or relax'}
+        term={squeeze > 0.3 ? 'Asthma squeeze' : 'Smooth muscle walls'}
+        resort={squeeze > 0.3 ? 'Corridors tighten, less air' : 'Walls that squeeze or relax'}
         at={6} t={t}
         to={[1350, 420]}
       />
-      <Sign x={40} y={500} term="Terminal bronchioles" resort="1,000+ per lung" note="last corridor of the conducting zone" at={13} t={t} to={[700, 430]} />
-      <Sign x={1170} y={500} term="Respiratory bronchioles" resort="→ alveolar ducts → alveolar sacs" note="~2,400 km of corridors in total" at={14.5} t={t} to={[900, 430]} />
+      <Sign x={40} y={500} term="Tiny bronchioles" resort="Thousands per lung" note="the last stretch of airway" at={13} t={t} to={[700, 430]} />
+      <Sign x={1170} y={500} term="Alveoli ahead" resort="→ the spa suites" note="~2,400 km of airways in total" at={14.5} t={t} to={[900, 430]} />
     </g>
   )
 }
@@ -166,11 +166,10 @@ export function SpaArt({ t }: { t: number }) {
       </g>
       {t > 16 && t < 20 && <circle cx={mix(1150, mx + 70, ramp(t, 17, 19.5))} cy={540} r="9" fill="#5A6B65" />}
 
-      <Sign x={820} y={14} term="Alveoli" resort="The Spa Suites" note="~480 million · the respiratory zone" at={0.3} t={t} />
-      <Sign x={1170} y={150} term="Type I alveolar cells" resort="Thin glass walls" note="gases pass straight through" at={7} t={t} to={[1060, 360]} />
-      <Sign x={30} y={560} term="Type II alveolar cells" resort="The Masseuses" note="apply surfactant → suites don’t collapse" at={12} t={t} to={[700, 560]} />
-      <Sign x={1170} y={430} term="Alveolar macrophage" resort="Night Housekeeping" at={17.5} t={t} to={[mx, 520]} />
-      <Sign x={30} y={170} term="Alveolar pore" resort="Porthole to the next suite" at={20} t={t} to={[200, 380]} />
+      <Sign x={820} y={14} term="Alveoli" resort="The Spa Suites" note="~480 million tiny air sacs" at={0.3} t={t} />
+      <Sign x={1170} y={150} term="Thin walls" resort="Glass walls, one cell thick" note="gases pass straight through" at={7} t={t} to={[1060, 360]} />
+      <Sign x={30} y={560} term="Surfactant cells" resort="The Masseuses" note="surfactant stops the sacs collapsing" at={12} t={t} to={[700, 560]} />
+      <Sign x={1170} y={430} term="Cleaner cells" resort="Night Housekeeping" at={17.5} t={t} to={[mx, 520]} />
     </g>
   )
 }
@@ -194,7 +193,7 @@ export function ShuttleArt({ t }: { t: number }) {
         <text x="20" y="34" className="film-board-led">DEPARTURES · RBC SHUTTLE</text>
         <text x="20" y="72" className="film-board-led film-board-led--sm">TO  HEART → BODY        ON TIME</text>
         <text x="20" y="102" className="film-board-led film-board-led--sm">SEATS  4 O₂ PER HEMOGLOBIN</text>
-        <text x="20" y="132" className="film-board-led film-board-led--sm">LOUNGE  O₂ 104 · CO₂ 40 mm Hg</text>
+        <text x="20" y="132" className="film-board-led film-board-led--sm">LOUNGE  LOTS OF O₂, LITTLE CO₂</text>
       </g>
       <Sofa x={260} y={430} s={0.9} />
       <SideTable x={450} y={430} s={0.8} />
@@ -203,13 +202,13 @@ export function ShuttleArt({ t }: { t: number }) {
       <rect x="0" y="470" width="1600" height="36" fill="url(#g-glass)" />
       <rect x="0" y="466" width="1600" height="6" fill="url(#g-brass)" />
       <rect x="0" y="504" width="1600" height="6" fill="url(#g-brass)" />
-      <text x="1570" y="495" textAnchor="end" className="film-plaque">GLASS FLOOR · RESPIRATORY MEMBRANE ≈ 0.5 µm</text>
+      <text x="1570" y="495" textAnchor="end" className="film-plaque">GLASS FLOOR · ONE CELL THICK</text>
       {/* tram tunnel (capillary) */}
       <rect x="0" y="510" width="1600" height="200" fill="#14221F" />
       <rect x="0" y="540" width="1600" height="130" fill="url(#g-blood)" opacity="0.4" />
       <rect x="0" y="680" width="1600" height="8" fill="url(#g-brass)" />
-      <text x="30" y="708" className="film-plaque" style={{ textAnchor: 'start' }}>← BLOOD IN: OXYGEN-POOR (BLUE) · O₂ 40 · CO₂ 45 mm Hg</text>
-      <text x="1570" y="708" className="film-plaque" style={{ textAnchor: 'end' }}>BLOOD OUT: OXYGEN-RICH (RED) →</text>
+      <text x="30" y="708" className="film-plaque" style={{ textAnchor: 'start' }}>← BLOOD IN: LOW OXYGEN (BLUE)</text>
+      <text x="1570" y="708" className="film-plaque" style={{ textAnchor: 'end' }}>BLOOD OUT: FULL OF OXYGEN (RED) →</text>
       {Array.from({ length: 9 }).map((_, i) => {
         const cyc = (t * 0.42 + i * 0.11) % 1
         return (
@@ -240,7 +239,7 @@ export function ShuttleArt({ t }: { t: number }) {
           </g>
         )
       })}
-      <Sign x={780} y={14} term="Simple diffusion" resort="High → low partial pressure" note="no energy needed" at={0.5} t={t} />
+      <Sign x={780} y={14} term="Diffusion" resort="From more → to less" note="no energy needed" at={0.5} t={t} />
       <Sign x={1110} y={340} term="Hemoglobin" resort="Tram seats: up to 4 O₂ each" note="~98.5% of O₂ rides here" at={7} t={t} to={[1100, 580]} />
       {t > 13 && (
         <g className="film-sign is-on">
@@ -249,8 +248,8 @@ export function ShuttleArt({ t }: { t: number }) {
           <rect x="584" y="222" width="290" height="26" rx="6" fill={M.coral} />
           <rect x="878" y="222" width="84" height="26" rx="6" fill={M.blush} stroke={M.velvet} />
           <rect x="966" y="222" width="36" height="26" rx="6" fill={M.leaf} />
-          <text x="584" y="274" className="film-sign__note">~70% bicarbonate (HCO₃⁻) · ~20% carbaminohemoglobin</text>
-          <text x="584" y="298" className="film-sign__note">7–10% dissolved in plasma</text>
+          <text x="584" y="274" className="film-sign__note">~70% as bicarbonate · ~20% on hemoglobin</text>
+          <text x="584" y="298" className="film-sign__note">~10% dissolved in the blood</text>
         </g>
       )}
     </g>
@@ -310,7 +309,7 @@ export function CheckoutArt({ t }: { t: number }) {
       <Stream pts={[[1500, 960], [1200, 780], [900, 600], [880, 520]]} t={t} start={0.4} travel={5.5} count={16} gap={0.9} kind="CO2" s={1} scaleAt={sc} bag hero />
       <Stream pts={[[200, 960], [500, 780], [720, 600], [720, 520]]} t={t} start={0.9} travel={5.5} count={16} gap={0.9} kind="CO2" s={1} scaleAt={sc} bag />
 
-      <Sign x={800} y={14} term="Exhalation (quiet = passive)" resort="Check-out" note="diaphragm relaxes · lungs recoil · air flows out" at={0.3} t={t} />
+      <Sign x={800} y={14} term="Breathing out" resort="Check-out" note="diaphragm relaxes · chest shrinks · air flows out" at={0.3} t={t} />
       <Sign x={30} y={420} term="Vocal cords + conchae" resort="Voice made · moisture recaptured" at={14} t={t} />
     </g>
   )
@@ -389,10 +388,10 @@ export function ConciergeArt({ t }: { t: number }) {
             BREATHING: {rate > 1.3 ? 'FASTER + DEEPER' : 'STEADY'}
           </text>
         </g>
-        <Sign x={30} y={600} term="Medulla oblongata" resort="Head Concierge" note="VRG sets rhythm · DRG reads sensors" at={0.3} t={t} to={[560, 520]} />
-        <Sign x={1170} y={20} term="Pons" resort="Mezzanine managers" note="apneustic = depth · pneumotaxic = limits inhale" at={8} t={t} to={[1040, 220]} />
-        <Sign x={1150} y={440} term="Signals to the air pump" resort="Phrenic + intercostal nerves" note="faster rhythm = faster breathing" at={3} t={t} to={[800, 860]} />
-        <Sign x={30} y={170} term="Chemoreceptors" resort="Front-desk phones" note="carotid + aortic bodies, brainstem: sense H⁺" at={14} t={t} to={[210, 400]} />
+        <Sign x={30} y={600} term="Medulla oblongata" resort="Head Concierge" note="sets your breathing rhythm" at={0.3} t={t} to={[560, 520]} />
+        <Sign x={1170} y={20} term="Pons" resort="Mezzanine managers" note="helps fine-tune breathing" at={8} t={t} to={[1040, 220]} />
+        <Sign x={1150} y={440} term="Nerve signals" resort="Down to the air pump" note="faster signals = faster breathing" at={3} t={t} to={[800, 860]} />
+        <Sign x={30} y={170} term="Chemoreceptors" resort="Front-desk phones" note="sense CO₂ in your blood" at={14} t={t} to={[210, 400]} />
       </g>
       {end > 0 && (
         <g opacity={end}>

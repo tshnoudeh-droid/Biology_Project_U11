@@ -53,21 +53,19 @@ export function NasalDiagram() {
       <path d="M200 160 C260 146 320 146 400 150" fill="none" stroke={C.coralDeep} strokeWidth="1.8" strokeDasharray="6 5" />
 
       {/* labels — left column */}
-      <Callout at={[214, 80]} to={[150, 30]} label="Frontal sinus" anchor="end" />
-      <Callout at={[110, 228]} to={[24, 300]} label="Naris (nostril)" sub="air enters here" />
+      <Callout at={[214, 80]} to={[150, 30]} label="Sinus" anchor="end" />
+      <Callout at={[110, 228]} to={[24, 300]} label="Nostril" sub="air enters here" />
       <Label x={24} y={238} small>Air in</Label>
 
       {/* labels — bottom */}
-      <Callout at={[300, 252]} to={[230, 330]} label="Hard palate" sub="floor of the cavity" />
+      <Callout at={[300, 252]} to={[230, 330]} label="Roof of the mouth" sub="(hard palate)" />
       <Callout at={[446, 274]} to={[330, 380]} label="Soft palate" />
-      <Callout at={[240, 246]} to={[150, 400]} label="Mucus-covered, ciliated lining" sub="traps dust; warms and humidifies" />
+      <Callout at={[240, 246]} to={[150, 400]} label="Lining with mucus + cilia" sub="traps dust, warms and moistens air" />
 
       {/* labels — right column */}
-      <Callout at={[340, 111]} to={[580, 112]} label="Olfactory epithelium" sub="odour receptors" />
-      <Callout at={[460, 74]} to={[580, 62]} label="Sphenoidal sinus" />
-      <Callout at={[392, 134]} to={[580, 160]} label="Superior concha" />
-      <Callout at={[424, 170]} to={[580, 200]} label="Middle concha" />
-      <Callout at={[452, 216]} to={[580, 240]} label="Inferior concha" sub="conchae swirl and warm the air" />
+      <Callout at={[340, 111]} to={[580, 112]} label="Smell receptors" sub="detect odours" />
+      <Callout at={[460, 74]} to={[580, 62]} label="Sinus" />
+      <Callout at={[392, 134]} to={[580, 160]} label="Nasal conchae" sub="3 curvy shelves: swirl + warm air" />
       <Callout at={[492, 330]} to={[580, 330]} label="To the pharynx" sub="(Stop 2)" />
 
       <g transform="translate(150 0)">
@@ -94,12 +92,12 @@ export function NasalDiagram() {
       <path d="M708 214 C722 200 748 206 750 232 C748 264 730 290 712 280 C700 268 700 232 708 214 Z" fill={C.blush} stroke={C.coralDeep} strokeWidth="1.2" />
       <path d="M872 214 C858 200 832 206 830 232 C832 264 850 290 868 280 C880 268 880 232 872 214 Z" fill={C.blush} stroke={C.coralDeep} strokeWidth="1.2" />
 
-      <Callout at={[790, 110]} to={[940, 96]} label="Frontal" />
-      <Callout at={[798, 176]} to={[940, 150]} label="Ethmoidal" />
-      <Callout at={[790, 160]} to={[940, 204]} label="Sphenoidal" sub="(deep, behind)" />
-      <Callout at={[870, 240]} to={[940, 262]} label="Maxillary" />
-      <Callout at={[790, 300]} to={[700, 410]} label="Nasal septum" sub="splits left / right" anchor="end" />
-      <Label x={940} y={74} small>Sinus pairs:</Label>
+      
+      
+      
+      <Callout at={[870, 240]} to={[940, 200]} label="Sinuses" sub="air spaces that" />
+      <Callout at={[790, 300]} to={[700, 410]} label="Septum" sub="wall between nostrils" anchor="end" />
+      <Label x={940} y={236} small>make the skull lighter</Label>
       </g>
     </svg>
   )

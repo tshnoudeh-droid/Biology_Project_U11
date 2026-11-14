@@ -13,9 +13,9 @@ export default function TourFilm() {
       <div className="film-page__inner">
         <FilmPlayer />
         <p className="film-page__alt">
-          Prefer to explore at your own pace?{' '}
-          <Link to="/tour/map">
-            <IconMap /> Open the interactive resort map
+          Want to explore each stop yourself?{' '}
+          <Link to="/stops">
+            <IconMap /> Open the resort map
           </Link>
         </p>
       </div>

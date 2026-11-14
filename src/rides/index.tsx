@@ -5,34 +5,26 @@ import { SurfactantRide } from './SurfactantRide'
 import { GasRide } from './GasRide'
 import { DiaphragmRide } from './DiaphragmRide'
 import { ChemoRide } from './ChemoRide'
+import { NoseRide } from './NoseRide'
+import { SwallowRide } from './SwallowRide'
+import { CiliaRide } from './CiliaRide'
+import { PeanutRide } from './PeanutRide'
+import { RouteRide } from './RouteRide'
+import { AdvisoryRide } from './AdvisoryRide'
 import '../styles/rides.css'
 
-export const rideMeta: Record<RideKey, { eyebrow: string; title: string; blurb: string }> = {
-  asthma: {
-    eyebrow: 'Thrill ride · Stop 6',
-    title: 'Asthma Mode',
-    blurb: 'Toggle bronchoconstriction and watch the smooth muscle tighten. The narrower the trail, the slower the airflow.',
-  },
-  surfactant: {
-    eyebrow: 'Thrill ride · Stop 7',
-    title: 'The Surfactant Switch',
-    blurb: 'Turn surfactant off and watch surface tension pull the alveolus closed.',
-  },
-  gas: {
-    eyebrow: 'Thrill ride · Stop 7b',
-    title: 'Live from the Exchange Market',
-    blurb: 'Watch O₂ and CO₂ diffuse across the respiratory membrane, each moving down its own partial-pressure gradient.',
-  },
-  diaphragm: {
-    eyebrow: 'Thrill ride · Stop 8',
-    title: 'The Diaphragm Drop Tower',
-    blurb: 'Press Inhale or Exhale. Watch the diaphragm, ribs and lungs move, and follow Boyle’s law on the gauges.',
-  },
-  chemo: {
-    eyebrow: 'Interactive · Concierge',
-    title: 'The CO₂ Dial',
-    blurb: 'Raise or lower blood CO₂ and see how the chemoreceptors tell the medulla to change your breathing.',
-  },
+export const rideMeta: Record<RideKey, { title: string; blurb: string }> = {
+  nose: { title: 'Nose vs mouth', blurb: 'Switch routes and watch what happens to the dust and the cold air.' },
+  swallow: { title: 'Breathe or swallow?', blurb: 'Watch the epiglottis flip down when you swallow.' },
+  cilia: { title: 'The mucus escalator', blurb: 'Compare a healthy airway with a smoker’s.' },
+  peanut: { title: 'Down the wrong pipe', blurb: 'Drop a peanut and see which lung it lands in.' },
+  asthma: { title: 'Asthma mode', blurb: 'Switch on an asthma attack and watch the airway narrow.' },
+  surfactant: { title: 'The surfactant switch', blurb: 'Turn surfactant off and watch the alveolus collapse.' },
+  gas: { title: 'Live from the exchange', blurb: 'Watch oxygen and carbon dioxide trade places.' },
+  diaphragm: { title: 'The drop tower', blurb: 'Press Inhale or Exhale and watch the pressure change.' },
+  chemo: { title: 'The CO₂ dial', blurb: 'Raise blood CO₂ and see how your breathing responds.' },
+  route: { title: 'Find your way out', blurb: 'Tap the stops in the order air leaves your body.' },
+  advisory: { title: 'Healthy vs affected', blurb: 'Pick a condition and switch it on.' },
 }
 
 export const rides: Record<RideKey, ComponentType> = {
@@ -41,4 +33,10 @@ export const rides: Record<RideKey, ComponentType> = {
   gas: GasRide,
   diaphragm: DiaphragmRide,
   chemo: ChemoRide,
+  nose: NoseRide,
+  swallow: SwallowRide,
+  cilia: CiliaRide,
+  peanut: PeanutRide,
+  route: RouteRide,
+  advisory: AdvisoryRide,
 }

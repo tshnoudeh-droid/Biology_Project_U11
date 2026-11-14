@@ -68,7 +68,7 @@ export function SurfactantRide() {
             <rect y="96" width={240 * (1 - 0.6 * c)} height="14" rx="7" fill="#F4D5CC" />
             <g opacity={1 - c}>
               <line x1="0" y1="148" x2="30" y2="148" stroke="#E9C46A" strokeWidth="4" strokeDasharray="2 7" strokeLinecap="round" />
-              <text x="40" y="153" className="svg-label svg-label--sm svg-label--on-dark">surfactant film (type II cells)</text>
+              <text x="40" y="153" className="svg-label svg-label--sm svg-label--on-dark">surfactant</text>
             </g>
           </g>
         </svg>
@@ -84,8 +84,8 @@ export function SurfactantRide() {
         </div>
         <p className="ride__caption" aria-live="polite">
           {on
-            ? 'Type II alveolar cells coat the inside of the alveolus with pulmonary surfactant. It lowers the surface tension of the thin water layer, so the alveolus stays open even at the end of an exhale.'
-            : 'Without surfactant, the water lining the alveolus has high surface tension. Water molecules pull toward each other, drawing the wall inward until the alveolus collapses. Re-inflating it takes huge effort: this is what happens in neonatal respiratory distress syndrome.'}
+            ? 'Surfactant coats the inside of the alveolus. It stops the water lining from pulling the walls together, so the alveolus stays open.'
+            : 'Without surfactant, the water lining pulls the walls inward (surface tension) and the alveolus collapses. Premature babies can have this problem.'}
         </p>
       </div>
     </div>

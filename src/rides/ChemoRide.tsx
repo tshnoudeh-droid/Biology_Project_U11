@@ -12,10 +12,10 @@ export function ChemoRide() {
 
   const verdict =
     pco2 > 42 || lowO2
-      ? 'Chemoreceptors detect rising H⁺ (from CO₂)' + (lowO2 ? ' and a large O₂ drop' : '') + ' → the medulla sends more signals → faster, deeper breathing removes extra CO₂ and pH climbs back toward 7.4.'
+      ? 'Sensors detect extra CO₂' + (lowO2 ? ' and low oxygen' : '') + ', so the brain speeds up your breathing to get rid of it.'
       : pco2 < 38
-        ? 'Blood CO₂ is low and pH is high → chemoreceptors send fewer signals → breathing slows, letting CO₂ build back up.'
-        : 'Blood CO₂ is normal (about 40 mm Hg) and pH is about 7.4 → steady, relaxed breathing.'
+        ? 'CO₂ is low, so breathing slows down until it builds back up.'
+        : 'CO₂ is normal, so breathing stays calm and steady.'
 
   return (
     <div className="ride">
@@ -29,24 +29,24 @@ export function ChemoRide() {
           <span className="chemo__unit">breaths / min</span>
         </div>
         <ol className="chemo__loop">
-          <li><strong>Sensors</strong> · central chemoreceptors (brainstem) and peripheral chemoreceptors (carotid and aortic bodies)</li>
-          <li><strong>Control centre</strong> · medulla oblongata (DRG integrates, VRG sets rhythm), fine-tuned by the pons</li>
-          <li><strong>Effectors</strong> · diaphragm and external intercostals</li>
-          <li><strong>Result</strong> · CO₂ exhaled faster or slower until blood pH is balanced</li>
+          <li><strong>Sensors</strong> · chemoreceptors detect CO₂ in your blood</li>
+          <li><strong>Brain</strong> · the medulla oblongata decides how fast to breathe</li>
+          <li><strong>Muscles</strong> · diaphragm and rib muscles do the breathing</li>
+          <li><strong>Result</strong> · extra CO₂ gets breathed out</li>
         </ol>
       </div>
       <div className="ride__controls">
         <label className="slider">
           <span className="slider__label">
-            Blood CO₂ (partial pressure): <strong>{pco2} mm Hg</strong>
+            Blood CO₂ level: <strong>{pco2 < 38 ? 'low' : pco2 > 42 ? 'high' : 'normal'}</strong>
           </span>
           <input type="range" min={34} max={56} step={1} value={pco2} onChange={(e) => setPco2(+e.target.value)} />
-          <span className="slider__ends" aria-hidden="true"><span>34 · low</span><span>40 · normal</span><span>56 · high</span></span>
+          <span className="slider__ends" aria-hidden="true"><span>low</span><span>normal</span><span>high</span></span>
         </label>
         <label className="switch">
           <input type="checkbox" checked={lowO2} onChange={(e) => setLowO2(e.target.checked)} />
           <span className="switch__track" aria-hidden="true" />
-          Big O₂ drop (e.g. high altitude)
+          Low oxygen (high altitude)
         </label>
         <dl className="readout">
           <div>
@@ -59,7 +59,7 @@ export function ChemoRide() {
           </div>
         </dl>
         <p className="ride__caption" aria-live="polite">{verdict}</p>
-        <p className="ride__hint">Breathing rates are illustrative; pH is calculated from CO₂ with normal bicarbonate.</p>
+        <p className="ride__hint">Breathing rates are approximate.</p>
       </div>
     </div>
   )

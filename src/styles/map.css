@@ -5,9 +5,9 @@
   color: var(--body-on-dark);
   padding: 28px 0 56px;
 }
-.map-page__inner {
+.map-layout {
   display: grid;
-  grid-template-columns: auto minmax(340px, 1fr);
+  grid-template-columns: auto minmax(320px, 1fr);
   gap: clamp(28px, 4vw, 72px);
   align-items: start;
 }
@@ -17,7 +17,7 @@
 }
 .map-canvas {
   position: relative;
-  height: min(calc(100vh - 76px - 56px), 1000px);
+  height: min(calc(100vh - 76px - 80px), 900px);
   max-width: 100%;
 }
 .airway-art,
@@ -341,7 +341,7 @@
 }
 
 @media (max-width: 960px) {
-  .map-page__inner {
+  .map-layout {
     grid-template-columns: 1fr;
   }
   .map-canvas {
@@ -363,4 +363,61 @@
 }
 .map-page .breath-box .eyebrow {
   color: var(--blush);
+}
+
+.map-page {
+  scroll-margin-top: 76px;
+}
+.map-page > .container > .eyebrow {
+  color: var(--oxygen-coral);
+  margin-bottom: 18px;
+}
+.map-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.map-list__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(201, 214, 207, 0.12);
+  color: var(--mist);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.map-list__item:hover {
+  background: rgba(244, 213, 204, 0.1);
+  border-color: var(--blush);
+}
+.map-list__num {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--blush);
+  color: var(--deep-lung);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.map-list__name {
+  flex: 1;
+}
+.map-list__item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--blush);
+}
+.extras-title {
+  color: var(--mist);
+  margin: 56px 0 18px;
 }

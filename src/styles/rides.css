@@ -7,9 +7,6 @@
   border-radius: var(--radius);
   padding: clamp(18px, 2.4vw, 32px);
 }
-.ride--stack {
-  grid-template-columns: 1fr;
-}
 .ride__row {
   display: grid;
   grid-template-columns: minmax(0, 2.1fr) minmax(280px, 1fr);
@@ -351,4 +348,167 @@
   justify-content: space-between;
   font-size: 13px;
   color: var(--body-on-dark);
+}
+
+/* new interactives */
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px;
+}
+.checklist li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.checklist span {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+.checklist .is-yes {
+  color: var(--mist);
+}
+.checklist .is-yes span {
+  background: var(--visited);
+  color: var(--deep-lung);
+}
+.checklist .is-no {
+  color: var(--body-on-dark);
+  opacity: 0.8;
+}
+.checklist .is-no span {
+  background: var(--coral-deep);
+  color: var(--paper);
+}
+.peanut-num {
+  font-family: var(--font-display);
+  font-size: 38px;
+  fill: var(--deep-lung);
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tabs button {
+  border: 1px solid rgba(244, 213, 204, 0.35);
+  background: transparent;
+  color: var(--body-on-dark);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: var(--pill);
+  cursor: pointer;
+}
+.tabs button[aria-pressed='true'] {
+  background: var(--blush);
+  color: var(--deep-lung);
+  border-color: var(--blush);
+}
+.route-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.route-track__step {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: var(--pill);
+  border: 2px dashed rgba(201, 214, 207, 0.35);
+  color: var(--body-on-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.route-track__step.is-done {
+  border: 2px solid var(--visited);
+  background: var(--visited);
+  color: var(--deep-lung);
+}
+.route-track__out.is-done {
+  background: var(--oxygen-coral);
+  border-color: var(--oxygen-coral);
+}
+.route-pieces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.route-piece {
+  border: 0;
+  background: var(--blush);
+  color: var(--deep-lung);
+  font-weight: 700;
+  font-size: 17px;
+  padding: 14px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.route-piece:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.route-piece.is-used {
+  opacity: 0.25;
+  cursor: default;
+}
+.route-piece.is-wrong {
+  animation: shake 0.4s;
+  background: var(--oxygen-coral);
+}
+@keyframes shake {
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.ride--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: flex-start;
+}
+
+.ride--stack > .ride__row,
+.ride--stack > .co2-breakdown {
+  width: 100%;
+}
+
+/* rides are always dark panels: mirror the on-dark styles */
+.ride {
+  color: var(--body-on-dark);
+}
+.ride strong {
+  color: var(--blush);
+}
+.ride .toggle {
+  background: rgba(255, 255, 255, 0.08);
+}
+.ride .toggle button {
+  color: var(--body-on-dark);
+}
+.ride .toggle button[aria-pressed='true'] {
+  background: var(--blush);
+  color: var(--deep-lung);
+}
+.ride :focus-visible {
+  outline-color: var(--blush);
+}
+.ride .o2-bar__note {
+  color: var(--body-on-dark);
+}
+.ride .btn--ghost-dark[aria-pressed='true'] {
+  background: var(--blush);
+  color: var(--deep-lung);
+  border-color: var(--blush);
 }

@@ -32,9 +32,9 @@ export function AlveoliDiagram() {
       <path d="M60 350 C80 340 100 336 120 330" stroke={C.blue} strokeWidth="9" strokeLinecap="round" fill="none" />
       <path d="M400 290 C420 320 440 340 470 350" stroke={C.coral} strokeWidth="9" strokeLinecap="round" fill="none" />
 
-      <Callout at={[64, 350]} to={[40, 400]} label="Pulmonary arteriole" sub="oxygen-poor blood in" anchor="start" />
-      <Callout at={[466, 352]} to={[480, 456]} label="Pulmonary venule" sub="oxygen-rich blood out" />
-      <Callout at={[242, 440]} to={[270, 500]} label="Respiratory bronchiole" />
+      <Callout at={[64, 350]} to={[40, 400]} label="Blood in" sub="low in oxygen" anchor="start" />
+      <Callout at={[466, 352]} to={[480, 456]} label="Blood out" sub="full of oxygen" />
+      <Callout at={[242, 440]} to={[270, 500]} label="Bronchiole" />
       <Callout at={[356, 160]} to={[420, 36]} label="Alveolus" sub="one of ~480 million" />
       <Callout at={[160, 180]} to={[60, 70]} label="Capillary network" anchor="start" />
       <BloodKey x={40} y={470} />
@@ -77,12 +77,12 @@ export function AlveoliDiagram() {
       <path d={`M${zc.x + 4} ${zc.y + 160} L${zc.x + 4} ${zc.y + 180}`} stroke={C.deep} strokeWidth="1.6" />
 
       <Label x={zc.x - 40} y={zc.y - 40} small anchor="middle">Air space</Label>
-      <Callout at={[zc.x - 120, zc.y - 120]} to={[560, 76]} label="Type I alveolar cell" sub="thin squamous wall, ~95% of surface" anchor="end" />
-      <Callout at={[zc.x - 130, zc.y + 70]} to={[560, 330]} label="Type II alveolar cell" sub="secretes surfactant" anchor="end" />
-      <Callout at={[zc.x - 100, zc.y + 110]} to={[560, 400]} label="Surfactant film" sub="lowers surface tension" anchor="end" />
-      <Callout at={[zc.x + 50, zc.y + 10]} to={[935, 270]} label="Alveolar macrophage" sub="“dust cell”" />
-      <Callout at={[zc.x + 111, zc.y - 128]} to={[935, 200]} label="Alveolar pore" sub="equalizes pressure" />
-      <Callout at={[zc.x + 4, zc.y + 170]} to={[935, 380]} label="Respiratory membrane" sub="≈ 0.5 µm thick" />
+      <Callout at={[zc.x - 120, zc.y - 120]} to={[560, 76]} label="Thin wall" sub="just one cell thick" anchor="end" />
+      <Callout at={[zc.x - 130, zc.y + 70]} to={[560, 330]} label="Surfactant-making cell" sub="(type II cell)" anchor="end" />
+      <Callout at={[zc.x - 100, zc.y + 110]} to={[560, 400]} label="Surfactant" sub="stops the sac collapsing" anchor="end" />
+      <Callout at={[zc.x + 50, zc.y + 10]} to={[935, 270]} label="Cleaner cell" sub="eats dust and germs" />
+      
+      <Callout at={[zc.x + 4, zc.y + 170]} to={[935, 380]} label="Gases cross here" sub="super-thin wall" />
       <Callout at={[zc.x + 150, zc.y + 180]} to={[935, 460]} label="Capillary" sub="red blood cells pick up O₂" />
       </g>
     </svg>

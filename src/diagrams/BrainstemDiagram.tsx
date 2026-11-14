@@ -45,23 +45,23 @@ export function BrainstemDiagram() {
       <path d="M318 494 C334 450 370 400 392 346" stroke={C.euc} strokeWidth="2" strokeDasharray="5 4" fill="none" markerEnd="url(#bs-euc)" />
       {/* efferent */}
       <path d="M430 450 L540 500" stroke={C.coralDeep} strokeWidth="2.4" markerEnd="url(#bs-coral)" />
-      <Label x={550} y={500} bold>To the diaphragm and</Label>
-      <Label x={550} y={518} bold>external intercostals</Label>
-      <Label x={550} y={536} small>(phrenic and intercostal nerves)</Label>
+      <Label x={550} y={500} bold>Signals to the diaphragm</Label>
+      <Label x={550} y={518} bold>and rib muscles</Label>
+      
 
       {/* labels right */}
-      <Label x={600} y={60} bold>Pons</Label>
-      <Callout at={[408, 276]} to={[620, 100]} label="Pneumotaxic centre" sub="limits inspiration, sets rate" />
-      <Callout at={[420, 286]} to={[620, 160]} label="Apneustic centre" sub="controls depth" />
-      <Label x={600} y={226} bold>Medulla oblongata</Label>
-      <Callout at={[404, 318]} to={[620, 266]} label="Ventral respiratory group" sub="sets the rhythm" />
-      <Callout at={[418, 326]} to={[620, 326]} label="Dorsal respiratory group" sub="integrates sensor input" />
-      <Callout at={[396, 336]} to={[620, 386]} label="Central chemoreceptors" sub="sense H⁺ made from CO₂" />
+      
+      <Callout at={[408, 270]} to={[620, 120]} label="Pons" sub="helps adjust breathing" />
+      
+      
+      <Callout at={[404, 318]} to={[620, 266]} label="Medulla oblongata" sub="breathing control centre" />
+      
+      <Callout at={[396, 336]} to={[620, 386]} label="CO₂ sensor (brain)" sub="chemoreceptor" />
 
       {/* labels left */}
-      <Callout at={[358, 392]} to={[200, 400]} label="Carotid body" sub="peripheral chemoreceptor" anchor="end" />
-      <Callout at={[300, 508]} to={[200, 480]} label="Aortic bodies" sub="on the aortic arch" anchor="end" />
-      <Label x={200} y={530} small anchor="end">Sense H⁺, CO₂ and big O₂ drops</Label>
+      <Callout at={[358, 392]} to={[200, 400]} label="CO₂ sensor (neck)" sub="chemoreceptor" anchor="end" />
+      <Callout at={[300, 508]} to={[200, 480]} label="CO₂ sensor (chest)" sub="chemoreceptor" anchor="end" />
+      
     </svg>
   )
 }

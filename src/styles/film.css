@@ -510,3 +510,106 @@
   background: var(--blush);
   color: var(--deep-lung);
 }
+
+/* big scene stepper above the video */
+.film-steps {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+}
+.film-step {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.film-step button {
+  width: 100%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 8px 8px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  color: var(--body-on-dark);
+  transition: background-color 0.2s;
+}
+.film-step button:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+.film-step__num {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.7;
+}
+.film-step__name {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.film-step__bar {
+  display: block;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(201, 214, 207, 0.2);
+  overflow: hidden;
+}
+.film-step__bar span {
+  display: block;
+  height: 100%;
+  background: var(--visited);
+}
+.film-step--done button {
+  color: var(--visited);
+}
+.film-step--current {
+  flex-grow: 1.8;
+}
+.film-step--current button {
+  background: var(--blush);
+  color: var(--deep-lung);
+}
+.film-step--current .film-step__num {
+  opacity: 1;
+  color: var(--coral-deep);
+}
+.film-step--current .film-step__name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.film-step--current .film-step__bar {
+  background: rgba(27, 42, 38, 0.15);
+}
+.film-step--current .film-step__bar span {
+  background: var(--coral-deep);
+}
+.film-now {
+  margin: 0 0 12px;
+  font-size: 17px;
+  color: var(--body-on-dark);
+}
+.film-now strong {
+  color: var(--mist);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+}
+.film-now__term {
+  color: var(--body-on-dark);
+}
+@media (max-width: 900px) {
+  .film-step:not(.film-step--current) .film-step__name {
+    display: none;
+  }
+}
+.film-page__inner {
+  width: min(100% - 32px, calc((100vh - 76px - 230px) * 16 / 9), 1700px);
+}

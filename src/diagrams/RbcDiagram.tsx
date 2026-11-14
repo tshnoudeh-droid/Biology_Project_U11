@@ -1,66 +1,57 @@
 import { Arrowheads, C, Label, PanelTitle } from './parts'
 
+function Cell({ x, y, o2, co2 }: { x: number; y: number; o2: number; co2: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <ellipse rx="120" ry="62" fill="#F2B5A6" stroke={C.coralDeep} strokeWidth="3" />
+      <ellipse rx="80" ry="30" fill="#E89A87" />
+      {[-54, -18, 18, 54].map((sx, i) => (
+        <g key={i}>
+          <circle cx={sx} cy="-4" r="15" fill="#FBFCFB" stroke={C.coralDeep} strokeWidth="1.5" />
+          {i < o2 && <text x={sx} y="1" textAnchor="middle" className="svg-label svg-label--bold" style={{ fontSize: 13, fill: C.coralDeep }}>O₂</text>}
+        </g>
+      ))}
+      {Array.from({ length: co2 }).map((_, i) => (
+        <text key={i} x={-40 + i * 40} y="46" textAnchor="middle" className="svg-label svg-label--bold" style={{ fontSize: 13, fill: '#3E6359' }}>
+          CO₂
+        </text>
+      ))}
+    </g>
+  )
+}
+
+/** Simple picture of what a red blood cell does in the lungs vs in the body. */
 export function RbcDiagram() {
   return (
-    <svg viewBox="0 0 1060 420" role="img" aria-labelledby="rbc-t rbc-d" className="diagram-svg">
-      <title id="rbc-t">Labelled diagram of carbon dioxide transport in a red blood cell</title>
+    <svg viewBox="0 0 1000 400" role="img" aria-labelledby="rbc-t rbc-d" className="diagram-svg">
+      <title id="rbc-t">How a red blood cell carries gases</title>
       <desc id="rbc-d">
-        In body tissues, carbon dioxide from respiring cells enters the plasma and a red blood cell. About 7 to 10 percent stays
-        dissolved in plasma. About 20 percent binds to hemoglobin as carbaminohemoglobin. About 70 percent reacts with water, sped up
-        by carbonic anhydrase, to form carbonic acid, which splits into a hydrogen ion and a bicarbonate ion. The hydrogen ion binds
-        to hemoglobin, which releases oxygen (the Bohr effect). Bicarbonate leaves the cell in exchange for a chloride ion (the
-        chloride shift). In the lungs every step runs in reverse.
+        In the lungs, a red blood cell picks up oxygen: its hemoglobin fills up to four oxygen seats, and carbon dioxide leaves the blood
+        to be breathed out. In the body, the red blood cell drops off oxygen to a working cell and picks up carbon dioxide to bring back.
       </desc>
-      <Arrowheads id="rbc" />
-      <PanelTitle x={20} y={26}>In the body’s tissues (reverses in the lungs)</PanelTitle>
+      <Arrowheads id="rb" />
+      <PanelTitle x={40} y={36}>In the lungs</PanelTitle>
+      <rect x="30" y="56" width="420" height="90" rx="20" fill="#F4D5CC" opacity="0.5" />
+      <Label x={240} y={92} anchor="middle" bold>Alveolus: lots of oxygen</Label>
+      <path d="M180 116 L180 186" stroke={C.coralDeep} strokeWidth="3" markerEnd="url(#rb-coral)" />
+      <Label x={190} y={160} small>O₂ diffuses in</Label>
+      <path d="M320 186 L320 116" stroke={C.euc} strokeWidth="3" markerEnd="url(#rb-euc)" />
+      <Label x={330} y={160} small>CO₂ diffuses out</Label>
+      <Cell x={240} y={270} o2={4} co2={0} />
+      <Label x={240} y={370} anchor="middle" bold>Hemoglobin seats: full (4 O₂)</Label>
 
-      {/* tissue cell */}
-      <rect x="20" y="70" width="170" height="300" rx="26" fill={C.tissue} stroke={C.euc} strokeWidth="2" />
-      <Label x={105} y={106} anchor="middle" bold>Body cell</Label>
-      <Label x={105} y={126} anchor="middle" small>cellular respiration</Label>
-      <Label x={105} y={146} anchor="middle" small>makes CO₂</Label>
-      <text x="105" y="230" textAnchor="middle" className="svg-chem">CO₂</text>
+      <path d="M470 270 C540 250 600 250 660 270" stroke={C.coralDeep} strokeWidth="4" fill="none" markerEnd="url(#rb-coral)" />
+      <Label x={565} y={236} anchor="middle" small>pumped by the heart</Label>
 
-      {/* plasma */}
-      <rect x="210" y="50" width="830" height="340" rx="30" fill={C.blush} fillOpacity="0.35" stroke={C.coralDeep} strokeDasharray="6 5" />
-      <Label x={230} y={78} bold>Plasma (capillary)</Label>
-      <path d="M175 226 L250 226" stroke={C.coralDeep} strokeWidth="2.4" markerEnd="url(#rbc-coral)" />
-      <text x="290" y="232" textAnchor="middle" className="svg-chem">CO₂</text>
-      <Label x={290} y={274} anchor="middle" small>7–10% stays</Label>
-      <Label x={290} y={292} anchor="middle" small>dissolved</Label>
-
-      {/* RBC */}
-      <ellipse cx="660" cy="222" rx="320" ry="140" fill="#F2B5A6" stroke={C.coralDeep} strokeWidth="2.5" />
-      <ellipse cx="660" cy="222" rx="290" ry="112" fill="#F6C9BD" />
-      <Label x={660} y={106} anchor="middle" bold>Red blood cell</Label>
-      <path d="M318 226 L392 226" stroke={C.coralDeep} strokeWidth="2.4" markerEnd="url(#rbc-coral)" />
-
-      {/* main reaction row */}
-      <text x="430" y="232" className="svg-chem">CO₂ + H₂O</text>
-      <path d="M560 226 L620 226" stroke={C.deep} strokeWidth="2.2" markerEnd="url(#rbc-euc)" />
-      <Label x={590} y={254} anchor="middle" small>carbonic anhydrase</Label>
-      <text x="632" y="232" className="svg-chem">H₂CO₃</text>
-      <path d="M716 226 L760 226" stroke={C.deep} strokeWidth="2.2" markerEnd="url(#rbc-euc)" />
-      <text x="770" y="232" className="svg-chem">H⁺ + HCO₃⁻</text>
-      <Label x={680} y={196} anchor="middle" small>~70% of CO₂ travels as bicarbonate</Label>
-
-      {/* carbamino */}
-      <path d="M470 200 C470 150 500 136 520 136" stroke={C.deep} strokeWidth="1.8" fill="none" markerEnd="url(#rbc-euc)" />
-      <text x="528" y="142" className="svg-chem svg-chem--sm">CO₂ + Hb → HbCO₂</text>
-      <Label x={528} y={162} small>carbaminohemoglobin, ~20%</Label>
-
-      {/* H+ + Hb, Bohr */}
-      <path d="M800 244 L800 288" stroke={C.deep} strokeWidth="1.8" fill="none" markerEnd="url(#rbc-euc)" />
-      <text x="600" y="316" className="svg-chem svg-chem--sm">H⁺ + HbO₂ → HHb + O₂</text>
-      <Label x={600} y={336} small>Bohr effect: lower pH, more O₂ released</Label>
-
-      {/* chloride shift */}
-      <path d="M900 226 L1000 200" stroke={C.coralDeep} strokeWidth="2.4" markerEnd="url(#rbc-coral)" />
-      <text x="1002" y="196" className="svg-chem svg-chem--sm">HCO₃⁻</text>
-      <path d="M1010 268 L920 250" stroke={C.euc} strokeWidth="2.4" markerEnd="url(#rbc-euc)" />
-      <text x="1014" y="280" className="svg-chem svg-chem--sm">Cl⁻</text>
-      <Label x={960} y={340} anchor="middle" bold>Chloride shift</Label>
-      <Label x={960} y={358} anchor="middle" small>keeps the charge balanced</Label>
+      <PanelTitle x={560} y={36}>In the body</PanelTitle>
+      <rect x="550" y="56" width="420" height="90" rx="20" fill={C.tissue} />
+      <Label x={760} y={92} anchor="middle" bold>Working cell: needs oxygen</Label>
+      <path d="M700 186 L700 116" stroke={C.coralDeep} strokeWidth="3" markerEnd="url(#rb-coral)" />
+      <Label x={710} y={160} small>O₂ dropped off</Label>
+      <path d="M840 116 L840 186" stroke={C.euc} strokeWidth="3" markerEnd="url(#rb-euc)" />
+      <Label x={850} y={160} small>CO₂ picked up</Label>
+      <Cell x={770} y={270} o2={1} co2={3} />
+      <Label x={770} y={370} anchor="middle" bold>Brings CO₂ back to the lungs</Label>
     </svg>
   )
 }

@@ -61,23 +61,23 @@ export function BronchiolesDiagram() {
       <Sacs cx={660} cy={120} s={1.3} />
       <Sacs cx={510} cy={340} s={0.8} />
 
-      <Label x={100} y={190} anchor="middle" bold>Tertiary bronchus</Label>
-      <Label x={100} y={282} anchor="middle" small>cartilage plates</Label>
-      <Callout at={[240, 182]} to={[200, 90]} label="Bronchiole" sub="≤ 1 mm, smooth muscle" anchor="middle" />
-      <Callout at={[350, 140]} to={[350, 60]} label="Terminal bronchiole" anchor="middle" />
-      <Callout at={[460, 124]} to={[490, 210]} label="Respiratory bronchiole" sub="first alveoli appear" anchor="middle" />
-      <Callout at={[580, 120]} to={[620, 262]} label="Alveolar duct" anchor="middle" />
-      <Callout at={[690, 90]} to={[690, 40]} label="Alveolar sac" anchor="middle" />
+      <Label x={100} y={190} anchor="middle" bold>Bronchus</Label>
+      <Label x={100} y={282} anchor="middle" small>has cartilage</Label>
+      <Callout at={[240, 182]} to={[200, 90]} label="Bronchiole" sub="≤ 1 mm, muscle walls" anchor="middle" />
+      
+      <Callout at={[460, 124]} to={[490, 210]} label="Smallest bronchioles" sub="first air sacs appear" anchor="middle" />
+      
+      <Callout at={[690, 90]} to={[690, 40]} label="Alveoli (air sacs)" anchor="middle" />
 
       {/* zone brackets */}
       <g stroke={C.deep} strokeWidth="1.6" fill="none">
         <path d="M30 400 L30 412 L398 412 L398 400" />
         <path d="M410 400 L410 412 L730 412 L730 400" />
       </g>
-      <Label x={214} y={440} anchor="middle" bold>Conducting zone</Label>
-      <Label x={214} y={460} anchor="middle" small>moves air, no gas exchange</Label>
-      <Label x={570} y={440} anchor="middle" bold fill={C.coralDeep}>Respiratory zone</Label>
-      <Label x={570} y={460} anchor="middle" small>gas exchange happens here</Label>
+      <Label x={214} y={440} anchor="middle" bold>Moves air only</Label>
+      <Label x={214} y={460} anchor="middle" small>no gas exchange here</Label>
+      <Label x={570} y={440} anchor="middle" bold fill={C.coralDeep}>Gas exchange</Label>
+      <Label x={570} y={460} anchor="middle" small>oxygen enters the blood here</Label>
 
       {/* cross sections */}
       <PanelTitle x={900} y={26} anchor="middle">Cross-sections</PanelTitle>
@@ -89,13 +89,13 @@ export function BronchiolesDiagram() {
       })}
       <circle cx="900" cy="120" r="34" fill={C.paper} stroke={C.blush} strokeWidth="6" />
       <Label x={900} y={206} anchor="middle" bold>Bronchus</Label>
-      <Label x={900} y={224} anchor="middle" small>cartilage plates</Label>
+      <Label x={900} y={224} anchor="middle" small>has cartilage</Label>
       {/* bronchiole */}
       <circle cx="900" cy="320" r="52" fill={C.tissue} stroke={C.euc} strokeWidth="1.5" />
       <circle cx="900" cy="320" r="38" fill="none" stroke={C.coralDeep} strokeWidth="9" strokeDasharray="10 4" />
       <circle cx="900" cy="320" r="28" fill={C.paper} stroke={C.blush} strokeWidth="5" />
       <Label x={900} y={396} anchor="middle" bold>Bronchiole</Label>
-      <Label x={900} y={414} anchor="middle" small>smooth muscle ring,</Label>
+      <Label x={900} y={414} anchor="middle" small>ring of muscle,</Label>
       <Label x={900} y={432} anchor="middle" small>no cartilage</Label>
     </svg>
   )

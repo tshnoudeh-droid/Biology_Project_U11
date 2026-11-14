@@ -16,9 +16,9 @@ function spawn(kind: 'O2' | 'CO2', seed: number): P {
 }
 
 const co2Breakdown = [
-  { key: 'bicarb', pct: 70, label: 'Bicarbonate ions (HCO₃⁻)', short: '~70%', color: '#E3735E', text: 'Inside red blood cells, carbonic anhydrase speeds up CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻. Bicarbonate moves into the plasma (the chloride shift brings Cl⁻ in to balance the charge). In the lungs the reaction reverses and CO₂ is released.' },
-  { key: 'carbamino', pct: 20, label: 'Carbaminohemoglobin', short: '~20%', color: '#F4D5CC', text: 'CO₂ binds to the protein (globin) part of hemoglobin, not to the iron where O₂ binds. It is released in the lungs where the partial pressure of CO₂ is lower.' },
-  { key: 'dissolved', pct: 10, label: 'Dissolved in plasma', short: '7–10%', color: '#8FB3A6', text: 'A small amount of CO₂ simply dissolves in the plasma, because CO₂ is more soluble in water than O₂.' },
+  { key: 'bicarb', pct: 70, label: 'As bicarbonate', short: '~70%', color: '#E3735E', text: 'Most CO₂ reacts with water in your red blood cells and travels in the plasma as bicarbonate (HCO₃⁻). In the lungs it turns back into CO₂ and is breathed out.' },
+  { key: 'carbamino', pct: 20, label: 'On hemoglobin', short: '~20%', color: '#F4D5CC', text: 'Some CO₂ hitches a ride on hemoglobin, the same protein that carries oxygen.' },
+  { key: 'dissolved', pct: 10, label: 'Dissolved', short: '~10%', color: '#8FB3A6', text: 'A little CO₂ simply dissolves in the liquid part of the blood (plasma).' },
 ]
 
 export function GasRide() {
@@ -76,7 +76,7 @@ export function GasRide() {
               Oxygen particles diffuse from the alveolus across the thin respiratory membrane into the capillary blood, where they are carried
               away. Carbon dioxide particles diffuse from the blood up into the alveolus. Blood arrives oxygen-poor on the left (blue) and
               leaves oxygen-rich on the right (red).
-              {showPP ? ' Partial pressures: alveolus O₂ 104 and CO₂ 40 mm Hg; arriving blood O₂ 40 and CO₂ 45 mm Hg.' : ''}
+              {showPP ? ' The alveolus has more oxygen; the arriving blood has more carbon dioxide.' : ''}
             </desc>
             <defs>
               <linearGradient id="gx-blood" x1="0" x2="1" y1="0" y2="0">
@@ -94,7 +94,7 @@ export function GasRide() {
             <text x="44" y="52" className="svg-label svg-label--on-dark svg-label--bold">Alveolus (air)</text>
             {/* membrane */}
             <rect x="20" y={MEM_Y} width="960" height={CAP_TOP - MEM_Y} fill="#36574F" />
-            <text x="980" y={MEM_Y + 23} textAnchor="end" className="svg-label svg-label--sm svg-label--on-dark">respiratory membrane ≈ 0.5 µm</text>
+            <text x="980" y={MEM_Y + 23} textAnchor="end" className="svg-label svg-label--sm svg-label--on-dark">thin wall (one cell thick)</text>
             {/* capillary */}
             <rect x="20" y={CAP_TOP} width="960" height={CAP_BOT - CAP_TOP} rx="40" fill="url(#gx-blood)" opacity="0.55" />
             <g clipPath="url(#gx-cap)">
@@ -104,9 +104,9 @@ export function GasRide() {
                 ))}
               </g>
             </g>
-            <text x="44" y={CAP_BOT + 30} className="svg-label svg-label--on-dark svg-label--bold">Blood in: oxygen-poor</text>
-            <text x="956" y={CAP_BOT + 30} textAnchor="end" className="svg-label svg-label--on-dark svg-label--bold">Blood out: oxygen-rich →</text>
-            <text x="500" y={CAP_BOT + 54} textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">Pulmonary capillary · blue = oxygen-poor, red = oxygen-rich</text>
+            <text x="44" y={CAP_BOT + 30} className="svg-label svg-label--on-dark svg-label--bold">Blood in: low oxygen</text>
+            <text x="956" y={CAP_BOT + 30} textAnchor="end" className="svg-label svg-label--on-dark svg-label--bold">Blood out: full of oxygen →</text>
+            <text x="500" y={CAP_BOT + 54} textAnchor="middle" className="svg-label svg-label--sm svg-label--on-dark">Capillary · blue = low oxygen, red = full of oxygen</text>
 
             {/* particles */}
             {parts.map((p, i) => (
@@ -121,23 +121,22 @@ export function GasRide() {
             {showPP && (
               <g className="gx-pp">
                 <rect x="690" y="40" width="270" height="140" rx="16" fill="rgba(27,42,38,0.85)" />
-                <text x="708" y="66" className="svg-label svg-label--on-dark svg-label--bold">Partial pressures (mm Hg)</text>
-                <text x="708" y="94" className="svg-label svg-label--sm svg-label--on-dark">Alveolus · O₂ 104 · CO₂ 40</text>
-                <text x="708" y="118" className="svg-label svg-label--sm svg-label--on-dark">Blood in · O₂ 40 · CO₂ 45</text>
-                <text x="708" y="146" className="svg-label svg-label--sm" style={{ fill: '#F4D5CC' }}>O₂: 104 → 40, moves into blood ↓</text>
-                <text x="708" y="168" className="svg-label svg-label--sm" style={{ fill: '#8FB3A6' }}>CO₂: 45 → 40, moves into alveolus ↑</text>
+                <text x="708" y="66" className="svg-label svg-label--on-dark svg-label--bold">Where is there more?</text>
+                <text x="708" y="94" className="svg-label svg-label--sm svg-label--on-dark">Alveolus: lots of O₂, little CO₂</text>
+                <text x="708" y="118" className="svg-label svg-label--sm svg-label--on-dark">Blood arriving: little O₂, lots of CO₂</text>
+                <text x="708" y="146" className="svg-label svg-label--sm" style={{ fill: '#F4D5CC' }}>O₂ moves down into the blood ↓</text>
+                <text x="708" y="168" className="svg-label svg-label--sm" style={{ fill: '#8FB3A6' }}>CO₂ moves up into the alveolus ↑</text>
               </g>
             )}
           </svg>
         </div>
         <div className="ride__controls">
           <button type="button" className="btn btn--ghost-dark btn--sm" aria-pressed={showPP} onClick={() => setShowPP((s) => !s)}>
-            {showPP ? 'Hide' : 'Show'} partial-pressure gradient
+            {showPP ? 'Hide' : 'Show'} where there’s more
           </button>
           <p className="ride__caption">
-            Each gas diffuses <strong>down its own partial-pressure gradient</strong>, from high to low. O₂ is higher in the alveolus, so it
-            moves into the blood; CO₂ is higher in the arriving blood, so it moves into the alveolus. No energy is used: this is{' '}
-            <strong>simple diffusion</strong>.
+            Each gas moves from where there’s <strong>more</strong> to where there’s <strong>less</strong>. That’s{' '}
+            <strong>diffusion</strong>, and it needs no energy.
           </p>
           <div className="o2-bar" aria-label="How oxygen is carried: about 98.5 percent bound to hemoglobin, 1.5 percent dissolved">
             <span className="o2-bar__label">How O₂ travels</span>

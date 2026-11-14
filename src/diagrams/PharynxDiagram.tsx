@@ -2,9 +2,9 @@ import { Arrowheads, C, Callout, Label, PanelTitle } from './parts'
 
 export function PharynxDiagram() {
   const regions = [
-    { y1: 70, y2: 212, fill: C.sage, name: 'Nasopharynx', resort: 'North Wing · air only' },
-    { y1: 212, y2: 318, fill: C.coral, name: 'Oropharynx', resort: 'Food Court Crossing · air + food' },
-    { y1: 318, y2: 420, fill: C.blush, name: 'Laryngopharynx', resort: 'The Great Split' },
+    { y1: 70, y2: 212, fill: C.sage, name: 'Upper throat', resort: 'nasopharynx · air only' },
+    { y1: 212, y2: 318, fill: C.coral, name: 'Middle throat', resort: 'oropharynx · air + food' },
+    { y1: 318, y2: 420, fill: C.blush, name: 'Lower throat', resort: 'laryngopharynx · routes split' },
   ]
   return (
     <svg viewBox="0 0 1000 540" role="img" aria-labelledby="ph-t ph-d" className="diagram-svg">
@@ -75,13 +75,13 @@ export function PharynxDiagram() {
         </g>
       ))}
 
-      <Callout at={[514, 100]} to={[790, 112]} label="Pharyngeal tonsil (adenoid)" />
-      <Callout at={[462, 262]} to={[860, 236]} label="Palatine tonsil" />
-      <Callout at={[412, 300]} to={[860, 290]} label="Lingual tonsil" sub="base of the tongue" />
+      <Callout at={[514, 100]} to={[790, 112]} label="Adenoid (a tonsil)" />
+      <Callout at={[462, 262]} to={[860, 236]} label="Tonsil" />
+      <Callout at={[412, 300]} to={[860, 290]} label="Tonsil" sub="base of the tongue" />
       <Callout at={[446, 294]} to={[860, 352]} label="Epiglottis" />
       <Callout at={[432, 470]} to={[300, 470]} label="Larynx → trachea" sub="air route" anchor="end" />
       <Callout at={[510, 490]} to={[640, 500]} label="Esophagus" sub="food route" />
-      <Callout at={[436, 232]} to={[640, 46]} label="Soft palate + uvula" sub="lifts to seal the nasopharynx when you swallow" elbow />
+      <Callout at={[436, 232]} to={[640, 46]} label="Soft palate" sub="lifts to seal off the nose when you swallow" elbow />
       <Label x={220} y={186} small>Nasal cavity</Label>
       <Label x={190} y={244} small>Oral cavity</Label>
       <Label x={250} y={290} small>Tongue</Label>

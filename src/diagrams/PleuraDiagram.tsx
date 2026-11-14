@@ -1,44 +1,66 @@
-import { C, Label, PanelTitle } from './parts'
+import { Arrowheads, C, Label, PanelTitle } from './parts'
 
-export function PleuraDiagram() {
-  const layers = [
-    { y: 60, h: 70, fill: C.cartilage, name: 'Ribs and intercostal muscles', note: 'the chest wall', ly: 70 },
-    { y: 130, h: 10, fill: C.euc, name: 'Parietal pleura', note: 'lines the chest wall', ly: 120 },
-    { y: 140, h: 26, fill: '#D6E7F2', name: 'Pleural cavity with pleural fluid', note: 'intrapleural pressure ≈ −4 mm Hg', ly: 170 },
-    { y: 166, h: 10, fill: C.coralDeep, name: 'Visceral pleura', note: 'covers the lung', ly: 220 },
-    { y: 176, h: 110, fill: C.blush, name: 'Lung tissue (alveoli)', note: 'follows the chest wall', ly: 270 },
-  ]
+function Chest({ x, inhale }: { x: number; inhale: boolean }) {
+  const domeY = inhale ? 300 : 250
+  const spread = inhale ? 1.08 : 1
   return (
-    <svg viewBox="0 0 1000 340" role="img" aria-labelledby="pl-t pl-d" className="diagram-svg">
-      <title id="pl-t">Labelled diagram of the pleura</title>
-      <desc id="pl-d">
-        Layers from the outside in: ribs and intercostal muscles, parietal pleura, the pleural cavity with pleural fluid at about
-        minus 4 millimetres of mercury, visceral pleura and the lung tissue. The thin fluid film holds the lung against the chest wall.
-      </desc>
-      <PanelTitle x={20} y={30}>Layers of the chest wall and lung</PanelTitle>
-      {layers.map((l) => (
-        <rect key={l.name} x="20" y={l.y} width="540" height={l.h} fill={l.fill} />
-      ))}
-      {/* ribs */}
-      {[60, 200, 340, 480].map((x) => (
-        <ellipse key={x} cx={x + 30} cy="95" rx="50" ry="22" fill={C.paper} stroke={C.euc} strokeWidth="1.5" />
-      ))}
-      {/* alveoli texture */}
-      {Array.from({ length: 22 }).map((_, i) => (
-        <circle key={i} cx={40 + (i % 11) * 48 + (i > 10 ? 24 : 0)} cy={i > 10 ? 254 : 210} r="18" fill="none" stroke={C.coralDeep} strokeWidth="1.2" />
-      ))}
-      {layers.map((l) => {
-        const cy = l.y + l.h / 2
-        return (
-          <g key={l.name}>
-            <path d={`M520 ${cy} L572 ${cy} L600 ${l.ly - 5}`} className="svg-leader" />
-            <circle cx="520" cy={cy} r="3.2" fill={C.deep} />
-            <text x="610" y={l.ly} className="svg-label svg-label--bold">{l.name}</text>
-            <text x="610" y={l.ly + 18} className="svg-label svg-label--sm">{l.note}</text>
+    <g transform={`translate(${x} 0)`}>
+      <g transform={`translate(200 200) scale(${spread} 1) translate(-200 -200)`}>
+        {[110, 150, 190, 230].map((y, i) => (
+          <g key={y} stroke={C.muted} strokeWidth="6" fill="none" strokeLinecap="round" opacity="0.6">
+            <path d={`M190 ${y - (inhale ? 12 : 0)} C140 ${y - 20 - (inhale ? 12 : 0)} 70 ${y - 4} 60 ${y + 30 + i * 2}`} />
+            <path d={`M210 ${y - (inhale ? 12 : 0)} C260 ${y - 20 - (inhale ? 12 : 0)} 330 ${y - 4} 340 ${y + 30 + i * 2}`} />
           </g>
-        )
-      })}
-      <Label x={20} y={322} small>The fluid film makes the two pleural layers stick together, like two wet panes of glass, so the lungs expand when the chest does.</Label>
+        ))}
+      </g>
+      <path d={`M190 90 C150 92 ${inhale ? 85 : 100} 150 ${inhale ? 80 : 95} 220 C${inhale ? 76 : 92} 260 ${inhale ? 90 : 100} ${domeY - 6} 110 ${domeY}`} fill={C.blush} opacity="0.8" />
+      <path d={`M190 90 L190 ${domeY} L110 ${domeY}`} fill={C.blush} opacity="0.8" />
+      <path d={`M210 90 C250 92 ${inhale ? 315 : 300} 150 ${inhale ? 320 : 305} 220 C${inhale ? 324 : 308} 260 ${inhale ? 310 : 300} ${domeY - 6} 290 ${domeY}`} fill={C.blush} opacity="0.8" />
+      <path d={`M210 90 L210 ${domeY} L290 ${domeY}`} fill={C.blush} opacity="0.8" />
+      <rect x="190" y="30" width="20" height="70" fill={C.cartilage} stroke={C.euc} />
+      <path d={inhale ? 'M50 312 C150 296 250 296 350 312' : 'M50 320 C120 220 280 220 350 320'} stroke={C.coral} strokeWidth="10" fill="none" strokeLinecap="round" />
+      {inhale ? (
+        <path d="M200 -10 L200 26" stroke={C.coralDeep} strokeWidth="4" markerEnd="url(#pl-coral)" />
+      ) : (
+        <path d="M200 26 L200 -10" stroke={C.euc} strokeWidth="4" markerEnd="url(#pl-euc)" />
+      )}
+      {inhale ? (
+        <path d="M200 260 L200 300" stroke={C.coralDeep} strokeWidth="3" markerEnd="url(#pl-coral)" opacity="0.8" />
+      ) : (
+        <path d="M200 270 L200 236" stroke={C.euc} strokeWidth="3" markerEnd="url(#pl-euc)" opacity="0.8" />
+      )}
+    </g>
+  )
+}
+
+/** Breathing in vs breathing out, side by side. */
+export function PleuraDiagram() {
+  return (
+    <svg viewBox="0 0 1000 440" role="img" aria-labelledby="br-in-t br-in-d" className="diagram-svg">
+      <title id="br-in-t">Breathing in vs breathing out</title>
+      <desc id="br-in-d">
+        Breathing in: the diaphragm contracts and moves down, the ribs move up and out, the chest gets bigger, pressure drops and air flows in.
+        Breathing out: the diaphragm relaxes back into a dome, the ribs move down, the chest gets smaller, pressure rises and air flows out.
+      </desc>
+      <Arrowheads id="pl" />
+      <PanelTitle x={40} y={24}>Breathing in</PanelTitle>
+      <PanelTitle x={540} y={24}>Breathing out</PanelTitle>
+      <g transform="translate(0 40)">
+        <Chest x={0} inhale />
+        <Chest x={500} inhale={false} />
+      </g>
+      <Label x={420} y={120} bold>Air rushes in</Label>
+      <Label x={420} y={150} small>ribs move up + out</Label>
+      <Label x={420} y={176} small>diaphragm moves down</Label>
+      <Label x={420} y={202} small>chest gets bigger</Label>
+      <Label x={420} y={228} small>pressure drops</Label>
+      <Label x={920} y={120} anchor="end" bold>Air flows out</Label>
+      <Label x={920} y={150} anchor="end" small>muscles relax</Label>
+      <Label x={920} y={176} anchor="end" small>diaphragm domes up</Label>
+      <Label x={920} y={202} anchor="end" small>chest gets smaller</Label>
+      <Label x={920} y={228} anchor="end" small>pressure rises</Label>
+      <Label x={200} y={420} anchor="middle" bold>Diaphragm: flat (contracted)</Label>
+      <Label x={700} y={420} anchor="middle" bold>Diaphragm: dome (relaxed)</Label>
     </svg>
   )
 }

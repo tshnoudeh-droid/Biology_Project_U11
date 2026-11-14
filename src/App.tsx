@@ -1,7 +1,7 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import Home from './pages/Home'
-import TourMap from './pages/TourMap'
+import Stops from './pages/Stops'
 import TourFilm from './pages/TourFilm'
 import StopPage from './pages/StopPage'
 import Book from './pages/Book'
@@ -15,7 +15,8 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="tour" element={<TourFilm />} />
-        <Route path="tour/map" element={<TourMap />} />
+        <Route path="stops" element={<Stops />} />
+        <Route path="tour/map" element={<Navigate to="/stops" replace />} />
         <Route path="tour/:stop" element={<StopPage />} />
         <Route path="book" element={<Book />} />
         <Route path="about" element={<About />} />
