@@ -7,33 +7,6 @@
 
 export type Zone = 'conducting' | 'respiratory' | 'ventilation' | 'bonus'
 
-export type DiagramKey =
-  | 'nasal'
-  | 'pharynx'
-  | 'larynx'
-  | 'trachea'
-  | 'bronchi'
-  | 'bronchioles'
-  | 'alveoli'
-  | 'rbc'
-  | 'diaphragm'
-  | 'brainstem'
-  | 'checkout'
-  | 'advisories'
-
-export type RideKey =
-  | 'nose'
-  | 'swallow'
-  | 'cilia'
-  | 'peanut'
-  | 'asthma'
-  | 'surfactant'
-  | 'gas'
-  | 'diaphragm'
-  | 'chemo'
-  | 'route'
-  | 'advisory'
-
 export interface AttractionCard {
   term: string
   resort: string
@@ -71,9 +44,6 @@ export interface Stop {
   glance: { value: string; label: string }[]
   tip: string
   quiz: Quiz
-  diagram: DiagramKey
-  diagramCaption: string
-  ride?: RideKey
 }
 
 export const zoneLabel: Record<Zone, string> = {
@@ -88,7 +58,7 @@ export const tourStops: Stop[] = [
     slug: 'nasal-cavity',
     number: 1,
     code: '1',
-    short: 'Nose',
+    short: 'Nasal cavity',
     term: 'Nasal cavity',
     attraction: 'The Nasal Welcome Lodge',
     pitch: 'Every breath checks in here first.',
@@ -97,7 +67,7 @@ export const tourStops: Stop[] = [
     progress: 0,
     cards: [
       { term: 'Nasal conchae', resort: 'Heated Rainforest Walls', body: 'Curvy shelves that swirl the air so it warms up and gets moist.' },
-      { term: 'Mucus and cilia', resort: 'Housekeeping', body: 'Sticky **mucus** traps dust and germs. Tiny hairs (**cilia**) sweep it to your throat.' },
+      { term: 'Mucus and cilia', resort: 'Housekeeping', body: 'Sticky **mucus** traps dust and germs. Tiny hair-like **cilia** sweep it to the pharynx.' },
       { term: 'Smell receptors', resort: 'Aromatherapy Suite', body: 'At the top of the nasal cavity. They detect odours.' },
     ],
     glance: [{ value: '3 jobs', label: 'clean, warm and moisten the air' }],
@@ -111,56 +81,50 @@ export const tourStops: Stop[] = [
         { text: 'Stop food from going into your lungs', why: 'Not quite. That’s the epiglottis’s job (Stop 3).' },
       ],
     },
-    diagram: 'nasal',
-    diagramCaption: 'Side view of the nose. Air swirls past the conchae on its way to the throat.',
-    ride: 'nose',
   },
   /* 2 */ {
     slug: 'pharynx',
     number: 2,
     code: '2',
-    short: 'Throat',
+    short: 'Pharynx',
     term: 'Pharynx',
     attraction: 'Crossroads Plaza',
     pitch: 'Where the air route and the food route cross.',
-    intro: 'The **pharynx** (throat) is a tube behind your nose and mouth. Both **air and food** pass through it.',
+    intro: 'The **pharynx** is the tube behind the nasal cavity and mouth. Both **air and food** pass through it.',
     zone: 'conducting',
     progress: 1,
     cards: [
-      { term: 'Three sections', resort: 'Three floors', body: 'Upper (behind the nose), middle (behind the mouth) and lower (above the voice box).' },
-      { term: 'Tonsils', resort: 'Security Guards', body: 'Lumps of tissue in the throat that trap germs coming in.' },
+      { term: 'Three regions', resort: 'Three floors', body: 'The **nasopharynx** (behind the nasal cavity), **oropharynx** (behind the mouth) and **laryngopharynx** (above the larynx).' },
+      { term: 'Tonsils', resort: 'Security Guards', body: 'Lymph tissue in the pharynx that traps **pathogens** coming in.' },
       { term: 'The split', resort: 'The Great Split', body: 'At the bottom, **air** goes to the larynx and **food** goes to the esophagus.' },
     ],
-    glance: [{ value: '2 routes', label: 'air and food share the throat' }],
-    tip: 'That’s why you can’t breathe and swallow at the same time.',
+    glance: [{ value: '2 routes', label: 'air and food share the pharynx' }],
+    tip: 'You can’t breathe and swallow at the same time: the airway closes while food goes past.',
     quiz: {
       question: 'What passes through the pharynx?',
       options: [
-        { text: 'Both air and food', correct: true, why: 'Correct! The throat is shared, then the two routes split at the bottom.' },
+        { text: 'Both air and food', correct: true, why: 'Correct! The pharynx is shared, then the two routes split at the bottom.' },
         { text: 'Only air', why: 'Not quite. Food passes through it too, on the way to the esophagus.' },
         { text: 'Only food', why: 'Not quite. Every breath passes through it too.' },
-        { text: 'Blood and air', why: 'Not quite. Blood travels in blood vessels, not through your throat.' },
+        { text: 'Blood and air', why: 'Not quite. Blood travels in blood vessels, not through the pharynx.' },
       ],
     },
-    diagram: 'pharynx',
-    diagramCaption: 'Side view of the head and neck. Follow the air route (red) and the food route (green).',
-    ride: 'swallow',
   },
   /* 3 */ {
     slug: 'larynx',
     number: 3,
     code: '3',
-    short: 'Voice box',
+    short: 'Larynx',
     term: 'Larynx',
     attraction: 'The Voice Box Concert Hall',
     pitch: 'A concert hall with a drawbridge out front.',
-    intro: 'The **larynx** (voice box) sits on top of the windpipe. It’s made of **cartilage**, which keeps it open.',
+    intro: 'The **larynx** (voice box) sits on top of the trachea. Its walls are **cartilage**, which keeps the airway open.',
     zone: 'conducting',
     progress: 2,
     cards: [
       { term: 'Epiglottis', resort: 'The Drawbridge', body: 'A flap that closes over the larynx when you swallow, so food doesn’t go down the wrong way.' },
       { term: 'Vocal cords', resort: 'The Main Stage', body: 'Two folds that **vibrate** when you breathe out. That makes your voice.' },
-      { term: 'Adam’s apple', resort: 'The Front Wall', body: 'The bump of cartilage at the front of your neck.' },
+      { term: 'Thyroid cartilage', resort: 'The Front Wall', body: 'The largest cartilage of the larynx. It forms the **Adam’s apple**.' },
     ],
     glance: [{ value: 'Exhale', label: 'is when you speak' }],
     tip: 'Food “going down the wrong pipe” happens when the epiglottis doesn’t close in time. Coughing pushes it back out.',
@@ -169,27 +133,25 @@ export const tourStops: Stop[] = [
       options: [
         { text: 'The epiglottis', correct: true, why: 'Correct! It flips down over the larynx every time you swallow.' },
         { text: 'The vocal cords', why: 'Not quite. They make sound; the epiglottis is the flap that blocks food.' },
-        { text: 'The Adam’s apple', why: 'Not quite. That’s cartilage that protects the larynx from the front.' },
+        { text: 'The thyroid cartilage', why: 'Not quite. It protects the larynx from the front but doesn’t cover the opening.' },
         { text: 'The nostrils', why: 'Not quite. Food never goes near your nostrils (hopefully).' },
       ],
     },
-    diagram: 'larynx',
-    diagramCaption: 'Front view of the larynx, and the vocal cords from above. Switch between breathing and speaking.',
   },
   /* 4 */ {
     slug: 'trachea',
     number: 4,
     code: '4',
-    short: 'Windpipe',
+    short: 'Trachea',
     term: 'Trachea',
     attraction: 'The Trachea Express',
     pitch: 'A tunnel straight down to the lungs.',
-    intro: 'The **trachea** (windpipe) carries air from the larynx down into your chest. It’s about 10–12 cm long.',
+    intro: 'The **trachea** (windpipe) carries air from the larynx down into the chest. It’s about 10–12 cm long.',
     zone: 'conducting',
     progress: 3,
     cards: [
       { term: 'C-shaped rings', resort: 'The Rail Tunnels', body: 'Rings of **cartilage** hold it open. The open side lets the esophagus behind it stretch when you swallow.' },
-      { term: 'Goblet cells and cilia', resort: 'Luggage Return', body: '**Goblet cells** make mucus; **cilia** sweep it up and out like an escalator.' },
+      { term: 'Goblet cells and cilia', resort: 'Luggage Return', body: '**Goblet cells** make mucus; **cilia** sweep it up toward the pharynx like an escalator.' },
       { term: 'No gas exchange', resort: 'Express Service', body: 'The trachea only moves air. Oxygen gets into the blood later, in the alveoli.' },
     ],
     glance: [{ value: '16–20', label: 'cartilage rings' }],
@@ -203,9 +165,6 @@ export const tourStops: Stop[] = [
         { text: 'Because they’re made of bone', why: 'Not quite. They’re cartilage, which is bendy but strong.' },
       ],
     },
-    diagram: 'trachea',
-    diagramCaption: 'The trachea from the front, a slice through one ring, and a close-up of the lining.',
-    ride: 'cilia',
   },
   /* 5 */ {
     slug: 'bronchi',
@@ -234,9 +193,6 @@ export const tourStops: Stop[] = [
         { text: 'It actually has 3, one is just hidden', why: 'Not quite. The left lung really has 2 lobes.' },
       ],
     },
-    diagram: 'bronchi',
-    diagramCaption: 'Both lungs from the front. Your right lung is on the left side of the picture.',
-    ride: 'peanut',
   },
   /* 6 */ {
     slug: 'bronchioles',
@@ -265,9 +221,6 @@ export const tourStops: Stop[] = [
         { text: 'You control them on purpose', why: 'Not quite. It’s smooth muscle, so it works automatically.' },
       ],
     },
-    diagram: 'bronchioles',
-    diagramCaption: 'A bronchiole branching down to the air sacs, and a slice showing its muscle wall.',
-    ride: 'asthma',
   },
   /* 7 */ {
     slug: 'alveoli',
@@ -296,9 +249,6 @@ export const tourStops: Stop[] = [
         { text: 'Makes your voice', why: 'Not quite. That’s the vocal cords.' },
       ],
     },
-    diagram: 'alveoli',
-    diagramCaption: 'A cluster of alveoli wrapped in capillaries, and a close-up of one alveolus.',
-    ride: 'surfactant',
   },
   /* 7b */ {
     slug: 'gas-exchange',
@@ -328,9 +278,6 @@ export const tourStops: Stop[] = [
         { text: 'The diaphragm pushes it in', why: 'Not quite. The diaphragm moves air into the lungs, not into the blood.' },
       ],
     },
-    diagram: 'rbc',
-    diagramCaption: 'How a red blood cell picks up oxygen in the lungs and drops it off in the body.',
-    ride: 'gas',
   },
   /* 8 */ {
     slug: 'diaphragm',
@@ -340,12 +287,12 @@ export const tourStops: Stop[] = [
     term: 'Diaphragm',
     attraction: 'The Diaphragm Drop Tower',
     pitch: 'Our thrill ride: the muscle that powers every breath.',
-    intro: 'The **diaphragm** is a dome-shaped muscle under your lungs. With your **rib muscles**, it changes the size of your chest.',
+    intro: 'The **diaphragm** is a dome-shaped muscle under the lungs. With the **intercostal muscles** between the ribs, it changes the volume of the chest.',
     zone: 'ventilation',
     progress: 7,
     cards: [
-      { term: 'Breathing in', resort: 'The Drop', body: 'Diaphragm moves **down**, ribs move **up and out**. Chest gets bigger, so air rushes in.' },
-      { term: 'Breathing out', resort: 'The Gentle Return', body: 'Muscles relax and the chest gets smaller, so air is pushed out.' },
+      { term: 'Inhalation', resort: 'The Drop', body: 'The diaphragm **contracts** and moves down; intercostals pull the ribs **up and out**. Volume goes up, pressure goes down, air rushes in.' },
+      { term: 'Exhalation', resort: 'The Gentle Return', body: 'The muscles **relax**, the chest volume goes down, pressure goes up and air flows out.' },
       { term: 'Pressure rule', resort: 'The Ride’s Physics', body: 'Bigger space = lower pressure. Air always flows from high pressure to low (**Boyle’s law**).' },
     ],
     glance: [{ value: '12–18', label: 'breaths per minute at rest' }],
@@ -359,9 +306,6 @@ export const tourStops: Stop[] = [
         { text: 'Nothing: the lungs inflate themselves', why: 'Not quite. Lungs have no muscle of their own; they follow the chest.' },
       ],
     },
-    diagram: 'diaphragm',
-    diagramCaption: 'Breathing in vs breathing out: what the diaphragm and ribs do.',
-    ride: 'diaphragm',
   },
   /* Extra: control */ {
     slug: 'concierge',
@@ -375,7 +319,7 @@ export const tourStops: Stop[] = [
     zone: 'bonus',
     progress: 8,
     cards: [
-      { term: 'Medulla oblongata', resort: 'Head Concierge', body: 'Sends signals to the diaphragm and rib muscles to set your breathing rhythm.' },
+      { term: 'Medulla oblongata', resort: 'Head Concierge', body: 'Sends nerve signals to the diaphragm and intercostal muscles to set the breathing rhythm.' },
       { term: 'Chemoreceptors', resort: 'The Sensors', body: 'Detect how much **CO₂** is in your blood.' },
       { term: 'More CO₂ = breathe faster', resort: 'Rush Hour', body: 'When CO₂ rises (like during exercise), you breathe faster and deeper.' },
     ],
@@ -390,19 +334,16 @@ export const tourStops: Stop[] = [
         { text: 'You decide to on purpose', why: 'Not quite. It happens automatically, controlled by your brainstem.' },
       ],
     },
-    diagram: 'brainstem',
-    diagramCaption: 'Where the brain’s breathing centre and the CO₂ sensors are.',
-    ride: 'chemo',
   },
   /* Extra: check-out */ {
     slug: 'check-out',
     number: null,
     code: 'Extra',
-    short: 'Check-out',
-    term: 'Breathing out',
+    short: 'Exhalation',
+    term: 'Exhalation',
     attraction: 'Check-out',
     pitch: 'Your route home, in reverse.',
-    intro: 'Breathing out follows the same route **backwards**, carrying carbon dioxide out of your body.',
+    intro: '**Exhalation** follows the same route **backwards**, carrying carbon dioxide out of your body.',
     zone: 'bonus',
     progress: 8,
     cards: [
@@ -421,16 +362,13 @@ export const tourStops: Stop[] = [
         { text: 'Nose → pharynx → larynx → trachea → alveoli', why: 'Not quite. That’s the breathing-in route.' },
       ],
     },
-    diagram: 'checkout',
-    diagramCaption: 'The route air takes out of your body.',
-    ride: 'route',
   },
   /* Extra: advisories */ {
     slug: 'advisories',
     number: null,
     code: 'Extra',
-    short: 'Health warnings',
-    term: 'Lung conditions',
+    short: 'Disorders',
+    term: 'Respiratory disorders',
     attraction: 'Travel Advisories',
     pitch: 'Three conditions that can disrupt your stay.',
     intro: 'Some health conditions change how the resort works. **Alvea is a smoke- and vape-free resort.**',
@@ -452,9 +390,6 @@ export const tourStops: Stop[] = [
         { text: 'There’s too much surfactant', why: 'Not quite. Too little surfactant is the problem for premature babies.' },
       ],
     },
-    diagram: 'advisories',
-    diagramCaption: 'Healthy (left of each pair) vs affected (right).',
-    ride: 'advisory',
   },
 ]
 

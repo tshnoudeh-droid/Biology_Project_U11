@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { C, Callout, Label, PanelTitle } from './parts'
+import { Figure, Toggle } from './Figure'
 import { useTween } from '../lib/useTween'
 
-export function LarynxDiagram() {
+export function LarynxFigure() {
   const [speaking, setSpeaking] = useState(false)
   const angle = useTween(speaking ? 1.2 : 13, 700)
   // superior view geometry
@@ -15,19 +16,11 @@ export function LarynxDiagram() {
   const by = ay + Math.cos(rad(angle)) * len
 
   return (
-    <div className="diagram-with-control">
-      <div className="diagram-control" role="group" aria-label="Vocal fold position">
-        <span className="diagram-control__label">Vocal cords:</span>
-        <div className="toggle">
-          <button type="button" aria-pressed={!speaking} onClick={() => setSpeaking(false)}>
-            Breathing (open)
-          </button>
-          <button type="button" aria-pressed={speaking} onClick={() => setSpeaking(true)}>
-            Speaking (closed)
-          </button>
-        </div>
-      </div>
-      <svg viewBox="0 0 1110 470" role="img" aria-labelledby="lx-t lx-d" className="diagram-svg">
+    <Figure
+      controls={<Toggle label="Vocal cords" value={speaking ? 'speak' : 'breathe'} onChange={(v) => setSpeaking(v === 'speak')} options={[{ value: 'breathe', label: 'Breathing (open)' }, { value: 'speak', label: 'Speaking (closed)' }]} />}
+      caption={speaking ? 'Speaking: the vocal cords move together and vibrate as air flows out.' : 'Breathing: the vocal cords open wide so air flows freely.'}
+    >
+      <svg viewBox="0 0 1110 470" role="img" aria-labelledby="lx-t lx-d" className="figure-svg">
         <title id="lx-t">Labelled diagram of the larynx</title>
         <desc id="lx-d">
           Front view of the larynx showing the hyoid bone, epiglottis, thyroid cartilage with the laryngeal prominence (Adam’s apple),
@@ -50,10 +43,10 @@ export function LarynxDiagram() {
 
         <Callout at={[250, 52]} to={[380, 46]} label="Epiglottis" sub="flap that blocks food" />
         
-        <Callout at={[250, 164]} to={[380, 160]} label="Adam’s apple" sub="bump of cartilage" />
-        <Callout at={[318, 220]} to={[380, 232]} label="Cartilage shield" />
-        <Callout at={[304, 342]} to={[380, 344]} label="Cartilage ring" sub="below the shield" />
-        <Callout at={[300, 428]} to={[380, 432]} label="Windpipe starts" sub="Stop 4" />
+        <Callout at={[250, 164]} to={[380, 160]} label="Thyroid cartilage" sub="forms the Adam’s apple" />
+        
+        <Callout at={[304, 342]} to={[380, 344]} label="Cricoid cartilage" sub="a full ring" />
+        <Callout at={[300, 428]} to={[380, 432]} label="Trachea begins" sub="Stop 4" />
         <PanelTitle x={760} y={26} anchor="middle">Top-down view of the glottis</PanelTitle>
         <Label x={760} y={58} small anchor="middle">Front (anterior)</Label>
         <ellipse cx="760" cy="250" rx="170" ry="170" fill="#EFC2B5" stroke={C.coralDeep} strokeWidth="1.5" />
@@ -72,12 +65,12 @@ export function LarynxDiagram() {
         <path d={`M${rx + 26} ${by + 2} L${rx - 4} ${by - 4} L${rx + 6} ${by + 30} Z`} fill={C.cartilage} stroke={C.euc} strokeWidth="1.5" />
         <Label x={760} y={446} small anchor="middle">Back (posterior)</Label>
 
-        <Callout at={[(ax + rx) / 2 + 4, (ay + by) / 2]} to={[950, 230]} label="Vocal cord" sub="vibrates to make sound" />
-        <Callout at={[ax, by - 30]} to={[950, 296]} label="Gap between cords" sub={speaking ? 'nearly closed: cords vibrate' : 'wide open: air flows in'} />
+        <Callout at={[(ax + rx) / 2 + 4, (ay + by) / 2]} to={[950, 230]} label="Vocal cords" sub="vibrate to make sound" />
+        <Callout at={[ax, by - 30]} to={[950, 296]} label="Glottis" sub={speaking ? 'narrow: cords vibrate' : 'wide open'} />
         
         
         <Callout at={[810, 104]} to={[950, 110]} label="Epiglottis" />
       </svg>
-    </div>
+    </Figure>
   )
 }

@@ -89,3 +89,42 @@
   font-size: 18px;
   overflow-wrap: anywhere;
 }
+
+.about-strip {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.about-strip__mark {
+  width: 72px;
+}
+.about-strip p:last-child {
+  margin: 0;
+  max-width: 70ch;
+}
+.team {
+  margin-bottom: 56px;
+}
+.team__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 22px;
+  background: var(--paper);
+  border: 1px solid rgba(47, 93, 80, 0.12);
+  border-radius: 18px;
+}
+.team__name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--deep-lung);
+}
+.team__avatar {
+  width: 72px;
+  height: 72px;
+  font-size: 32px;
+  margin-bottom: 12px;
+}

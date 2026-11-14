@@ -45,13 +45,12 @@ export function Footer() {
         <nav aria-label="Footer">
           <h2 className="footer__heading">Explore</h2>
           <ul className="footer__links">
-            <li><Link to="/tour">Watch the tour</Link></li>
-            <li><Link to="/stops">Resort map</Link></li>
+            <li><Link to="/#tour">Watch the tour</Link></li>
+            <li><Link to="/#map">Resort map</Link></li>
             <li><Link to="/tour/nasal-cavity">Start at Stop 1</Link></li>
-            <li><Link to="/tour/advisories">Health warnings</Link></li>
-            <li><Link to="/book">Book your stay</Link></li>
-            <li><Link to="/about">About us</Link></li>
-            <li><Link to="/sources">Sources</Link></li>
+            <li><Link to="/tour/advisories">Respiratory disorders</Link></li>
+            <li><Link to="/#book">Book your stay</Link></li>
+            <li><Link to="/#sources">Sources</Link></li>
           </ul>
         </nav>
       </div>

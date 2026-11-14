@@ -3,21 +3,19 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
 
-const titles: Record<string, string> = {
-  '/': 'Alvea Wellness Retreat',
-  '/stops': 'Resort Map · Alvea',
-  '/book': 'Book Your Stay · Alvea',
-  '/about': 'About · Alvea',
-  '/sources': 'Sources · Alvea',
-}
-
 export function Layout() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' })
-    if (titles[pathname]) document.title = titles[pathname]
-  }, [pathname])
+    if (pathname === '/') document.title = 'Alvea Wellness Retreat'
+    if (!hash) {
+      window.scrollTo({ top: 0, behavior: 'auto' })
+      return
+    }
+    // wait for the page to render, then jump to the section
+    const id = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'auto', block: 'start' }), 60)
+    return () => window.clearTimeout(id)
+  }, [pathname, hash])
 
   return (
     <>

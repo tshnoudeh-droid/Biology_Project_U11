@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
 import { IconCheck, IconPhone, IconX } from '../components/Icons'
 import { LogoMark } from '../components/Logo'
 import '../styles/book.css'
@@ -49,7 +48,8 @@ function makeCode() {
   return `ALV-O2-${Math.floor(1000 + Math.random() * 9000)}`
 }
 
-export default function Book() {
+/** Booking section on the home page. Nothing is stored or sent anywhere. */
+export function BookSection() {
   const [pkg, setPkg] = useState('deep')
   const [booking, setBooking] = useState<Booking | null>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -83,12 +83,12 @@ export default function Book() {
     : ''
 
   return (
-    <>
-      <section className="book-hero on-dark" aria-labelledby="book-title">
+    <section id="book" className="home-section book" aria-labelledby="book-title">
+      <div className="book-hero on-dark">
         <div className="container book-hero__inner">
           <div>
-            <p className="eyebrow">Reservations</p>
-            <h1 id="book-title">Book your stay</h1>
+            <p className="eyebrow">Step 3 · Reservations</p>
+            <h2 id="book-title">Book your stay</h2>
             <p className="tagline">Every breath, a destination. Choose yours.</p>
           </div>
           <div className="book-phone">
@@ -99,14 +99,14 @@ export default function Book() {
             </span>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="section" aria-labelledby="menu-title">
+      <div className="section section--tight">
         <div className="container">
           <form className="book-form" onSubmit={onSubmit} noValidate={false}>
             <fieldset className="book-fieldset">
               <legend id="menu-title" className="book-legend">
-                <span className="eyebrow">Step 1</span>
+                <span className="eyebrow">Package</span>
                 <span className="book-legend__title">Choose a package</span>
               </legend>
               <div className="packages">
@@ -144,7 +144,7 @@ export default function Book() {
             <div className="book-grid">
               <fieldset className="book-fieldset card">
                 <legend className="book-legend">
-                  <span className="eyebrow">Step 2</span>
+                  <span className="eyebrow">Your details</span>
                   <span className="book-legend__title">Guest details</span>
                 </legend>
                 <div className="field">
@@ -190,7 +190,7 @@ export default function Book() {
 
               <fieldset className="book-fieldset card">
                 <legend className="book-legend">
-                  <span className="eyebrow">Step 3</span>
+                  <span className="eyebrow">Add-ons</span>
                   <span className="book-legend__title">Spa add-ons</span>
                 </legend>
                 <div className="addons">
@@ -214,7 +214,7 @@ export default function Book() {
             </div>
           </form>
         </div>
-      </section>
+      </div>
 
       <dialog
         ref={dialogRef}
@@ -261,9 +261,9 @@ export default function Book() {
             </dl>
             <p className="tagline confirm__tagline">Your journey begins with your next breath.</p>
             <div className="confirm__actions">
-              <Link to="/tour" className="btn btn--euc" onClick={() => setBooking(null)}>
-                Preview the resort map
-              </Link>
+              <a href="#map" className="btn btn--euc" onClick={() => setBooking(null)}>
+                Explore the resort map
+              </a>
               <button type="button" className="btn btn--ghost" onClick={() => setBooking(null)}>
                 Done
               </button>
@@ -272,6 +272,6 @@ export default function Book() {
           </div>
         )}
       </dialog>
-    </>
+    </section>
   )
 }

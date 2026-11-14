@@ -185,7 +185,7 @@ export function FilmPlayer() {
           <div className="film-cover film-cover--end">
             <h2 className="film-cover__title">Thanks for visiting</h2>
             <div className="film-cover__row">
-              <Link to="/book" className="btn btn--blush">
+              <Link to="/#book" className="btn btn--blush">
                 Book your stay <IconArrowRight />
               </Link>
               <button type="button" className="btn btn--ghost-dark" onClick={play}>

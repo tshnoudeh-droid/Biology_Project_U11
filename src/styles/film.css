@@ -277,61 +277,7 @@
   width: 16px;
   height: 16px;
 }
-.film-chapters {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 6px;
-}
-.film-chapters li {
-  flex-basis: 0;
-  min-width: 0;
-}
-.film-chapter {
-  width: 100%;
-  border: 0;
-  background: transparent;
-  padding: 4px 0;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
-}
-.film-chapter__bar {
-  display: block;
-  height: 6px;
-  border-radius: 3px;
-  background: rgba(201, 214, 207, 0.22);
-  overflow: hidden;
-}
-.film-chapter__bar span {
-  display: block;
-  height: 100%;
-  background: var(--visited);
-}
-.film-chapter.is-current .film-chapter__bar span {
-  background: var(--oxygen-coral);
-}
-.film-chapter__name {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--body-on-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.film-chapter.is-current .film-chapter__name {
-  color: var(--mist);
-}
-.film-chapter:hover .film-chapter__name {
-  color: var(--blush);
-}
 @media (max-width: 760px) {
-  .film-chapter__name {
-    display: none;
-  }
   .film-more {
     margin-left: 0;
   }
@@ -341,6 +287,7 @@
   .film-caption p {
     font-size: 2.6cqw;
   }
+
 }
 
 /* interior-design scene type */
@@ -394,48 +341,6 @@
 }
 .film-sign rect:first-of-type {
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
-}
-
-/* journey strip under the scene title */
-.film-journey {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25cqw 0.7cqw;
-  margin-top: 0.7cqw;
-  font-size: 0.85cqw;
-  font-weight: 600;
-  color: rgba(201, 214, 207, 0.6);
-}
-.film-journey__stop {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35cqw;
-}
-.film-journey__stop i {
-  width: 0.55cqw;
-  height: 0.55cqw;
-  border-radius: 50%;
-  background: rgba(201, 214, 207, 0.35);
-}
-.film-journey__stop.is-done {
-  color: var(--visited);
-}
-.film-journey__stop.is-done i {
-  background: var(--visited);
-}
-.film-journey__stop.is-here {
-  color: var(--mist);
-}
-.film-journey__stop.is-here i {
-  background: var(--oxygen-coral);
-  box-shadow: 0 0 0 0.25cqw rgba(227, 115, 94, 0.35);
-}
-.film-journey.is-exhale .film-journey__stop.is-done {
-  color: #a9c4ba;
-}
-.film-journey__special {
-  color: var(--oxygen-coral);
 }
 .film-scrim {
   height: 34%;
@@ -609,6 +514,7 @@
   .film-step:not(.film-step--current) .film-step__name {
     display: none;
   }
+
 }
 .film-page__inner {
   width: min(100% - 32px, calc((100vh - 76px - 230px) * 16 / 9), 1700px);

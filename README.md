@@ -9,7 +9,6 @@ A fictional luxury retreat inside the human respiratory system, built for the SB
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # type-check + production build into dist/
-npm run preview  # serve the production build
 ```
 
 ## Deploy (Vercel)
@@ -18,30 +17,34 @@ npm run preview  # serve the production build
 npx vercel --prod
 ```
 
-Or import the GitHub repo at vercel.com/new (framework preset: Vite). `vercel.json` rewrites every route to `index.html`
-so deep links like `/tour/alveoli` work.
+Or import the GitHub repo at vercel.com/new (preset: Vite). `vercel.json` rewrites every route to `index.html`.
 
-## The tour film (`/tour`)
+## How the site is organised
 
-Press **Begin the tour**: 11 animated scenes (~4 min) play with captions. The resort is built into the organs:
-nose = front doors + lobby, pharynx = elevator, larynx = security gate (epiglottis drawbridge), trachea = main hallway,
-bronchi = guest wings, bronchioles = room corridors, alveoli = spa rooms (type II cells are the masseuses),
-red blood cells = shuttle buses, diaphragm = air pump, brainstem = concierge. Guests are O₂ and CO₂ molecules.
-Space = pause, ← → = skip scenes. Each scene links to its detailed stop page. Scene content lives in `src/film/scenes.ts`.
+**One scrolling home page** (`/`), with the top menu jumping between sections:
 
-The old clickable map is at `/tour/map`.
+1. **Hero**: what Alvea is, plus the 3 steps (watch → explore → book)
+2. **Tour** (`#tour`): the animated film, 11 scenes, with captions and a scene stepper
+3. **Resort map** (`#map`): click any of the 8 stops; extras shown as cards underneath
+4. **Book** (`#book`): packages, form and confirmation (nothing is stored or sent)
+5. **Sources** (`#sources`): team, about, and the MLA Works Cited
+
+**Stop pages** (`/tour/:stop`) all use one template: hero → **one interactive labelled figure** → 3 key facts → quiz.
+
+Old addresses (`/book`, `/tour`, `/stops`, `/sources`, `/about`) redirect to the matching home-page section.
+
+## Code layout
+
+| Folder | What lives there |
+|---|---|
+| `src/data/` | `tour.ts` (all stop content, in tour order), `numbers.ts` |
+| `src/sections/` | the five home-page sections |
+| `src/figures/` | one interactive figure per stop, all built on `Figure.tsx` (controls → SVG → caption) and `parts.tsx` (labels, palette) |
+| `src/film/` | the tour film: `scenes.ts` (captions + timing), `scenesA/B.tsx` (art), `interior.tsx` (hotel kit), `FilmPlayer.tsx` |
+| `src/components/` | nav, footer, resort map, stepper, quiz, logo, icons |
+| `src/styles/` | `global.css` (brand tokens) + one stylesheet per area |
 
 ## Recording route (1920×1080)
 
-Home → Tour film (play through, splitting scenes between narrators) → optional stop pages → Stops 1–7 → 7b Gas Exchange → 8 Diaphragm (play each thrill ride) → Concierge →
-Check-out → Advisories → Book a package → confirmation → footer contact info → Sources.
-
-## Structure
-
-- `src/data/tour.ts`: all stop content, quizzes and tour order (Previous/Next follows this array)
-- `src/diagrams/`: hand-built labelled SVG diagrams, one per stop
-- `src/rides/`: interactive thrill rides (asthma, surfactant, gas exchange, diaphragm, CO₂ dial)
-- `src/components/AirwayArt.tsx` + `src/lib/useBreath.ts`: the resort map and the Follow-a-breath animation
-- `src/styles/global.css`: brand tokens
-
-Static site only: the booking form stores and sends nothing.
+Home → Tour (play through, splitting scenes between narrators) → Resort map → click through stops 1–8 and try each figure →
+extras → Book a package → confirmation → Sources.

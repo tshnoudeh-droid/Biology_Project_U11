@@ -231,114 +231,6 @@
   font-size: 16px;
   color: var(--body-on-dark);
 }
-.breath-key {
-  display: flex;
-  gap: 20px;
-  font-size: 14px;
-}
-.breath-key span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-}
-.dot--o2 {
-  background: var(--oxygen-coral);
-}
-.dot--co2 {
-  background: var(--visited);
-}
-
-.zone-legend {
-  display: grid;
-  gap: 10px;
-}
-.zone-legend .eyebrow {
-  margin-bottom: 2px;
-}
-.zone-btn {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  text-align: left;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 2px solid rgba(201, 214, 207, 0.15);
-  background: transparent;
-  color: var(--body-on-dark);
-  cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
-}
-.zone-btn:hover,
-.zone-btn[aria-pressed='true'] {
-  border-color: var(--blush);
-  background: rgba(244, 213, 204, 0.06);
-}
-.zone-btn__swatch {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  margin-top: 3px;
-}
-.zone-btn--conducting .zone-btn__swatch {
-  background: var(--blush);
-}
-.zone-btn--respiratory .zone-btn__swatch {
-  background: var(--oxygen-coral);
-  border-radius: 50%;
-}
-.zone-btn--ventilation .zone-btn__swatch {
-  background: linear-gradient(var(--deep-lung) 40%, var(--oxygen-coral) 40%, var(--oxygen-coral) 70%, var(--deep-lung) 70%);
-  border: 1px solid var(--oxygen-coral);
-}
-.zone-btn > span:last-child {
-  display: flex;
-  flex-direction: column;
-}
-.zone-btn__label {
-  font-weight: 700;
-  color: var(--mist);
-}
-.zone-btn__note {
-  font-size: 14.5px;
-}
-
-.map-bonus ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.map-bonus a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: var(--pill);
-  border: 1px solid rgba(244, 213, 204, 0.35);
-  color: var(--blush);
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-}
-.map-bonus a:hover {
-  background: rgba(244, 213, 204, 0.1);
-}
-.map-bonus svg {
-  width: 15px;
-  height: 15px;
-}
-.map-start {
-  align-self: flex-start;
-}
 
 @media (max-width: 960px) {
   .map-layout {
@@ -357,6 +249,7 @@
     width: 36px;
     height: 36px;
   }
+
 }
 .map-page .eyebrow {
   color: var(--oxygen-coral);

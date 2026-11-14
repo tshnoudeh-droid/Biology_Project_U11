@@ -102,6 +102,7 @@
   .breathing-cluster {
     width: min(70%, 320px);
   }
+
 }
 
 .section-head {
@@ -109,137 +110,6 @@
 }
 .section-head.center {
   text-align: center;
-}
-
-.service h3 {
-  margin-bottom: 12px;
-}
-.service p:last-child {
-  margin: 0;
-}
-.service__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--blush);
-  color: var(--eucalyptus);
-  margin-bottom: 18px;
-}
-.service__icon svg {
-  width: 26px;
-  height: 26px;
-}
-.amenity {
-  display: flex;
-  gap: 22px;
-  align-items: flex-start;
-}
-.amenity .service__icon {
-  flex: none;
-  margin: 0;
-}
-.amenity p {
-  margin: 0;
-}
-.amenity a {
-  color: var(--coral-deep);
-  font-weight: 600;
-}
-
-.numbers {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 1px;
-  margin: 0;
-  background: rgba(238, 243, 239, 0.18);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.numbers__item {
-  background: var(--eucalyptus);
-  padding: 30px 28px;
-}
-.numbers dt {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--blush);
-  margin-bottom: 10px;
-}
-.numbers dd {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.numbers__value {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: 46px;
-  line-height: 1.05;
-  color: var(--mist);
-}
-.numbers__detail {
-  font-size: 15px;
-  color: var(--mist);
-  opacity: 0.92;
-}
-
-.itinerary {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: 14px;
-}
-.itinerary__item {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 22px;
-  background: var(--paper);
-  border-radius: 20px;
-  text-decoration: none;
-  border: 1px solid rgba(47, 93, 80, 0.08);
-  transition: transform 0.3s var(--ease-breath), border-color 0.3s;
-}
-.itinerary__item:hover {
-  transform: translateY(-2px);
-  border-color: var(--eucalyptus);
-}
-.itinerary__num {
-  flex: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--oxygen-coral);
-  color: var(--deep-lung);
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.itinerary__text {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-.itinerary__term {
-  font-weight: 700;
-  color: var(--deep-lung);
-}
-.itinerary__name {
-  font-size: 15px;
-  color: var(--muted);
-}
-.itinerary__arrow {
-  width: 20px;
-  color: var(--eucalyptus);
 }
 
 /* how-to strip */
@@ -258,6 +128,7 @@
   .howto__inner {
     grid-template-columns: 1fr;
   }
+
 }
 .howto__step {
   display: flex;
@@ -320,18 +191,6 @@
   margin: 0 auto;
 }
 
-/* book call-to-action */
-.book-cta__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.book-cta .lede {
-  margin: 0;
-}
-
 /* extras grid (shared) */
 .extras {
   display: grid;
@@ -342,11 +201,13 @@
   .extras {
     grid-template-columns: 1fr 1fr;
   }
+
 }
 @media (max-width: 560px) {
   .extras {
     grid-template-columns: 1fr;
   }
+
 }
 .extra {
   position: relative;
@@ -389,4 +250,49 @@
   width: 18px;
   height: 18px;
   color: var(--eucalyptus);
+}
+
+/* one-page sections */
+.home-section {
+  scroll-margin-top: 76px;
+}
+.hero {
+  min-height: calc(100vh - 76px - 96px);
+}
+.mini-numbers {
+  margin: 48px 0 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+@media (max-width: 1000px) {
+  .mini-numbers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+@media (max-width: 560px) {
+  .mini-numbers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+.mini-numbers > div {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(201, 214, 207, 0.12);
+}
+.mini-numbers dt {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blush);
+}
+.mini-numbers dd {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--mist);
 }

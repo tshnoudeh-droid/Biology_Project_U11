@@ -254,9 +254,9 @@ function Floorplate({ y, h, children }: { y: number; h: number; children?: React
 export function ElevatorArt({ t }: { t: number }) {
   const carY = t < 13.5 ? mix(110, 312, ramp(t, 8.5, 10)) : mix(312, 560, ramp(t, 13.5, 15))
   const floors = [
-    { y: 90, h: 190, name: 'Upper throat', resort: 'North Wing · air only', note: 'guard: the adenoid (a tonsil)', at: 5 },
-    { y: 280, h: 200, name: 'Middle throat', resort: 'Food Court · air + food', note: 'guards: the tonsils', at: 10 },
-    { y: 480, h: 200, name: 'Lower throat', resort: 'The Great Split', note: 'air → larynx · food → esophagus', at: 15 },
+    { y: 90, h: 190, name: 'Nasopharynx', resort: 'North Wing · air only', note: 'guard: the adenoid (a tonsil)', at: 5 },
+    { y: 280, h: 200, name: 'Oropharynx', resort: 'Food Court · air + food', note: 'guards: the tonsils', at: 10 },
+    { y: 480, h: 200, name: 'Laryngopharynx', resort: 'The Great Split', note: 'air → larynx · food → esophagus', at: 15 },
   ]
   const exitF = ramp(t, 15.5, 19)
   const boarding = ramp(t, 0.5, 3.2)
@@ -429,7 +429,7 @@ export function GateArt({ t }: { t: number }) {
         ))}
 
       <Sign x={1180} y={14} term="Larynx (voice box)" resort="The Security Gate" note="made of cartilage, stays open" at={0.3} t={t} />
-      <Sign x={1180} y={150} term="Adam’s apple" resort="The stage frame (cartilage)" at={3} t={t} to={[1030, 260]} />
+      <Sign x={1180} y={150} term="Thyroid cartilage" resort="The stage frame (Adam’s apple)" at={3} t={t} to={[1030, 260]} />
       <Sign x={60} y={200} term="Epiglottis" resort="The Drawbridge" note="closes when you swallow" at={6} t={t} to={[700, 250]} />
       <Sign x={1180} y={290} term="Swallowing" resort="Guests wait: breathing pauses" at={8} t={t} to={[800, 680]} />
       <Sign x={1180} y={420} term="Esophagus" resort="Service corridor for food" at={9} t={t} to={[1340, 560]} />

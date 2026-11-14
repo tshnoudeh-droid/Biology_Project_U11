@@ -1,12 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import Home from './pages/Home'
-import Stops from './pages/Stops'
-import TourFilm from './pages/TourFilm'
 import StopPage from './pages/StopPage'
-import Book from './pages/Book'
-import About from './pages/About'
-import Sources from './pages/Sources'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -14,13 +9,14 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="tour" element={<TourFilm />} />
-        <Route path="stops" element={<Stops />} />
-        <Route path="tour/map" element={<Navigate to="/stops" replace />} />
         <Route path="tour/:stop" element={<StopPage />} />
-        <Route path="book" element={<Book />} />
-        <Route path="about" element={<About />} />
-        <Route path="sources" element={<Sources />} />
+        {/* old addresses jump to the matching home-page section */}
+        <Route path="tour" element={<Navigate to="/#tour" replace />} />
+        <Route path="stops" element={<Navigate to="/#map" replace />} />
+        <Route path="tour/map" element={<Navigate to="/#map" replace />} />
+        <Route path="book" element={<Navigate to="/#book" replace />} />
+        <Route path="sources" element={<Navigate to="/#sources" replace />} />
+        <Route path="about" element={<Navigate to="/#sources" replace />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
