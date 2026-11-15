@@ -1,6 +1,7 @@
 import { BreathingCluster } from '../components/BreathingCluster'
 import { LogoMark } from '../components/Logo'
-import { IconArrowRight } from '../components/Icons'
+import { IconArrowRight, IconPlay } from '../components/Icons'
+import { openIntro } from '../components/IntroVideo'
 
 const steps = [
   { n: 1, title: 'Watch the tour', text: 'A 4-minute animated walk through the resort.', href: '#tour' },
@@ -31,6 +32,9 @@ export function HeroSection() {
               <a href="#map" className="btn btn--ghost-dark">
                 See the resort map
               </a>
+              <button type="button" className="btn btn--ghost-dark" onClick={openIntro}>
+                <IconPlay /> Watch the intro
+              </button>
             </div>
             <p className="hero__presented">Presented by Beautiful Body-Works Travel Co.</p>
           </div>

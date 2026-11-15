@@ -4,6 +4,8 @@ import { getStop } from '../data/tour'
 import { figures } from '../figures'
 import { Stepper } from '../components/Stepper'
 import { Quiz } from '../components/Quiz'
+import { StopVideo } from '../components/StopVideo'
+import { stopVideos } from '../data/videos'
 import { IconArrowLeft, IconArrowRight } from '../components/Icons'
 import { rich } from '../lib/rich'
 import NotFound from './NotFound'
@@ -85,6 +87,16 @@ export default function StopPage() {
           <IconArrowRight />
         </Link>
       </nav>
+
+      {stopVideos[stop.slug] && (
+        <StopVideo
+          key={stop.slug}
+          video={stopVideos[stop.slug]}
+          title={stop.attraction}
+          label={`${stop.number !== null ? `Stop ${stop.code}` : 'Extra'} · Your guide, ${stopVideos[stop.slug].guide}`}
+          next={next ? { href: `/tour/${next.slug}`, name: next.short } : undefined}
+        />
+      )}
     </article>
   )
 }

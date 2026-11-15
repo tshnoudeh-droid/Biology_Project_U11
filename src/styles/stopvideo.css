@@ -1,0 +1,232 @@
+/* ==========================================================
+   Stop guide video: docked card ⇄ round bubble (bottom-right)
+   Reuses the intro__* bar / control styles from intro.css.
+   ========================================================== */
+
+.svid[hidden] {
+  display: none;
+}
+
+.svid {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--oxygen-coral), var(--blush) 45%, var(--visited) 70%, var(--eucalyptus));
+  box-shadow: 0 24px 60px -18px rgba(10, 20, 17, 0.55);
+}
+
+.svid__frame {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--deep-lung);
+  overflow: hidden;
+}
+
+.svid__screen {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+.svid__screen video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* ---------- card ---------- */
+.svid--card {
+  width: clamp(240px, 22vw, 320px);
+  border-radius: 22px;
+  animation: svid-card-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.svid--card .svid__frame {
+  border-radius: 19px;
+}
+.svid--card .svid__screen {
+  margin: 0 8px;
+  border-radius: 13px;
+  aspect-ratio: 3 / 2;
+}
+.svid__bar {
+  padding: 8px 8px 8px 14px;
+}
+.svid__titles {
+  min-width: 0;
+}
+.svid--card .intro__title {
+  font-size: 15px;
+}
+.svid--card .intro__icon {
+  width: 32px;
+  height: 32px;
+}
+.svid--card .intro__icon svg {
+  width: 15px;
+  height: 15px;
+}
+.svid__controls {
+  gap: 8px;
+  padding: 8px 10px 10px;
+}
+.svid__controls .intro__time {
+  min-width: 30px;
+  font-size: 12px;
+  text-align: right;
+}
+.svid--card .intro__bigplay {
+  width: 56px;
+  height: 56px;
+}
+.svid--card .intro__bigplay svg {
+  width: 22px;
+  height: 22px;
+}
+.svid--card .intro__sound {
+  top: 8px;
+  left: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.svid__end {
+  gap: 8px;
+  padding: 10px;
+}
+.svid__end .btn {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+/* ---------- bubble: sits clear of the figure, progress ring around the edge ---------- */
+.svid--bubble {
+  width: var(--bsize, 92px);
+  height: var(--bsize, 92px);
+  border-radius: 50%;
+  padding: 4px;
+  background: conic-gradient(var(--oxygen-coral) var(--p, 0%), var(--blush) 0);
+  animation: svid-bubble-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.svid--bubble .svid__frame {
+  border-radius: 50%;
+}
+.svid--bubble .svid__bar,
+.svid--bubble .svid__controls {
+  display: none;
+}
+.svid--bubble .svid__screen {
+  height: 100%;
+  border-radius: 50%;
+}
+.svid__bubble-btn {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+}
+.svid__bubble-btn svg {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+.svid__bubble-btn:hover {
+  background: rgba(27, 42, 38, 0.25);
+}
+.svid__bubble-btn:focus-visible {
+  outline: 2px solid var(--blush);
+  outline-offset: 4px;
+}
+
+.svid__bubble-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 2px solid var(--blush);
+  border-radius: 50%;
+  background: var(--deep-lung);
+  color: var(--paper);
+  cursor: pointer;
+}
+.svid__bubble-close svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.svid__bubble-close:focus-visible {
+  outline: 2px solid var(--blush);
+  outline-offset: 2px;
+}
+
+/* ---------- reopen pill ---------- */
+.svid-pill {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid var(--blush);
+  border-radius: var(--pill);
+  background: var(--deep-lung);
+  color: var(--paper);
+  font: 600 14px/1 var(--font-body);
+  cursor: pointer;
+  box-shadow: 0 12px 30px -10px rgba(10, 20, 17, 0.5);
+}
+.svid-pill svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--oxygen-coral);
+}
+
+@media (max-width: 480px) {
+  .svid {
+    right: 12px;
+    bottom: 12px;
+  }
+  .svid--card {
+    width: min(62vw, 260px);
+  }
+}
+
+@keyframes svid-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.92);
+    transform-origin: bottom right;
+  }
+}
+@keyframes svid-bubble-in {
+  from {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svid--card,
+  .svid--bubble {
+    animation: none;
+  }
+}

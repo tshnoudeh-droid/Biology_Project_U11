@@ -1,0 +1,400 @@
+/* ==========================================================
+   Intro video: expanded (65% of the screen) ⇄ docked mini-player
+   ========================================================== */
+
+.intro[hidden] {
+  display: none;
+}
+
+/* the dialog takes focus on open; only its buttons show a focus ring */
+.intro:focus,
+.intro:focus-visible {
+  outline: none;
+}
+
+.intro-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(27, 42, 38, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: intro-fade 0.5s var(--ease-breath) both;
+}
+
+.intro {
+  position: fixed;
+  z-index: 91;
+  outline: none;
+  /* gradient brand border: coral → blush → eucalyptus */
+  padding: 3px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, var(--oxygen-coral), var(--blush) 45%, var(--visited) 70%, var(--eucalyptus));
+  box-shadow:
+    0 30px 80px -20px rgba(10, 20, 17, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* 65% of the viewport width, but never taller than the screen (video is 3:2) */
+.intro--expanded {
+  top: 50%;
+  left: 50%;
+  width: min(65vw, calc((94vh - 150px) * 1.5));
+  width: min(65vw, calc((94dvh - 150px) * 1.5));
+  transform: translate(-50%, -50%);
+  animation: intro-grow 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.intro--mini {
+  right: 16px;
+  bottom: 16px;
+  width: clamp(240px, 24vw, 360px);
+  border-radius: 22px;
+  animation: intro-dock 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.intro__frame {
+  display: flex;
+  flex-direction: column;
+  border-radius: 27px;
+  background: var(--deep-lung);
+  overflow: hidden;
+}
+.intro--mini .intro__frame {
+  border-radius: 19px;
+}
+
+/* ---------- top bar ---------- */
+.intro__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px 12px 18px;
+  color: var(--paper);
+}
+.intro__brand {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.intro__brand > span {
+  min-width: 0;
+}
+.intro__logo {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.intro__eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blush);
+}
+.intro__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.intro__winbtns {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+/* ---------- icon buttons ---------- */
+.intro__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--line-dark);
+  border-radius: var(--pill);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--paper);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+.intro__icon:hover {
+  background: rgba(244, 213, 204, 0.14);
+  border-color: var(--blush);
+}
+.intro__icon:focus-visible,
+.intro__bigplay:focus-visible,
+.intro__sound:focus-visible,
+.intro__seek:focus-visible {
+  outline: 2px solid var(--blush);
+  outline-offset: 2px;
+}
+.intro__icon svg,
+.intro__sound svg,
+.intro__bigplay svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.intro__icon .fill {
+  fill: currentColor;
+}
+.intro__icon--play {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: var(--oxygen-coral);
+}
+.intro__icon--play:hover {
+  background: var(--coral-deep);
+}
+
+/* ---------- video ---------- */
+.intro__screen {
+  position: relative;
+  margin: 0 10px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  aspect-ratio: 3 / 2;
+  box-shadow: inset 0 0 0 1px rgba(244, 213, 204, 0.18);
+}
+.intro--mini .intro__screen {
+  margin: 0 8px;
+  border-radius: 13px;
+}
+.intro__screen video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.intro__bigplay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  padding: 0;
+  border: 3px solid var(--blush);
+  border-radius: 50%;
+  background: rgba(227, 115, 94, 0.92);
+  color: var(--paper);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s var(--ease-breath);
+}
+.intro__bigplay:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+.intro__bigplay svg {
+  width: 34px;
+  height: 34px;
+  fill: currentColor;
+  margin-left: 4px;
+}
+.intro--mini .intro__bigplay {
+  width: 56px;
+  height: 56px;
+}
+.intro--mini .intro__bigplay svg {
+  width: 22px;
+  height: 22px;
+}
+
+.intro__sound {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid var(--blush);
+  border-radius: var(--pill);
+  background: rgba(27, 42, 38, 0.82);
+  color: var(--paper);
+  font: 600 14px/1 var(--font-body);
+  cursor: pointer;
+  animation: intro-pulse 2s var(--ease-breath) infinite;
+}
+
+.intro__end {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(27, 42, 38, 0.82);
+  animation: intro-fade 0.4s var(--ease-breath) both;
+}
+.intro__end-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 34px);
+  color: var(--paper);
+}
+.intro__end-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.intro--mini .intro__end-title {
+  font-size: 17px;
+}
+.intro--mini .intro__end .btn {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+/* ---------- bottom controls ---------- */
+.intro__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px 14px;
+  color: var(--body-on-dark);
+}
+.intro__time {
+  flex: none;
+  min-width: 34px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.intro__seek {
+  flex: 1;
+  min-width: 0;
+  height: 6px;
+  margin: 0;
+  border-radius: var(--pill);
+  background: linear-gradient(to right, var(--oxygen-coral) var(--p, 0%), var(--line-dark) var(--p, 0%));
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.intro__seek::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+  background: var(--oxygen-coral);
+  -webkit-appearance: none;
+}
+.intro__seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+  background: var(--oxygen-coral);
+}
+
+/* mini-player: compact bar and controls */
+.intro--mini .intro__bar {
+  padding: 8px 8px 8px 12px;
+}
+.intro--mini .intro__logo,
+.intro--mini .intro__eyebrow {
+  display: none;
+}
+.intro--mini .intro__title {
+  font-size: 15px;
+}
+.intro--mini .intro__icon {
+  width: 32px;
+  height: 32px;
+}
+.intro--mini .intro__icon svg {
+  width: 15px;
+  height: 15px;
+}
+.intro--mini .intro__controls {
+  gap: 8px;
+  padding: 8px 10px 10px;
+}
+.intro--mini .intro__time {
+  display: none;
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 760px) {
+  .intro--expanded {
+    width: min(94vw, calc((94dvh - 150px) * 1.5));
+  }
+  .intro__title {
+    font-size: 16px;
+  }
+  .intro__bigplay {
+    width: 64px;
+    height: 64px;
+  }
+}
+@media (max-width: 480px) {
+  .intro--mini {
+    right: 12px;
+    bottom: 12px;
+    width: min(62vw, 260px);
+  }
+}
+
+/* ---------- motion ---------- */
+@keyframes intro-grow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(28vw, 30vh) scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes intro-dock {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes intro-pulse {
+  50% {
+    box-shadow: 0 0 0 6px rgba(244, 213, 204, 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro--expanded,
+  .intro--mini,
+  .intro-backdrop,
+  .intro__sound {
+    animation: none;
+  }
+}

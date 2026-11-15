@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
+import { IntroVideo } from './IntroVideo'
 
 export function Layout() {
   const { pathname, hash } = useLocation()
@@ -27,6 +28,7 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <IntroVideo />
     </>
   )
 }
