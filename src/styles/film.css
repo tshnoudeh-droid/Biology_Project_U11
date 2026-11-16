@@ -519,3 +519,33 @@
 .film-page__inner {
   width: min(100% - 32px, calc((100vh - 76px - 230px) * 16 / 9), 1700px);
 }
+
+/* background music toggle */
+.film-music {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: var(--pill);
+  border: 1px solid rgba(244, 213, 204, 0.3);
+  background: transparent;
+  color: var(--body-on-dark);
+  font: 600 14px/1 var(--font-body);
+  cursor: pointer;
+}
+.film-music[aria-pressed='true'] {
+  color: var(--blush);
+  border-color: rgba(244, 213, 204, 0.55);
+}
+.film-music:hover {
+  background: rgba(244, 213, 204, 0.1);
+}
+.film-music svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

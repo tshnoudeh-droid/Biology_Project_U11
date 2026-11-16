@@ -39,6 +39,43 @@ export function IntroVideo() {
   /** true while the tab is hidden and we paused it ourselves */
   const pausedByTab = useRef(false)
   const autoOpened = useRef(false)
+  /** removes the "unmute on first click/key" listeners, if armed */
+  const disarmUnlock = useRef<() => void>(() => {})
+  const swallowClick = useRef(false)
+
+  const unmute = useCallback(() => {
+    disarmUnlock.current()
+    const v = videoRef.current
+    if (!v) return
+    v.muted = false
+    setMuted(false)
+    setNeedsSound(false)
+  }, [])
+
+  /** Browser blocked sound: turn it on at the visitor's first click / key press anywhere. */
+  const armUnlock = useCallback(() => {
+    disarmUnlock.current()
+    const onGesture = (e: Event) => {
+      // the player's own sound buttons handle themselves
+      const el = e.target as Element | null
+      if (el?.closest?.('.intro__sound, .intro__controls')) return
+      // a first click on the video means "turn sound on", not "pause"
+      if (el?.closest?.('.intro__screen')) {
+        swallowClick.current = true
+        window.setTimeout(() => (swallowClick.current = false), 600)
+      }
+      unmute()
+    }
+    const opts = { capture: true }
+    window.addEventListener('pointerdown', onGesture, opts)
+    window.addEventListener('keydown', onGesture, opts)
+    disarmUnlock.current = () => {
+      window.removeEventListener('pointerdown', onGesture, opts)
+      window.removeEventListener('keydown', onGesture, opts)
+      disarmUnlock.current = () => {}
+    }
+  }, [unmute])
+  useEffect(() => () => disarmUnlock.current(), [])
 
   /** Try to play with sound; if the browser blocks it, play muted and offer a sound button. */
   const play = useCallback(async () => {
@@ -51,13 +88,14 @@ export function IntroVideo() {
       v.muted = true
       setMuted(true)
       setNeedsSound(true)
+      armUnlock()
       try {
         await v.play()
       } catch {
         /* still blocked: the big play button stays visible */
       }
     }
-  }, [])
+  }, [armUnlock])
 
   const open = useCallback(() => {
     setMode('expanded')
@@ -158,12 +196,14 @@ export function IntroVideo() {
   const toggleMute = () => {
     const v = videoRef.current
     if (!v) return
+    disarmUnlock.current()
     v.muted = !v.muted
     setMuted(v.muted)
     setNeedsSound(false)
   }
 
   const close = () => {
+    disarmUnlock.current()
     videoRef.current?.pause()
     pausedByTab.current = false
     setMode('hidden')
@@ -232,7 +272,10 @@ export function IntroVideo() {
               poster={POSTER}
               playsInline
               preload="metadata"
-              onClick={toggle}
+              onClick={() => {
+                if (swallowClick.current) swallowClick.current = false
+                else toggle()
+              }}
               onPlay={() => setPlaying(true)}
               onPause={() => setPlaying(false)}
               onEnded={() => {
@@ -250,7 +293,7 @@ export function IntroVideo() {
             )}
 
             {needsSound && playing && (
-              <button type="button" className="intro__sound" onClick={toggleMute}>
+              <button type="button" className="intro__sound" onClick={unmute}>
                 <SoundIcon muted /> Tap for sound
               </button>
             )}

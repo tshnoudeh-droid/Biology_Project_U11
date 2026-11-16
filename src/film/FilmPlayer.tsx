@@ -5,8 +5,19 @@ import { CamContext, ease, type Cam } from './kit'
 import { InteriorDefs } from './interior'
 import { rich } from '../lib/rich'
 import { IconArrowLeft, IconArrowRight, IconPlay } from '../components/Icons'
+import { OPEN_INTRO_EVENT } from '../components/IntroVideo'
+import { AmbientMusic } from './music'
 
 const SPEEDS = [1, 1.25, 1.5]
+const MUSIC_KEY = 'alvea:film-music'
+
+function readMusicPref() {
+  try {
+    return localStorage.getItem(MUSIC_KEY) !== 'off'
+  } catch {
+    return true
+  }
+}
 
 /** Camera eases from the previous beat's focus to the current one, plus a slow drift for life. */
 function cameraAt(scene: Scene, local: number, bi: number): Cam {
@@ -45,6 +56,32 @@ export function FilmPlayer() {
   speedRef.current = speed
   const timeRef = useRef(0)
   const raf = useRef(0)
+  const [musicOn, setMusicOn] = useState(readMusicPref)
+  const music = useRef<AmbientMusic | null>(null)
+
+  // Calm background music while the film plays.
+  useEffect(() => {
+    if (playing && musicOn) (music.current ??= new AmbientMusic()).play()
+    else music.current?.pause()
+  }, [playing, musicOn])
+  useEffect(() => () => music.current?.dispose(), [])
+
+  // The intro video has its own sound: pause the film when it opens.
+  useEffect(() => {
+    const stop = () => setPlaying(false)
+    window.addEventListener(OPEN_INTRO_EVENT, stop)
+    return () => window.removeEventListener(OPEN_INTRO_EVENT, stop)
+  }, [])
+
+  const toggleMusic = () => {
+    const on = !musicOn
+    setMusicOn(on)
+    try {
+      localStorage.setItem(MUSIC_KEY, on ? 'on' : 'off')
+    } catch {
+      /* private mode: preference just isn't remembered */
+    }
+  }
 
   const seek = useCallback((t: number) => {
     const v = Math.max(0, Math.min(TOTAL, t))
@@ -214,6 +251,15 @@ export function FilmPlayer() {
               </button>
             ))}
           </div>
+          <button type="button" className="film-music" onClick={toggleMusic} aria-pressed={musicOn} aria-label={musicOn ? 'Turn music off' : 'Turn music on'}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 18V5l11-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="17" cy="16" r="3" />
+              {!musicOn && <path d="M3 3l18 18" />}
+            </svg>
+            Music {musicOn ? 'on' : 'off'}
+          </button>
           <span className="film-time">
             {fmt(time)} / {fmt(TOTAL)}
           </span>

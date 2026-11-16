@@ -2,10 +2,9 @@ import { LogoMark } from '../components/Logo'
 import '../styles/about.css'
 
 const team = [
-  { name: 'Tawfic', title: 'Head Guide, Upper Airway Tours', stops: 'Stops 1–3', initials: 'T' },
-  { name: 'Max', title: 'Director of Gas Exchange', stops: 'Stop 7b', initials: 'M' },
-  { name: 'Ben', title: 'Chief Ventilation Officer', stops: 'Stop 8', initials: 'B' },
-  { name: 'Oliver', title: 'Alveoli Spa Concierge', stops: 'Stop 7', initials: 'O' },
+  { name: 'Tawfic', title: 'Head Guide, Upper Airway Tours', stops: 'Stops 1–2', initials: 'T' },
+  { name: 'Max', title: 'Director of Airway Tours', stops: 'Stops 3–5', initials: 'M' },
+  { name: 'Oliver', title: 'Alveoli Spa Concierge', stops: 'Stops 6–8', initials: 'O' },
 ]
 
 /** MLA 9 Works Cited, alphabetical. */
