@@ -98,8 +98,10 @@ export function StopVideo({ video, title, label, next }: Props) {
       raf = 0
       const vw = window.innerWidth
       const vh = window.innerHeight
-      const w = vw <= 480 ? Math.min(vw * 0.62, 260) : Math.min(Math.max(240, vw * 0.22), 320)
-      const h = w / 1.5 + 96
+      const w = video.portrait
+        ? vw <= 480 ? Math.min(vw * 0.44, 190) : Math.min(Math.max(200, vw * 0.16), 240)
+        : vw <= 480 ? Math.min(vw * 0.62, 260) : Math.min(Math.max(240, vw * 0.22), 320)
+      const h = (w - 16) / (video.portrait ? 0.75 : 1.5) + 96
       const zone = { left: vw - GAP - w, top: vh - GAP - h, right: vw - GAP, bottom: vh - GAP }
       const rects = Array.from(document.querySelectorAll(AVOID)).map((el) => el.getBoundingClientRect())
       const hit = rects.some((r) => r.left < zone.right && r.right > zone.left && r.top < zone.bottom && r.bottom > zone.top)
@@ -121,7 +123,7 @@ export function StopVideo({ video, title, label, next }: Props) {
       window.removeEventListener('resize', schedule)
       cancelAnimationFrame(raf)
     }
-  }, [])
+  }, [video.portrait])
 
   const toggle = () => {
     const v = videoRef.current
@@ -173,7 +175,7 @@ export function StopVideo({ video, title, label, next }: Props) {
         </button>
       )}
       <div
-        className={`svid ${bubble ? 'svid--bubble' : 'svid--card'}`}
+        className={`svid ${bubble ? 'svid--bubble' : 'svid--card'}${video.portrait ? ' svid--portrait' : ''}`}
         role="region"
         aria-label={`Guide video: ${title}`}
         hidden={closed}

@@ -102,6 +102,17 @@
   font-size: 13px;
 }
 
+/* portrait (phone-upright) clips: narrower, taller frame */
+.svid--portrait.svid--card {
+  width: clamp(200px, 16vw, 240px);
+}
+.svid--portrait.svid--card .svid__screen {
+  aspect-ratio: 3 / 4;
+}
+.svid--portrait .svid__screen video {
+  object-position: 50% 25%;
+}
+
 /* ---------- bubble: sits clear of the figure, progress ring around the edge ---------- */
 .svid--bubble {
   width: var(--bsize, 92px);
@@ -208,6 +219,9 @@
   }
   .svid--card {
     width: min(62vw, 260px);
+  }
+  .svid--portrait.svid--card {
+    width: min(44vw, 190px);
   }
 }
 
